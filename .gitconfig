@@ -1,0 +1,23 @@
+[user]
+	name = Ricardo Marliere
+	email = rbmarliere@gmail.com
+[alias]
+	aa = add --all
+	amend = commit --amend
+	br = branch
+	ci = commit --verbose
+	co = checkout
+	d = diff
+	dc = diff --cached
+	fa = fetch --all
+	ff = merge --ff-only
+	noff = merge --no-ff
+	po = push origin
+	pom = push origin master
+	pullff = pull --ff-only
+	r = !git l
+	ra = !git r --all
+	st = status
+	l = log --graph --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
+	la = !git l --name-status
+
