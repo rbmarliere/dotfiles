@@ -10,6 +10,8 @@ URxvt.shading:                15
 URxvt.underlineURLs:          true
 URxvt.url-launcher:           /usr/bin/google-chrome-stable
 URxvt.transparent:            true
+URxvt.matcher.button:         1
+URxvt.perl-ext-common:        default,selection-to-clipboard,matcher,keyboard-select
 
 #define S_base03        #002b36
 #define S_base02        #073642
