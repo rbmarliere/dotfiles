@@ -3,7 +3,7 @@ URxvt*scrollTtyOutput:        false
 URxvt*scrollWithBuffer:       true
 URxvt.clipboard.autocopy:     true
 URxvt.cursorBlink:            1
-URxvt.font:                   xft:Hack:size=12
+URxvt.font:                   xft:Hack:size=13
 URxvt.saveLines:              81920
 URxvt.scrollBar:              false
 URxvt.shading:                15
