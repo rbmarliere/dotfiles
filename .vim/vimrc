@@ -32,19 +32,11 @@ nnoremap <Leader>4 4gt
 nnoremap <Leader>5 5gt
 nnoremap <Leader>0 :tablast<CR>
 nnoremap - :Ex<CR>
-nnoremap <C-w><C-t> :tabe<CR>
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 nnoremap <Leader><Space> :nohlsearch<CR>
-nnoremap <Leader>Q :qa<CR>
 nnoremap <Leader>H :vertical resize +5<CR>
 nnoremap <Leader>J :resize -5<CR>
 nnoremap <Leader>K :resize +5<CR>
 nnoremap <Leader>L :vertical resize -5<CR>
-nnoremap <Leader>rs :source ~/.vim/sessions/
-nnoremap <Leader>ss :mksession! ~/.vim/sessions/
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap P :pu<CR>
