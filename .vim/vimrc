@@ -31,6 +31,7 @@ nnoremap <Leader>3 3gt
 nnoremap <Leader>4 4gt
 nnoremap <Leader>5 5gt
 nnoremap <Leader>0 :tablast<CR>
+nnoremap <C-w><C-t> :tabnew<CR>
 nnoremap - :Ex<CR>
 nnoremap <Leader><Space> :nohlsearch<CR>
 nnoremap <Leader>H :vertical resize +5<CR>
