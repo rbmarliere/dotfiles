@@ -1,4 +1,4 @@
-set $mod Mod1
+set $mod Mod4
 font pango:Hack 10
 floating_modifier $mod
 bindsym $mod+Return exec urxvt
@@ -70,4 +70,4 @@ bindsym $mod+Control+k exec /home/ricardo/bin/keys-switch
 exec --no-startup-id /home/ricardo/bin/capesc
 exec --no-startup-id /home/ricardo/bin/monitor
 exec --no-startup-id nitrogen --restore
-exec --no-startup-id volumeicon -d hw:1
+exec --no-startup-id volumeicon
