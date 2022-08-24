@@ -10,9 +10,3 @@
 [submodule ".vim/bundle/vim-pathogen"]
 	path = .vim/bundle/vim-pathogen
 	url = https://github.com/tpope/vim-pathogen.git
-[submodule ".vim/bundle/vim-surround"]
-	path = .vim/bundle/vim-surround
-	url = https://github.com/tpope/vim-surround.git
-[submodule ".vim/bundle/vim-syntastic"]
-	path = .vim/bundle/vim-syntastic
-	url = https://github.com/vim-syntastic/syntastic.git
