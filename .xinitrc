@@ -1,1 +1,0 @@
-xrdb -I$HOME ~/.Xresources
