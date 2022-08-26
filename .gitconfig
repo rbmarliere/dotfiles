@@ -1,32 +1,32 @@
 [user]
-	name = Ricardo Marliere
-	email = rbmarliere@gmail.com
+    name = Ricardo Marliere
+    email = rbmarliere@gmail.com
 [alias]
-	aa = add --all
-	amend = commit --amend
-	br = branch
-	ci = commit --verbose
-	co = checkout
-	d = difftool
-	dc = diff --cached
-	fa = fetch --all
-	ff = merge --ff-only
-	noff = merge --no-ff
-	po = push origin
-	pom = push origin master
-	pullff = pull --ff-only
-	r = !git l
-	ra = !git r --all
-	st = status
-	l = log --graph --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
-	la = !git l --name-status
+    aa = add --all
+    amend = commit --amend
+    br = branch
+    ci = commit --verbose
+    co = checkout
+    d = difftool
+    dc = diff --cached
+    fa = fetch --all
+    ff = merge --ff-only
+    noff = merge --no-ff
+    po = push origin
+    pom = push origin master
+    pullff = pull --ff-only
+    r = !git l
+    ra = !git r --all
+    st = status
+    l = log --graph --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
+    la = !git l --name-status
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 [diff]
-	tool = vimdiff
+    tool = vimdiff
 [difftool]
-	prompt = false
+    prompt = false
     trustExitCode = true
