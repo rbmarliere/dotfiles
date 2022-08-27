@@ -27,6 +27,8 @@ nnoremap <Leader>K :resize +10<CR>
 nnoremap <Leader>L :vertical resize -10<CR>
 nnoremap <Leader>Q :qa<CR>
 nnoremap <Leader>W :w !sudo tee % > /dev/null<CR>
+nnoremap <Leader>rs :source ~/.vim/sessions/
+nnoremap <Leader>ss :mksession! ~/.vim/sessions/
 nnoremap <Leader>w :w<CR>
 nnoremap <expr><silent> <Bar> v:count == 0 ? "<C-W>v<C-W><Right>" : ":<C-U>normal! 0".v:count."<Bar><CR>"
 nnoremap <expr><silent> _ v:count == 0 ? "<C-W>s<C-W><Down>"  : ":<C-U>normal! ".v:count."_<CR>"
