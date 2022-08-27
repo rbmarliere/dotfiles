@@ -23,6 +23,8 @@ vim.cmd[[ source ~/.vim/vimrc ]]
 vim.cmd[[ colorscheme gruvbox ]]
 vim.o.background = 'dark'
 
+vim.api.nvim_set_keymap('n', '<Leader>rs', ':source ~/.vim/sessions/', {})
+vim.api.nvim_set_keymap('n', '<Leader>ss', ':mksession! ~/.vim/sessions/', {})
 vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>ff', ':lua vim.lsp.buf.format()<CR>:Isort<CR>', { silent = true })
