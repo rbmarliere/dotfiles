@@ -11,6 +11,7 @@ export EDITOR=vim
 alias ..="cd .."
 alias cdg="cd ~/git"
 alias g="git"
+alias grep="grep --color=auto"
 alias la="ls --color=auto -la"
 alias ls="ls --color=auto"
 alias reboot="sudo reboot"

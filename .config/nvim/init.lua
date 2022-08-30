@@ -19,9 +19,11 @@ end)
 require('nvim-cmp-config')
 require('nvim-treesitter-config')
 
+vim.o.background = 'dark'
+vim.o.guicursor='n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175'
 vim.cmd[[ source ~/.vim/vimrc ]]
 vim.cmd[[ colorscheme gruvbox ]]
-vim.o.background = 'dark'
+vim.cmd[[ highlight Normal ctermbg=none ]]
 
 vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { silent = true })
