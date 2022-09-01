@@ -1,22 +1,22 @@
 syntax on
-set mouse=a
-set clipboard=unnamedplus
-set encoding=utf-8
-set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+let mapleader=' '
 set autoindent
-set backspace=indent,eol,start
-set number
-set relativenumber
-set dir=$HOME/.vim/swp/
-set bdir=$HOME/.vim/bkp/
 set autoread
+set backspace=indent,eol,start
+set bdir=$HOME/.vim/bkp/
+set clipboard=unnamedplus
+set dir=$HOME/.vim/swp/
+set encoding=utf-8
+set hidden
 set hlsearch
 set incsearch
-let mapleader=' '
-set list listchars=tab:\~\ ,trail:~
-set statusline=%{expand('%:h')}/%t\ [%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ %h%m%r%y%=%c,%l/%L\ %P
 set laststatus=2
-set hidden
+set list listchars=tab:\~\ ,trail:~
+set mouse=a
+set number
+set relativenumber
+set statusline=%{expand('%:h')}/%t\ [%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ %h%m%r%y%=%c,%l/%L\ %P
+set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 
 nnoremap - :Ex<CR>
 nnoremap <C-w><C-t> :tabnew<CR>
