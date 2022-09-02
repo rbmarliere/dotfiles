@@ -13,7 +13,6 @@ require('packer').startup(function(use)
     use 'nvim-telescope/telescope.nvim'
     use 'nvim-treesitter/nvim-treesitter'
     use 'nvim-treesitter/nvim-treesitter-context'
-    use 'stsewd/isort.nvim'
     use 'wbthomason/packer.nvim'
 end)
 
@@ -30,5 +29,5 @@ vim.cmd[[ iabbrev debug import pdb; import rlcompleter; pdb.Pdb.complete=rlcompl
 
 vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>ff', ':lua vim.lsp.buf.format()<CR>:Isort<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>ff', ':lua vim.lsp.buf.format()', { silent = true })
 
