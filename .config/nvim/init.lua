@@ -19,11 +19,12 @@ end)
 require('nvim-cmp-config')
 require('nvim-treesitter-config')
 
-vim.o.background = 'dark'
 vim.o.guicursor='n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175'
+
 vim.cmd[[ source ~/.vim/vimrc ]]
 vim.cmd[[ colorscheme gruvbox ]]
 vim.cmd[[ highlight Normal ctermbg=none ]]
+
 vim.cmd[[ iabbrev pubd __import__('pudb').set_trace() ]]
 vim.cmd[[ iabbrev debug import pdb; import rlcompleter; pdb.Pdb.complete=rlcompleter.Completer(locals()).complete; pdb.set_trace() ]]
 

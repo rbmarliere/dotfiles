@@ -8,7 +8,7 @@
     ci = commit --verbose
     co = checkout
     d = difftool
-    dc = diff --cached
+    dc = difftool --cached
     fa = fetch --all
     ff = merge --ff-only
     noff = merge --no-ff
@@ -26,7 +26,9 @@
     process = git-lfs filter-process
     required = true
 [diff]
-    tool = vimdiff
+    tool = nvimdiff
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [difftool]
     prompt = false
     trustExitCode = true
