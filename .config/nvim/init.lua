@@ -29,5 +29,5 @@ vim.cmd[[ iabbrev debug import pdb; import rlcompleter; pdb.Pdb.complete=rlcompl
 
 vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>ff', ':lua vim.lsp.buf.format()', { silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>ff', ':lua vim.lsp.buf.format()<CR>', { silent = true })
 
