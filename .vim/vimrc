@@ -20,7 +20,9 @@ set number
 set relativenumber
 set ruler
 set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+set textwidth=80
 set wildmenu
+set wrap
 
 nnoremap - :Ex<CR>
 nnoremap <C-w><C-t> :tabnew<CR>
@@ -40,6 +42,7 @@ nnoremap <silent> <Leader>fws :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:no
 nnoremap P :pu<CR>
 nnoremap Y y$
 vnoremap <Leader>y "+y
+vnoremap <Leader>p "_dP
 
 source $HOME/.vim/ccr.vim
 
