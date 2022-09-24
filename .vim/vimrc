@@ -20,9 +20,7 @@ set number
 set relativenumber
 set ruler
 set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-set textwidth=80
 set wildmenu
-set wrap
 
 nnoremap - :Ex<CR>
 nnoremap <C-w><C-t> :tabnew<CR>

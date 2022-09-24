@@ -26,8 +26,8 @@ vim.cmd[[ source ~/.vim/vimrc ]]
 vim.cmd[[ colorscheme gruvbox ]]
 vim.cmd[[ highlight Normal ctermbg=none ]]
 
-vim.cmd[[ iabbrev pubd __import__('pudb').set_trace() ]]
-vim.cmd[[ iabbrev debug import pdb; import rlcompleter; pdb.Pdb.complete=rlcompleter.Completer(locals()).complete; pdb.set_trace() ]]
+vim.cmd[[ iabbrev pudb __import__('pudb').set_trace() ]]
+vim.cmd[[ iabbrev pdb import pdb; import rlcompleter; pdb.Pdb.complete=rlcompleter.Completer(locals()).complete; pdb.set_trace() ]]
 
 vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { silent = true })
