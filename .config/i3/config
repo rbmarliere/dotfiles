@@ -131,6 +131,7 @@ bindsym --release Print exec /home/ricardo/bin/ss 1
 bindsym --release Control+Print exec /home/ricardo/bin/ss 2
 bindsym $mod+Control+l exec i3lock -n -i /home/ricardo/Pictures/bg.png
 
+exec --no-startup-id pasystray
 exec --no-startup-id nm-applet
 exec --no-startup-id nitrogen --restore
 exec --no-startup-id compton

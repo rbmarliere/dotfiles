@@ -29,9 +29,10 @@ vim.cmd[[ highlight Normal ctermbg=none ]]
 vim.cmd[[ iabbrev pudb __import__('pudb').set_trace() ]]
 vim.cmd[[ iabbrev pdb import pdb; import rlcompleter; pdb.Pdb.complete=rlcompleter.Completer(locals()).complete; pdb.set_trace() ]]
 
-vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>ff', ':lua vim.lsp.buf.format()<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<S-C-PageUp>', ':lua TabMove(-1)<CR>', { silent = true })
-vim.api.nvim_set_keymap('n', '<S-C-PageDown>', ':lua TabMove(1)<CR>', { silent = true })
+vim.api.nvim_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<C-p>', ':Telescope find_files<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>ff', ':lua vim.lsp.buf.format()<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>fg', ':Telescope live_grep<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<S-C-PageDown>', ':lua TabMove(1)<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<S-C-PageUp>', ':lua TabMove(-1)<CR>', { silent = true, noremap = true })
 
