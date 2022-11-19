@@ -1,0 +1,22 @@
+{
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DeepInThought/vscode-shell-snippets.git"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "sh",
+        "path": "./shellscript.json"
+      },
+      {
+        "language": "sh",
+        "path": "./bulk-snippets.json"
+      },
+      {
+        "language": "sh",
+        "path": "./tests.json"
+      }
+    ]
+  }
+}

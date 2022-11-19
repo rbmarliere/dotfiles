@@ -1,0 +1,30 @@
+{
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnpapa/vscode-angular-snippets.git"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "typescript",
+        "path": "./typescript.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./javascript.json"
+      },
+      {
+        "language": "jsonc",
+        "path": "./jsonc.json"
+      },
+      {
+        "language": "html",
+        "path": "./html.json"
+      },
+      {
+        "language": "dockerfile",
+        "path": "./dockerfile.json"
+      }
+    ]
+  }
+}

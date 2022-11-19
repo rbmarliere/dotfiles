@@ -53,3 +53,8 @@ require'lspconfig'.angularls.setup{
         new_config.cmd = cmd
     end,
 }
+
+require'lspconfig'.bashls.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}

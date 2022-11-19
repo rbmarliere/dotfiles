@@ -5,6 +5,8 @@ let mapleader=' '
 let g:netrw_liststyle=3
 let g:netrw_bufsettings='noma nomod nu nobl nowrap ro'
 autocmd filetype netrw nnoremap <buffer> <Space> :Ntree<CR>
+autocmd filetype netrw nnoremap <buffer> <C-LeftMouse> :Ntree<CR>
+
 
 set autoindent
 set autoread
