@@ -16,7 +16,7 @@ lsp.setup_nvim_cmp({
 })
 
 lsp.on_attach(function(client, bufnr)
-  local opts = { noremap=true, silent=true, buffer=bufnr }
+  local opts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, opts)
   vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
   vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
@@ -29,7 +29,7 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set('n', '<Leader>wa', vim.lsp.buf.add_workspace_folder, opts)
   vim.keymap.set('n', '<Leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
   vim.keymap.set('n', '<Leader>wl', function()
-      print(vim.inspect(vim.lsp.buf.list_workLeader_folders()))
+    print(vim.inspect(vim.lsp.buf.list_workLeader_folders()))
   end, opts)
   vim.keymap.set('n', '<Leader>D', vim.lsp.buf.type_definition, opts)
   vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, opts)
@@ -43,4 +43,3 @@ lsp.setup()
 vim.diagnostic.config({
   virtual_text = true,
 })
-

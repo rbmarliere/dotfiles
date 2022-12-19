@@ -64,4 +64,3 @@ require('dap').configurations.typescript = {
     webRoot = '${workspaceFolder}/web',
   },
 }
-

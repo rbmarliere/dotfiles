@@ -1,4 +1,4 @@
-local opts = { noremap=true }
+local opts = { noremap = true }
 
 vim.g.mapleader = ' '
 

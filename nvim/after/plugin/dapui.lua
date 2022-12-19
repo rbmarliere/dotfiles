@@ -30,7 +30,7 @@ require('dapui').setup({
   layouts = {
     {
       elements = {
-      -- Elements can be strings or table with id and size keys.
+        -- Elements can be strings or table with id and size keys.
         { id = 'scopes', size = 0.25 },
         'breakpoints',
         'stacks',
