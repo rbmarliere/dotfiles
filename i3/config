@@ -134,7 +134,6 @@ bindsym $mod+Control+l exec i3lock -n -i /home/ricardo/Pictures/bg.png
 exec --no-startup-id pasystray
 exec --no-startup-id nm-applet
 exec --no-startup-id nitrogen --restore
-exec --no-startup-id compton
 
 default_border pixel 4
 default_floating_border pixel 4

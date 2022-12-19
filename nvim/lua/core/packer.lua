@@ -1,28 +1,22 @@
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
-  use {
-	  'nvim-telescope/telescope.nvim', tag = '0.1.0',
-	  -- or                            , branch = '0.1.x',
-	  requires = { {'nvim-lua/plenary.nvim'} }
-  }
-
+  use('folke/which-key.nvim')
+  use('folke/zen-mode.nvim')
+  use('jamessan/vim-gnupg')
+  use('lukas-reineke/indent-blankline.nvim')
+  use('mbbill/undotree')
+  use('mfussenegger/nvim-dap')
+  use('rcarriga/nvim-dap-ui')
+  use('sainnhe/gruvbox-material')
+  use('tpope/vim-commentary')
+  use('tpope/vim-fugitive')
   use({'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'})
 
-  use('folke/zen-mode.nvim')
-
-  use('mbbill/undotree')
-
-  use('tpope/vim-fugitive')
-
-  use('tpope/vim-commentary')
-
-  use('jamessan/vim-gnupg')
-
-  use('sainnhe/gruvbox-material')
-
-  use('lukas-reineke/indent-blankline.nvim')
-
+  use {
+	  'nvim-telescope/telescope.nvim', tag = '0.1.0', -- or                            , branch = '0.1.x',
+	  requires = { {'nvim-lua/plenary.nvim'} }
+  }
   use {
 	  'VonHeikemen/lsp-zero.nvim',
 	  requires = {
@@ -30,7 +24,6 @@ return require('packer').startup(function(use)
 		  {'neovim/nvim-lspconfig'},
 		  {'williamboman/mason.nvim'},
 		  {'williamboman/mason-lspconfig.nvim'},
-
 		  -- Autocompletion
 		  {'hrsh7th/nvim-cmp'},
 		  {'hrsh7th/cmp-buffer'},
@@ -38,21 +31,9 @@ return require('packer').startup(function(use)
 		  {'saadparwaiz1/cmp_luasnip'},
 		  {'hrsh7th/cmp-nvim-lsp'},
 		  {'hrsh7th/cmp-nvim-lua'},
-
 		  -- Snippets
 		  {'L3MON4D3/LuaSnip'},
 		  {'rafamadriz/friendly-snippets'},
 	  }
   }
-
-  use('mfussenegger/nvim-dap')
-
-  use('mfussenegger/nvim-dap-python')
-
-  use('rcarriga/nvim-dap-ui')
-
-  use('theHamsta/nvim-dap-virtual-text')
-
-  use('folke/which-key.nvim')
-
 end)
