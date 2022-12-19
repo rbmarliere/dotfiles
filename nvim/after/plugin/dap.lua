@@ -61,7 +61,7 @@ require('dap').configurations.typescript = {
     sourceMaps = true,
     protocol = 'inspector',
     port = 9222,
-    webRoot = '${workspaceFolder}',
+    webRoot = '${workspaceFolder}/web',
   },
 }
 
