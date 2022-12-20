@@ -40,3 +40,7 @@ require('nvim-treesitter.configs').setup {
     additional_vim_regex_highlighting = false,
   },
 }
+
+vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline = true, sp = 'Cyan' })
+
+-- hi TreesitterContextBottom gui=underline guisp=Grey

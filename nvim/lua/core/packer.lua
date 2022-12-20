@@ -11,7 +11,9 @@ return require('packer').startup(function(use)
   use('sainnhe/gruvbox-material')
   use('tpope/vim-commentary')
   use('tpope/vim-fugitive')
+
   use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
+  use('nvim-treesitter/nvim-treesitter-context')
 
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
