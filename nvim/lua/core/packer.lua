@@ -3,6 +3,7 @@ return require('packer').startup(function(use)
 
   use('folke/which-key.nvim')
   use('folke/zen-mode.nvim')
+  use('github/copilot.vim')
   use('jamessan/vim-gnupg')
   use('lukas-reineke/indent-blankline.nvim')
   use('mbbill/undotree')
