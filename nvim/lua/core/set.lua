@@ -1,7 +1,3 @@
-vim.g.netrw_banner = 0
-vim.g.netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
-vim.g.netrw_liststyle = 3
-
 vim.opt.autoindent = true
 vim.opt.autoread = true
 vim.opt.background = 'dark'

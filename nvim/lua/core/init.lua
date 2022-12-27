@@ -17,11 +17,3 @@ autocmd({ "FileType" }, {
   pattern = "lua",
   command = [[setlocal tabstop=2 softtabstop=2 shiftwidth=2]]
 })
-autocmd({ "FileType" }, {
-  pattern = "netrw",
-  command = [[nnoremap <buffer> <Space> :Ntree<CR>]]
-})
-autocmd({ "FileType" }, {
-  pattern = "netrw",
-  command = [[nnoremap <buffer> <C-LeftMouse> :Ntree<CR>]]
-})
