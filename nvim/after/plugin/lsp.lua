@@ -1,21 +1,4 @@
-local lsp = require("lsp-zero")
-lsp.preset("recommended")
-
-local cmp = require("cmp")
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-  ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-  ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
-})
-cmp_mappings["<Tab>"] = nil
-cmp_mappings["<S-Tab>"] = nil
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings,
-})
-
-lsp.on_attach(function(client, bufnr)
+local on_attach = function(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "<Leader>e", vim.diagnostic.open_float, opts)
   vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
@@ -38,26 +21,28 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("n", "<Leader>f", function()
     vim.lsp.buf.format({ async = true })
   end, opts)
-end)
-
-lsp.configure("pylsp", {
-  on_attach = function(client, bufnr)
-    vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-      pattern = "<buffer>",
-      callback = function()
-        vim.lsp.buf.format()
-        vim.lsp.buf.code_action({
-          context = {
-            only = {
-              -- requires pylsp-rope
-              "source.organizeImports",
-            },
+  vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+    pattern = "<buffer>",
+    callback = function()
+      vim.lsp.buf.code_action({
+        context = {
+          only = {
+            "source.organizeImports",
           },
-          apply = true,
-        })
-      end,
-    })
-  end,
+        },
+        apply = true,
+      })
+      vim.lsp.buf.format()
+    end,
+  })
+end
+
+local lsp = require("lsp-zero")
+lsp.preset("recommended")
+lsp.on_attach(on_attach)
+lsp.configure("pylsp", {
+  -- organizeImports requires pylsp-rope
+  on_attach = function(client, bufnr) end,
   settings = {
     pylsp = {
       plugins = {
@@ -69,6 +54,20 @@ lsp.configure("pylsp", {
   },
 })
 
+local cmp = require("cmp")
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
+local cmp_mappings = lsp.defaults.cmp_mappings({
+  ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+  ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+  ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+  ["<C-Space>"] = cmp.mapping.complete(),
+})
+cmp_mappings["<Tab>"] = nil
+cmp_mappings["<S-Tab>"] = nil
+lsp.setup_nvim_cmp({
+  mapping = cmp_mappings,
+})
+
 lsp.setup()
 
 vim.diagnostic.config({
@@ -78,4 +77,16 @@ vim.diagnostic.config({
   underline = true,
   severity_sort = false,
   float = true,
+})
+
+local null_ls = require("null-ls")
+null_ls.setup({
+  on_attach = on_attach,
+  sources = {
+    null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.formatting.prettier.with({
+      disabled_filetypes = { "typescript" },
+    }),
+  },
 })
