@@ -1,3 +1,12 @@
+local function ts_organize_imports()
+  local params = {
+    command = "_typescript.organizeImports",
+    arguments = { vim.api.nvim_buf_get_name(0) },
+    title = "",
+  }
+  vim.lsp.buf.execute_command(params)
+end
+
 local on_attach = function(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "<Leader>e", vim.diagnostic.open_float, opts)
@@ -24,12 +33,15 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = "<buffer>",
     callback = function()
-      if client.supports_method("textDocument/codeAction") then
+      if client.name == "tsserver" then
+        ts_organize_imports()
+      elseif client.supports_method("textDocument/codeAction") then
         local response = client.request_sync("textDocument/codeAction", vim.lsp.util.make_range_params())
         if response and response.result then
           local code_actions = response.result
           if code_actions then
             for _, code_action_object in ipairs(code_actions) do
+              -- print(vim.inspect(code_action_object))
               if code_action_object.kind == "source.organizeImports" then
                 vim.lsp.buf.code_action({
                   context = { only = { "source.organizeImports" } },
@@ -94,7 +106,14 @@ null_ls.setup({
     null_ls.builtins.code_actions.gitsigns,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.prettier.with({
-      disabled_filetypes = { "typescript" },
+      disabled_filetypes = {
+        "javascript",
+        --   "javascriptreact",
+        --   "javascript.jsx",
+        "typescript",
+        --   "typescriptreact",
+        --   "typescript.tsx",
+      },
     }),
   },
 })
