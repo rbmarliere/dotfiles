@@ -24,14 +24,22 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = "<buffer>",
     callback = function()
-      vim.lsp.buf.code_action({
-        context = {
-          only = {
-            "source.organizeImports",
-          },
-        },
-        apply = true,
-      })
+      if client.supports_method("textDocument/codeAction") then
+        local response = client.request_sync("textDocument/codeAction", vim.lsp.util.make_range_params())
+        if response and response.result then
+          local code_actions = response.result
+          if code_actions then
+            for _, code_action_object in ipairs(code_actions) do
+              if code_action_object.kind == "source.organizeImports" then
+                vim.lsp.buf.code_action({
+                  context = { only = { "source.organizeImports" } },
+                  apply = true,
+                })
+              end
+            end
+          end
+        end
+      end
       vim.lsp.buf.format()
     end,
   })
