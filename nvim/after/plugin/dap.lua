@@ -44,38 +44,12 @@ require("which-key").register(keymap_v, {
   nowait = false,
 })
 
-require("dap").adapters.chrome = {
-  type = "executable",
-  command = "node",
-  args = { vim.fn.stdpath("data") .. "/mason/packages/chrome-debug-adapter/out/src/chromeDebug.js" },
-}
-require("dap").configurations.typescript = {
-  {
-    type = "chrome",
-    request = "attach",
-    program = "${file}",
-    cwd = vim.fn.getcwd(),
-    sourceMaps = true,
-    protocol = "inspector",
-    port = 9222,
-    webRoot = "${workspaceFolder}/web",
-  },
-}
-
-require("dap").adapters.cppdbg = {
-  id = "cppdbg",
-  type = "executable",
-  command = vim.fn.stdpath("data") .. "/mason/bin/OpenDebugAD7",
-}
-require("dap").configurations.c = {
-  {
-    type = "cppdbg",
-    request = "launch",
-    program = function()
-      return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-    end,
-    cwd = "${workspaceFolder}",
-    stopAtEntry = true,
-  },
-}
-require("dap").configurations.cpp = require("dap").configurations.c
+local local_rc = os.getenv("LOCAL_RC")
+if local_rc ~= nil then
+  for _, project_path in ipairs(vim.fn.split(local_rc, ":")) do
+    vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+      pattern = project_path .. "/**",
+      command = vim.cmd("source " .. project_path .. "/.exrc"),
+    })
+  end
+end
