@@ -1,5 +1,6 @@
 local opts = { silent = true }
 
+vim.keymap.set("n", "<F4>", ":lua require'dap'.close()<CR>", opts)
 vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>", opts)
 vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>", opts)
 vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>", opts)
