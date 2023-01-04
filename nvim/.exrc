@@ -1,5 +1,8 @@
+lua << EOF
 require("lspconfig").sumneko_lua.setup({
 -- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/server_configurations/sumneko_lua.lua
+  on_attach = LSPAttach,
+  capabilities = LSPCapabilities,
   settings = {
     Lua = {
       runtime = {
@@ -21,3 +24,4 @@ require("lspconfig").sumneko_lua.setup({
     },
   },
 })
+EOF

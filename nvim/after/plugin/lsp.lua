@@ -1,7 +1,7 @@
 require("mason").setup({ ui = { border = "rounded" } })
 require("mason-lspconfig").setup()
 
-local lsp_attach = function(client, bufnr)
+LSPAttach = function(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
 
   vim.keymap.set("n", "<Leader>e", vim.diagnostic.open_float, opts)
@@ -83,14 +83,14 @@ cmp.setup({
   })
 })
 
-local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+LSPCapabilities = require("cmp_nvim_lsp").default_capabilities()
 
 local lspconfig = require("lspconfig")
 local get_servers = require("mason-lspconfig").get_installed_servers
 for _, server_name in ipairs(get_servers()) do
   lspconfig[server_name].setup({
-    on_attach = lsp_attach,
-    capabilities = lsp_capabilities,
+    on_attach = LSPAttach,
+    capabilities = LSPCapabilities,
   })
 end
 
