@@ -1,14 +1,9 @@
-local function ts_organize_imports()
-  local params = {
-    command = "_typescript.organizeImports",
-    arguments = { vim.api.nvim_buf_get_name(0) },
-    title = "",
-  }
-  vim.lsp.buf.execute_command(params)
-end
+require("mason").setup({ ui = { border = "rounded" } })
+require("mason-lspconfig").setup()
 
-local on_attach = function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
+
   vim.keymap.set("n", "<Leader>e", vim.diagnostic.open_float, opts)
   vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
   vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
@@ -30,18 +25,24 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "<Leader>f", function()
     vim.lsp.buf.format({ async = true })
   end, opts)
+
+  -- automatically format and organize imports when saving file
   vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = "<buffer>",
     callback = function()
       if client.name == "tsserver" then
-        ts_organize_imports()
+        local params = {
+          command = "_typescript.organizeImports",
+          arguments = { vim.api.nvim_buf_get_name(0) },
+          title = "",
+        }
+        vim.lsp.buf.execute_command(params)
       elseif client.supports_method("textDocument/codeAction") then
         local response = client.request_sync("textDocument/codeAction", vim.lsp.util.make_range_params())
         if response and response.result then
           local code_actions = response.result
           if code_actions then
             for _, code_action_object in ipairs(code_actions) do
-              -- print(vim.inspect(code_action_object))
               if code_action_object.kind == "source.organizeImports" then
                 vim.lsp.buf.code_action({
                   context = { only = { "source.organizeImports" } },
@@ -57,65 +58,48 @@ local on_attach = function(client, bufnr)
   })
 end
 
-local lsp = require("lsp-zero")
--- lsp.preset("recommended")
-lsp.set_preferences({
-  suggest_lsp_servers = true,
-  setup_servers_on_start = true,
-  set_lsp_keymaps = false,
-  configure_diagnostics = true,
-  cmp_capabilities = true,
-  manage_nvim_cmp = true,
-  call_servers = "local",
-  sign_icons = {
-    error = "✘",
-    warn = "▲",
-    hint = "⚑",
-    info = "",
+local cmp = require("cmp")
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
   },
-})
-lsp.on_attach(on_attach)
-
-lsp.configure("pylsp", {
-  -- organizeImports requires pylsp-rope
-  on_attach = function(client, bufnr) end,
-  settings = {
-    pylsp = {
-      plugins = {
-        mccabe = {
-          threshold = 20,
-        },
-      },
-    },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
+  mapping = cmp.mapping.preset.insert({
+    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.abort(),
+    ["<CR>"] = cmp.mapping.confirm({ select = false }),
+  }),
+  sources = cmp.config.sources({
+    { name = "nvim_lsp" },
+  }, {
+    { name = "buffer" },
+  })
 })
 
-lsp.setup()
+local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-vim.diagnostic.config({
-  virtual_text = true,
-  signs = true,
-  update_in_insert = false,
-  underline = true,
-  severity_sort = false,
-  float = true,
-})
+local lspconfig = require("lspconfig")
+local get_servers = require("mason-lspconfig").get_installed_servers
+for _, server_name in ipairs(get_servers()) do
+  lspconfig[server_name].setup({
+    on_attach = lsp_attach,
+    capabilities = lsp_capabilities,
+  })
+end
 
-local null_ls = require("null-ls")
-null_ls.setup({
-  on_attach = on_attach,
-  sources = {
-    null_ls.builtins.code_actions.gitsigns,
-    null_ls.builtins.formatting.stylua,
-    null_ls.builtins.formatting.prettier.with({
-      disabled_filetypes = {
-        "javascript",
-        --   "javascriptreact",
-        --   "javascript.jsx",
-        "typescript",
-        --   "typescriptreact",
-        --   "typescript.tsx",
-      },
-    }),
-  },
-})
+local local_rc = os.getenv("LOCAL_RC")
+if local_rc ~= nil then
+  for _, project_path in ipairs(vim.fn.split(local_rc, ":")) do
+    vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+      pattern = project_path .. "/**",
+      command = vim.cmd("source " .. project_path .. "/.exrc"),
+    })
+  end
+end

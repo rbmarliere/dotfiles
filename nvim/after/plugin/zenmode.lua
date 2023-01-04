@@ -8,8 +8,4 @@ require("zen-mode").setup({
   },
 })
 
-vim.keymap.set("n", "<Leader>z", function()
-  require("zen-mode").toggle()
-  -- vim.wo.wrap = false
-  setColors()
-end)
+vim.keymap.set("n", "<Leader>z", ":lua require('zen-mode').toggle()<CR>")
