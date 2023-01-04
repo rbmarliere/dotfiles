@@ -1,6 +1,6 @@
-require('nvim-treesitter.configs').setup {
+require("nvim-treesitter.configs").setup({
   -- A list of parser names, or 'all'
-  ensure_installed = { 'c', 'lua', 'rust', 'python', 'typescript', 'help', 'javascript' },
+  ensure_installed = { "c", "lua", "rust", "python", "typescript", "help", "javascript" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -39,15 +39,6 @@ require('nvim-treesitter.configs').setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
+})
 
-  rainbow = {
-    enable = true,
-    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    max_file_lines = nil, -- Do not enable for files with more than n lines, int
-    -- colors = {}, -- table of hex strings
-    -- termcolors = {} -- table of colour name strings
-  }
-}
-
-vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline = true, sp = 'Cyan' })
+vim.api.nvim_set_hl(0, "TreesitterContextBottom", { underline = true, sp = "Cyan" })
