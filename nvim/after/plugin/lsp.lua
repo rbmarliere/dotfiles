@@ -1,9 +1,11 @@
 require("mason").setup({ ui = { border = "rounded" } })
 require("mason-lspconfig").setup()
 
+-- global lsp on_attach function
 LSPAttach = function(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
 
+  -- default mappings
   vim.keymap.set("n", "<Leader>e", vim.diagnostic.open_float, opts)
   vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
   vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
@@ -58,6 +60,7 @@ LSPAttach = function(client, bufnr)
   })
 end
 
+-- autocompletion
 local cmp = require("cmp")
 cmp.setup({
   snippet = {
@@ -83,20 +86,11 @@ cmp.setup({
   }, {
     { name = "nvim_lsp" },
   }, {
-    { name = "buffer" },
-  })
-})
-
--- Set configuration for specific filetype.
-cmp.setup.filetype("gitcommit", {
-  sources = cmp.config.sources({
-    { name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
+    { name = "nvim_lua" },
   }, {
     { name = "buffer" },
   })
 })
-
--- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won"t work anymore).
 cmp.setup.cmdline({ "/", "?" }, {
   mapping = cmp.mapping.preset.cmdline(),
   sources = {
@@ -105,8 +99,6 @@ cmp.setup.cmdline({ "/", "?" }, {
     { name = "buffer" }
   }
 })
-
--- Use cmdline & path source for ":" (if you enabled `native_menu`, this won"t work anymore).
 cmp.setup.cmdline(":", {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
@@ -116,8 +108,11 @@ cmp.setup.cmdline(":", {
   })
 })
 
+-- global cmp capabilities
 LSPCapabilities = require("cmp_nvim_lsp").default_capabilities()
 
+-- setup every lsp installed by mason
+-- https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero
 local lspconfig = require("lspconfig")
 local get_servers = require("mason-lspconfig").get_installed_servers
 for _, server_name in ipairs(get_servers()) do
@@ -127,6 +122,7 @@ for _, server_name in ipairs(get_servers()) do
   })
 end
 
+-- source allowed projects config
 local local_rc = os.getenv("LOCAL_RC")
 if local_rc ~= nil then
   for _, project_path in ipairs(vim.fn.split(local_rc, ":")) do
