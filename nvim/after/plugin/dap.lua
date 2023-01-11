@@ -9,7 +9,7 @@ vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>", opts)
 vim.keymap.set("n", "<Leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('condition: '))<CR>", opts)
 vim.keymap.set("n", "<Leader>b", ":lua require'dap'.toggle_breakpoint()<CR>", opts)
 vim.keymap.set("n", "<Leader>dl", ":lua require'dap'.run_last()<CR>", opts)
-vim.keymap.set("n", "<Leader>lb", ":lua require'dap'.list_breakpoints()<CR>:belowright copen<CR>", opts)
+vim.keymap.set("n", "<Leader>lb", ":lua require'dap'.list_breakpoints()<CR>:copen<CR>", opts)
 vim.keymap.set("n", "<Leader>lp", ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('message: '))<CR>", opts)
 
 local toggle_float = function()
@@ -21,3 +21,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = "dap-float",
   command = [[nnoremap <buffer><silent> q <cmd>close!<CR>]],
 })
+-- vim.api.nvim_create_autocmd({ "FileType" }, {
+--   pattern = "dap-repl",
+--   command = [[wincmd J]],
+-- })
