@@ -1,3 +1,4 @@
+vim.g.netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 vim.opt.autoindent = true
 vim.opt.autoread = true
 vim.opt.background = "dark"
