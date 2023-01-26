@@ -1,6 +1,19 @@
 local opts = { silent = true }
 
-vim.keymap.set("n", "<C-x>", ":lua require'dap'.repl.toggle()<CR><C-w>j", opts)
+local toggle_repl = function()
+  local buf = vim.fn.bufnr("[dap-repl]")
+  local visible = vim.fn.bufwinnr(buf)
+  if visible ~= -1 then
+    require("dap").repl.close()
+    vim.cmd("wincmd =")
+  else
+    require("dap").repl.open()
+    vim.cmd("wincmd |")
+    vim.cmd("wincmd j")
+  end
+end
+
+vim.keymap.set("n", "<C-x>", toggle_repl, opts)
 vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>", opts)
 vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>", opts)
 vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>", opts)
