@@ -2,14 +2,14 @@ local opts = { silent = true }
 
 local toggle_repl = function()
   local buf = vim.fn.bufnr("[dap-repl]")
-  local visible = vim.fn.bufwinnr(buf)
-  if visible ~= -1 then
-    require("dap").repl.close()
-    vim.cmd("wincmd =")
-  else
+  local shown = vim.fn.win_findbuf(buf)
+  if vim.fn.bufloaded(buf) and vim.tbl_isempty(shown) then
     require("dap").repl.open()
     vim.cmd("wincmd |")
     vim.cmd("wincmd j")
+  else
+    require("dap").repl.close()
+    vim.cmd("wincmd =")
   end
 end
 
