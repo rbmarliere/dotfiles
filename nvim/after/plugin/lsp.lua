@@ -133,7 +133,7 @@ if local_rc ~= nil then
 end
 
 -- specific neovim config
-require("lspconfig").sumneko_lua.setup({
+require("lspconfig").lua_ls.setup({
   -- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/server_configurations/sumneko_lua.lua
   on_attach = LSPAttach,
   capabilities = LSPCapabilities,
