@@ -1,19 +1,44 @@
-local opts = { silent = true }
-
-local toggle_repl = function()
-  local buf = vim.fn.bufnr("[dap-repl]")
-  local shown = vim.fn.win_findbuf(buf)
-  if vim.fn.bufloaded(buf) and vim.tbl_isempty(shown) then
-    require("dap").repl.open()
-    vim.cmd("wincmd |")
-    vim.cmd("wincmd j")
-  else
-    require("dap").repl.close()
-    vim.cmd("wincmd =")
+local function mk_scopes_win()
+  return function()
+    vim.cmd("20 split")
+    local win = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_option(win, "number", false)
+    vim.api.nvim_win_set_option(win, "relativenumber", false)
+    vim.api.nvim_win_set_option(win, "statusline", " ")
+    require("dap.ui").apply_winopts(win)
+    return win
   end
 end
 
-vim.keymap.set("n", "<C-x>", toggle_repl, opts)
+local toggle_ui = function()
+  local bufname = vim.fn.bufname()
+
+  if bufname == '' then
+    return
+  end
+
+  local curpos = vim.fn.getcurpos()
+  vim.cmd.tabedit(bufname)
+  vim.fn.setpos('.', curpos)
+
+  local widgets = require("dap.ui.widgets")
+  local widget = widgets.scopes
+  local dap = require("dap")
+
+  widgets
+      .builder(widget)
+      .keep_focus()
+      .new_win(mk_scopes_win())
+      .new_buf(widgets.with_refresh(widget.new_buf, widget.refresh_listener or "event_stopped"))
+      .build()
+      .open()
+
+  dap.repl.close()
+  dap.repl.open({ height = 20 })
+end
+
+local opts = { silent = true }
+vim.keymap.set("n", "<C-x>", toggle_ui, opts)
 vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>", opts)
 vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>", opts)
 vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>", opts)
@@ -24,17 +49,3 @@ vim.keymap.set("n", "<Leader>b", ":lua require'dap'.toggle_breakpoint()<CR>", op
 vim.keymap.set("n", "<Leader>dl", ":lua require'dap'.run_last()<CR>", opts)
 vim.keymap.set("n", "<Leader>lb", ":lua require'dap'.list_breakpoints()<CR>:copen<CR>", opts)
 vim.keymap.set("n", "<Leader>lp", ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('message: '))<CR>", opts)
-
-local toggle_float = function()
-  local widgets = require("dap.ui.widgets")
-  widgets.centered_float(widgets.scopes)
-end
-vim.keymap.set("n", "<Leader><C-x>", toggle_float, opts)
-vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = "dap-float",
-  command = [[nnoremap <buffer><silent> q <cmd>close!<CR>]],
-})
--- vim.api.nvim_create_autocmd({ "FileType" }, {
---   pattern = "dap-repl",
---   command = [[wincmd J]],
--- })
