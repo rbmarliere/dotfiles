@@ -1,15 +1,3 @@
-local function mk_scopes_win()
-  return function()
-    vim.cmd("20 split")
-    local win = vim.api.nvim_get_current_win()
-    vim.api.nvim_win_set_option(win, "number", false)
-    vim.api.nvim_win_set_option(win, "relativenumber", false)
-    vim.api.nvim_win_set_option(win, "statusline", " ")
-    require("dap.ui").apply_winopts(win)
-    return win
-  end
-end
-
 local toggle_ui = function()
   local bufname = vim.fn.bufname()
 
@@ -22,19 +10,12 @@ local toggle_ui = function()
   vim.fn.setpos('.', curpos)
 
   local widgets = require("dap.ui.widgets")
-  local widget = widgets.scopes
   local dap = require("dap")
 
-  widgets
-      .builder(widget)
-      .keep_focus()
-      .new_win(mk_scopes_win())
-      .new_buf(widgets.with_refresh(widget.new_buf, widget.refresh_listener or "event_stopped"))
-      .build()
-      .open()
+  widgets.sidebar(widgets.scopes, { width = 110 }).open()
 
   dap.repl.close()
-  dap.repl.open({ height = 20 })
+  dap.repl.open({ height = 25 })
 end
 
 local opts = { silent = true }
