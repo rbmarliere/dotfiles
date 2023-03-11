@@ -12,10 +12,10 @@ local toggle_ui = function()
   local widgets = require("dap.ui.widgets")
   local dap = require("dap")
 
-  widgets.sidebar(widgets.scopes, { width = 110 }).open()
+  widgets.sidebar(widgets.scopes, { width = 90 }).open()
 
   dap.repl.close()
-  dap.repl.open({ height = 25 })
+  dap.repl.open({ width = 150 }, "vsplit")
 end
 
 local opts = { silent = true }
