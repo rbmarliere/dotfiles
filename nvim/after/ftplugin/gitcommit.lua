@@ -1,4 +1,11 @@
-vim.cmd([[wincmd L]])
+vim.api.nvim_create_autocmd(
+  {
+    "BufWinEnter"
+  }, {
+    buffer = 0,
+    command = [[wincmd H]]
+  }
+)
 
 vim.cmd.setlocal("spell")
 
