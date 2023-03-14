@@ -1,27 +1,24 @@
 require("dapui").setup({
   layouts = { {
     elements = { {
-      id = "breakpoints",
-      size = 0.10
-    }, {
       id = "stacks",
-      size = 0.30
+      size = 0.16
+    }, {
+      id = "breakpoints",
+      size = 0.17
     }, {
       id = "watches",
-      size = 0.20
+      size = 0.22
     }, {
       id = "scopes",
-      size = 0.40
+      size = 0.45
     } },
     position = "left",
-    size = 60
+    size = 80
   }, {
     elements = { {
-      id = "console",
-      size = 0.25
-    }, {
       id = "repl",
-      size = 0.75
+      size = 1
     } },
     position = "right",
     size = 170
@@ -74,3 +71,11 @@ vim.keymap.set("n", "<Leader>b", ":lua require'dap'.toggle_breakpoint()<CR>", op
 vim.keymap.set("n", "<Leader>dl", ":lua require'dap'.run_last()<CR>", opts)
 vim.keymap.set("n", "<Leader>lb", ":lua require'dap'.list_breakpoints()<CR>:copen<CR>", opts)
 vim.keymap.set("n", "<Leader>lp", ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('message: '))<CR>", opts)
+vim.keymap.set("n", "<Leader>ls", function()
+  local widgets = require("dap.ui.widgets")
+  widgets.centered_float(widgets.sessions)
+end, opts)
+vim.keymap.set("n", "<Leader>lt", function()
+  local widgets = require("dap.ui.widgets")
+  widgets.centered_float(widgets.threads)
+end, opts)

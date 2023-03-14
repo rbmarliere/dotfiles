@@ -1,15 +1,24 @@
 #!/bin/bash
 
-git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+#
+packer="$HOME/.local/share/nvim/site/pack/packer/start/packer.nvim"
+if [ ! -d "$packer" ]; then
+    git clone --depth 1 https://github.com/wbthomason/packer.nvim "$packer"
+fi
 
-mkdir -p ~/.config
+files=(
+    .bashrc 
+    .config/alacritty
+    .config/i3 
+    .config/nvim 
+    .gitconfig 
+    .inputrc 
+    .tmux.conf
+)
 
-rm -r ~/.config/{i3,nvim}
-rm ~/{.bashrc,.gitconfig,.inputrc,.tmux.conf}
+mkdir -p "$HOME/.config"
 
-ln -s "$(pwd)/nvim" ~/.config/nvim
-ln -s "$(pwd)/i3" ~/.config/i3
-ln -s "$(pwd)/.bashrc" ~/.bashrc
-ln -s "$(pwd)/.gitconfig" ~/.gitconfig
-ln -s "$(pwd)/.inputrc" ~/.inputrc
-ln -s "$(pwd)/.tmux.conf" ~/.tmux.conf
+for file in "${files[@]}"; do
+    rm -rf "${HOME:?}/$file"
+    ln -s "$(pwd)/$file" "$HOME/$file"
+done
