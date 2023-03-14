@@ -2,3 +2,4 @@
 plugin/*
 tmp/*
 sessions/*
+lua/.luarc.json

@@ -1,4 +1,4 @@
-vim.g.netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
+vim.g.netrw_bufsettings = "noma nomod nu nobl nowrap ro"
 vim.opt.autoindent = true
 vim.opt.autoread = true
 vim.opt.background = "dark"
@@ -32,3 +32,4 @@ vim.opt.termguicolors = true
 vim.opt.undodir = os.getenv("HOME") .. "/.config/nvim/tmp"
 vim.opt.undofile = true
 vim.opt.updatetime = 50
+vim.opt.sessionoptions:remove("blank") -- exclude nvim-dap buffers

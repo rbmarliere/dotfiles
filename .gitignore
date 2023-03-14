@@ -1,4 +1,0 @@
-nvim/plugin/*
-nvim/tmp/*
-nvim/sessions/*
-nvim/lua/.luarc.json
