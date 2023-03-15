@@ -2,6 +2,7 @@ return require("packer").startup(function(use)
   use("wbthomason/packer.nvim")
 
   -- general
+  use("folke/neodev.nvim")
   use("folke/zen-mode.nvim")
   use("github/copilot.vim")
   use("jamessan/vim-gnupg")
