@@ -1,3 +1,7 @@
+require("nvim-dap-virtual-text").setup({
+  commented = true,
+})
+
 require("dapui").setup({
   layouts = { {
     elements = { {
@@ -14,14 +18,17 @@ require("dapui").setup({
       size = 0.45
     } },
     position = "left",
-    size = 80
+    size = 65
   }, {
     elements = { {
+      id = "console",
+      size = 0.3
+    }, {
       id = "repl",
-      size = 1
+      size = 0.7
     } },
     position = "right",
-    size = 170
+    size = 150
   } },
 })
 
@@ -58,6 +65,11 @@ local toggle_ui = function()
   end
 end
 
+local run_dap = function()
+  vim.cmd([[write]])
+  require("dap").continue()
+end
+
 local opts = { silent = true }
 
 vim.keymap.set("n", "<C-x>", toggle_ui, opts)
@@ -65,7 +77,7 @@ vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>", opts)
 vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>", opts)
 vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>", opts)
 vim.keymap.set("n", "<F4>", ":lua require'dap'.close()<CR>", opts)
-vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>", opts)
+vim.keymap.set("n", "<F5>", run_dap, opts)
 vim.keymap.set("n", "<Leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('condition: '))<CR>", opts)
 vim.keymap.set("n", "<Leader>b", ":lua require'dap'.toggle_breakpoint()<CR>", opts)
 vim.keymap.set("n", "<Leader>dl", ":lua require'dap'.run_last()<CR>", opts)
