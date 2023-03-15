@@ -127,9 +127,8 @@ end
 local local_rc = os.getenv("LOCAL_RC")
 if local_rc ~= nil then
   for _, project_path in ipairs(vim.fn.split(local_rc, ":")) do
-    vim.api.nvim_create_autocmd({ "BufReadPost" }, {
-      pattern = project_path .. "/**",
-      command = vim.cmd("source " .. project_path .. "/init.lua"),
-    })
+    if vim.fn.getcwd() == project_path then
+      vim.cmd("source " .. project_path .. "/init.lua")
+    end
   end
 end
