@@ -122,13 +122,3 @@ for _, server_name in ipairs(get_servers()) do
     capabilities = LSPCapabilities,
   })
 end
-
--- source allowed projects config
-local local_rc = os.getenv("LOCAL_RC")
-if local_rc ~= nil then
-  for _, project_path in ipairs(vim.fn.split(local_rc, ":")) do
-    if vim.fn.getcwd() == project_path then
-      vim.cmd("source " .. project_path .. "/init.lua")
-    end
-  end
-end
