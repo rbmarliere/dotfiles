@@ -3,6 +3,15 @@ require("neodev").setup()
 require("mason").setup({ ui = { border = "rounded" } })
 require("mason-lspconfig").setup()
 
+-- override border for floating windows
+require("lspconfig.ui.windows").default_options.border = "rounded"
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or "rounded"
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+
 -- global lsp on_attach function
 LSPAttach = function(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -16,7 +25,7 @@ LSPAttach = function(client, bufnr)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
   vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-  -- vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+  vim.keymap.set("n", "<Leader>k", vim.lsp.buf.signature_help, opts)
   vim.keymap.set("n", "<Leader>wa", vim.lsp.buf.add_workspace_folder, opts)
   vim.keymap.set("n", "<Leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
   vim.keymap.set("n", "<Leader>wl", function()
