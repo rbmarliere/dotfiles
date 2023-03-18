@@ -3,6 +3,7 @@ vim.opt.autoindent = true
 vim.opt.autoread = true
 vim.opt.background = "dark"
 vim.opt.backspace = "indent,eol,start"
+vim.opt.backup = false
 vim.opt.bdir = os.getenv("HOME") .. "/.config/nvim/tmp"
 vim.opt.colorcolumn = "80"
 vim.opt.dir = os.getenv("HOME") .. "/.config/nvim/tmp"
@@ -21,15 +22,16 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.ruler = true
 vim.opt.scrolloff = 8
-vim.opt.title = true
+vim.opt.sessionoptions:remove({ "blank", "terminal" }) -- exclude nvim-dap buffers
 vim.opt.shiftround = true
 vim.opt.shiftwidth = 4
 vim.opt.signcolumn = "yes"
 vim.opt.smartindent = true
 vim.opt.softtabstop = 4
+vim.opt.swapfile = false
 vim.opt.tabstop = 4
 vim.opt.termguicolors = true
+vim.opt.title = true
 vim.opt.undodir = os.getenv("HOME") .. "/.config/nvim/tmp"
 vim.opt.undofile = true
 vim.opt.updatetime = 50
-vim.opt.sessionoptions:remove("blank") -- exclude nvim-dap buffers
