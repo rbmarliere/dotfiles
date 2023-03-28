@@ -6,26 +6,17 @@ return require("packer").startup(function(use)
   use("folke/zen-mode.nvim")
   use("github/copilot.vim")
   use("jamessan/vim-gnupg")
+  use("lewis6991/gitsigns.nvim")
   use("lukas-reineke/indent-blankline.nvim")
   use("mbbill/undotree")
+  use("nvim-lua/plenary.nvim")
+  use("nvim-telescope/telescope.nvim")
   use("sainnhe/gruvbox-material")
   use("tpope/vim-commentary")
   use("tpope/vim-fugitive")
   use("tpope/vim-repeat")
   use("tpope/vim-surround")
   use("tpope/vim-unimpaired")
-  use({
-    "lewis6991/gitsigns.nvim",
-    config = function()
-      require("gitsigns").setup()
-    end,
-  })
-  use({
-    "nvim-telescope/telescope.nvim",
-    tag = "0.1.0",
-    -- or                            , branch = "0.1.x",
-    requires = { "nvim-lua/plenary.nvim" },
-  })
 
 
   -- treesitter
@@ -42,6 +33,7 @@ return require("packer").startup(function(use)
   use("neovim/nvim-lspconfig")
   use("williamboman/mason.nvim")
   use("williamboman/mason-lspconfig.nvim")
+  use("jose-elias-alvarez/null-ls.nvim")
 
   -- autocompletion
   use("davidsierradz/cmp-conventionalcommits")

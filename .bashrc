@@ -25,11 +25,11 @@ alias apt="sudo apt"
 alias systemctl="sudo systemctl"
 alias dd="sudo dd status=progress"
 alias dpkg="sudo dpkg"
-alias py="PYTHONSTARTUP=~/.pythonrc python3"
 alias dmesg="sudo dmesg"
 alias mount="sudo mount"
 alias umount="sudo umount"
 
 [ -f "$HOME/.bash_aliases" ] && source "$HOME/.bash_aliases"
+
 [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
 [ -f /usr/share/doc/fzf/examples/completion.bash ] && source /usr/share/doc/fzf/examples/completion.bash

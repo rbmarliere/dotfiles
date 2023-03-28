@@ -1,7 +1,15 @@
 require("neodev").setup()
 
 require("mason").setup({ ui = { border = "rounded" } })
-require("mason-lspconfig").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "ruff_lsp",
+    "jedi_language_server",
+    "lua_ls",
+    "bashls",
+    "tsserver",
+  }
+})
 
 -- override border for floating windows
 require("lspconfig.ui.windows").default_options.border = "rounded"
@@ -11,6 +19,9 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
   opts.border = opts.border or "rounded"
   return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
+
+local format_group = vim.api.nvim_create_augroup("LSPFormatting", {})
+-- local imports_group = vim.api.nvim_create_augroup("LSPOrganizeImports", {})
 
 -- global lsp on_attach function
 LSPAttach = function(client, bufnr)
@@ -39,36 +50,32 @@ LSPAttach = function(client, bufnr)
     vim.lsp.buf.format({ async = true })
   end, opts)
 
-  -- automatically format and organize imports when saving file
-  vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    pattern = "<buffer>",
-    callback = function()
-      if client.name == "tsserver" then
-        local params = {
-          command = "_typescript.organizeImports",
-          arguments = { vim.api.nvim_buf_get_name(0) },
-          title = "",
-        }
-        vim.lsp.buf.execute_command(params)
-      elseif client.supports_method("textDocument/codeAction") then
-        local response = client.request_sync("textDocument/codeAction", vim.lsp.util.make_range_params())
-        if response and response.result then
-          local code_actions = response.result
-          if code_actions then
-            for _, code_action_object in ipairs(code_actions) do
-              if code_action_object.kind == "source.organizeImports" then
-                vim.lsp.buf.code_action({
-                  context = { only = { "source.organizeImports" } },
-                  apply = true,
-                })
-              end
-            end
-          end
-        end
-      end
-      vim.lsp.buf.format()
-    end,
-  })
+  -- automatically format on save
+  if client.supports_method("textDocument/formatting") then
+    vim.api.nvim_clear_autocmds({ group = format_group, buffer = bufnr })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = format_group,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ bufnr = bufnr })
+      end,
+    })
+  end
+
+  -- automatically organize imports on save
+  -- if client.supports_method("source.organizeImports") then
+  --   vim.api.nvim_clear_autocmds({ group = imports_group, buffer = bufnr })
+  --   vim.api.nvim_create_autocmd("BufWritePost", {
+  --     group = format_group,
+  --     buffer = bufnr,
+  --     callback = function()
+  --       vim.lsp.buf.code_action({
+  --         context = { only = { "source.organizeImports" } },
+  --         apply = true
+  --       })
+  --     end,
+  --   })
+  -- end
 end
 
 -- autocompletion
@@ -131,3 +138,12 @@ for _, server_name in ipairs(get_servers()) do
     capabilities = LSPCapabilities,
   })
 end
+
+local null_ls = require("null-ls")
+null_ls.setup({
+  sources = {
+    null_ls.builtins.diagnostics.ruff,
+    null_ls.builtins.formatting.black,
+  },
+  on_attach = LSPAttach,
+})
