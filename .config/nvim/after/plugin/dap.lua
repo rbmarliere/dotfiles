@@ -1,21 +1,27 @@
 require("nvim-dap-virtual-text").setup({
   commented = true,
+  virt_text_win_col = 90,
+  highlight_changed_variables = true,
 })
 
 require("dapui").setup({
   layouts = { {
     elements = { {
+      id = "scopes",
+      size = 1
+    } },
+    position = "bottom",
+    size = 22
+  }, {
+    elements = { {
       id = "stacks",
-      size = 0.16
+      size = 0.33
     }, {
       id = "breakpoints",
-      size = 0.17
+      size = 0.34
     }, {
       id = "watches",
-      size = 0.22
-    }, {
-      id = "scopes",
-      size = 0.45
+      size = 0.33
     } },
     position = "left",
     size = 65
@@ -23,12 +29,9 @@ require("dapui").setup({
     elements = { {
       id = "repl",
       size = 1
-      -- }, {
-      --   id = "repl",
-      --   size = 0.7
     } },
     position = "right",
-    size = 150
+    size = 120
   } },
 })
 
@@ -73,6 +76,7 @@ end
 local opts = { silent = true }
 
 vim.keymap.set("n", "<C-x>", toggle_ui, opts)
+vim.keymap.set("n", "<F8>", ":DapVirtualTextToggle<CR>", opts)
 vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>", opts)
 vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>", opts)
 vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>", opts)
