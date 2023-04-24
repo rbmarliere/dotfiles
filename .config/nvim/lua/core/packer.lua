@@ -9,8 +9,6 @@ return require("packer").startup(function(use)
   use("lewis6991/gitsigns.nvim")
   use("lukas-reineke/indent-blankline.nvim")
   use("mbbill/undotree")
-  use("nvim-lua/plenary.nvim")
-  use("nvim-telescope/telescope.nvim")
   use("sainnhe/gruvbox-material")
   use("tpope/vim-commentary")
   use("tpope/vim-fugitive")
@@ -18,6 +16,17 @@ return require("packer").startup(function(use)
   use("tpope/vim-surround")
   use("tpope/vim-unimpaired")
 
+  use {
+    "nvim-telescope/telescope.nvim",
+    tag = "0.1.1",
+    requires = {
+      { "nvim-telescope/telescope-live-grep-args.nvim" },
+      { "nvim-lua/plenary.nvim" }
+    },
+    config = function()
+      require("telescope").load_extension("live_grep_args")
+    end
+  }
 
   -- treesitter
   use {
