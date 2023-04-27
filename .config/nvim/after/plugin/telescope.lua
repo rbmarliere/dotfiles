@@ -2,8 +2,8 @@ local builtin = require("telescope.builtin")
 local opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<Leader>pf", builtin.git_files, opts)
 vim.keymap.set("n", "<C-p>", builtin.find_files, opts)
-vim.keymap.set("n", "<Leader>pg", builtin.live_grep, opts)
-vim.keymap.set("n", "<Leader>pG", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", opts)
+-- vim.keymap.set("n", "<Leader>pg", builtin.live_grep, opts)
+vim.keymap.set("n", "<Leader>pg", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", opts)
 vim.keymap.set("n", "<C-Space>", builtin.lsp_document_symbols, opts)
 
 require("telescope").setup {

@@ -9,12 +9,8 @@ fi
 
 files=(
     .bashrc
-    .config/alacritty
-    .config/i3
-    .config/nvim
-    .gitconfig
+    .config/**
     .inputrc
-    .tmux.conf
 )
 
 for file in "${files[@]}"; do

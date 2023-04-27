@@ -137,6 +137,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id compton
 exec --no-startup-id nitrogen --restore
 exec --no-startup-id setxkbmap -option "caps:escape"
+exec --no-startup-id gxkb
 
 default_border pixel 4
 default_floating_border pixel 4
