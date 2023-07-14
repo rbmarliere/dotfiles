@@ -9,6 +9,7 @@ require("mason-lspconfig").setup({
     "bashls",
     "tsserver",
   }
+  -- prettier, stylua, black
 })
 
 -- override border for floating windows
@@ -47,20 +48,29 @@ LSPAttach = function(client, bufnr)
   vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, opts)
   vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
   vim.keymap.set("n", "<Leader>f", function()
-    vim.lsp.buf.format({ async = true })
+    vim.cmd("Format")
   end, opts)
 
+  -- Create a command `:Format` local to the LSP buffer
+  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+    if client.name == "ruff_lsp" then
+      vim.cmd("silent !" .. vim.fn.stdpath("data") .. "/mason/packages/black/venv/bin/black" .. " %")
+    else
+      if client.supports_method("textDocument/formatting") then
+        vim.lsp.buf.format({ async = false })
+      end
+    end
+  end, { desc = "Format current buffer with LSP" })
+
   -- automatically format on save
-  if client.supports_method("textDocument/formatting") then
-    vim.api.nvim_clear_autocmds({ group = format_group, buffer = bufnr })
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      group = format_group,
-      buffer = bufnr,
-      callback = function()
-        vim.lsp.buf.format({ bufnr = bufnr })
-      end,
-    })
-  end
+  vim.api.nvim_clear_autocmds({ group = format_group, buffer = bufnr })
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    group = format_group,
+    buffer = bufnr,
+    callback = function()
+      vim.cmd("Format")
+    end,
+  })
 
   -- automatically organize imports on save
   -- if client.supports_method("source.organizeImports") then
@@ -138,12 +148,3 @@ for _, server_name in ipairs(get_servers()) do
     capabilities = LSPCapabilities,
   })
 end
-
-local null_ls = require("null-ls")
-null_ls.setup({
-  sources = {
-    null_ls.builtins.diagnostics.ruff,
-    null_ls.builtins.formatting.black,
-  },
-  on_attach = LSPAttach,
-})
