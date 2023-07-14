@@ -34,3 +34,5 @@
     trustExitCode = true
 [pull]
     ff = only
+[bash]
+	showDirtyState = true
