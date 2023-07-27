@@ -10,6 +10,7 @@ fi
 files=(
     .bashrc
     .config/**
+    .local/bin/*
     .inputrc
 )
 

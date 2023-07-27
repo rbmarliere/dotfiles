@@ -4,7 +4,7 @@ require("mason").setup({ ui = { border = "rounded" } })
 require("mason-lspconfig").setup({
   ensure_installed = {
     "ruff_lsp",
-    "jedi_language_server",
+    "pyright",
     "lua_ls",
     "bashls",
     "tsserver",
@@ -143,8 +143,28 @@ LSPCapabilities = require("cmp_nvim_lsp").default_capabilities()
 local lspconfig = require("lspconfig")
 local get_servers = require("mason-lspconfig").get_installed_servers
 for _, server_name in ipairs(get_servers()) do
-  lspconfig[server_name].setup({
-    on_attach = LSPAttach,
-    capabilities = LSPCapabilities,
-  })
+  if server_name == "ruff_lsp" then
+    lspconfig[server_name].setup({
+      on_attach = LSPAttach,
+      capabilities = LSPCapabilities,
+      settings = {
+        interpreter = vim.fn.getcwd() .. "/.venv/bin/python"
+      },
+    })
+  elseif server_name == "pyright" then
+    lspconfig[server_name].setup({
+      on_attach = LSPAttach,
+      capabilities = LSPCapabilities,
+      settings = {
+        python = {
+          pythonPath = vim.fn.getcwd() .. "/.venv/bin/python",
+        },
+      },
+    })
+  else
+    lspconfig[server_name].setup({
+      on_attach = LSPAttach,
+      capabilities = LSPCapabilities,
+    })
+  end
 end
