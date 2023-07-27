@@ -28,6 +28,15 @@ require("telescope").setup {
     -- }
     -- Now the picker_config_key will be applied every time you call this
     -- builtin picker
+    find_files = {
+      hidden = true,
+      theme = "ivy",
+      file_ignore_patterns = { ".git/", ".cache", "%.o", "%.a", "%.out", "%.class",
+        "%.pdf", "%.mkv", "%.mp4", "%.zip" },
+    },
+    git_files = {
+      theme = "ivy",
+    },
   },
   extensions = {
     -- Your extension configuration goes here:
