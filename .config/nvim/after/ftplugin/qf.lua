@@ -1,3 +1,2 @@
-vim.cmd([[wincmd J]])
-
-vim.cmd([[setlocal modifiable]])
+vim.cmd.wincmd("J")
+vim.cmd.setlocal("modifiable")

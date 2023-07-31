@@ -1,17 +1,17 @@
 local toggle_qf = function()
-  local qf_exists = false
-  for _, win in pairs(vim.fn.getwininfo()) do
-    if win["quickfix"] == 1 then
-      qf_exists = true
-    end
-  end
-  if qf_exists == true then
-    vim.cmd "cclose"
-    return
-  end
-  if not vim.tbl_isempty(vim.fn.getqflist()) then
-    vim.cmd "copen"
-  end
+	local qf_exists = false
+	for _, win in pairs(vim.fn.getwininfo()) do
+		if win["quickfix"] == 1 then
+			qf_exists = true
+		end
+	end
+	if qf_exists == true then
+		vim.cmd("cclose")
+		return
+	end
+	if not vim.tbl_isempty(vim.fn.getqflist()) then
+		vim.cmd("copen")
+	end
 end
 
 local opts = { noremap = true }
@@ -35,6 +35,7 @@ vim.keymap.set("n", "<Leader>J", ":resize -10<CR>", opts)
 vim.keymap.set("n", "<Leader>K", ":resize +10<CR>", opts)
 vim.keymap.set("n", "<Leader>L", ":vertical resize -10<CR>", opts)
 vim.keymap.set("n", "<Leader>W", ":w !sudo tee % > /dev/null<CR>", opts)
+vim.keymap.set("n", "<Leader>X", ":!chmod +x %<CR>", opts)
 vim.keymap.set("n", "<Leader>Y", '"+y$', opts)
 vim.keymap.set("n", "<Leader>q", toggle_qf, opts)
 vim.keymap.set("n", "<Leader>rs", ":source ~/.config/nvim/sessions/", opts)

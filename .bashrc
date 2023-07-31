@@ -1,9 +1,10 @@
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 export EDITOR="nvim"
 
 export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
-export HISTFILE=~/.bash_eternal_history
+export HISTFILE="$HOME/.bash_eternal_history"
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 shopt -s histappend
 
@@ -22,4 +23,3 @@ alias la="ls --color=auto -la"
 alias ls="ls --color=auto"
 
 [ -f "$HOME/.aliases" ] && source "$HOME/.aliases"
-
