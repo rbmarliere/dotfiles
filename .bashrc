@@ -23,3 +23,6 @@ alias la="ls --color=auto -la"
 alias ls="ls --color=auto"
 
 [ -f "$HOME/.aliases" ] && source "$HOME/.aliases"
+[ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
+
+bind '"\006":"tmux-sessionizer.sh\n"'
