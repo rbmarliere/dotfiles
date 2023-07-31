@@ -1,6 +1,6 @@
 #!/bin/bash
 
-selected=$(find ~/git ~/personal ~/work -mindepth 1 -maxdepth 1 -type d | fzf)
+selected=$(find ~/git ~/personal ~/work -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
 
 if [[ -z "$selected" ]]; then
     exit 0
