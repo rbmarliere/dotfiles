@@ -1,6 +1,6 @@
 #!/bin/bash
 
-selected=$(find ~/personal ~/work -mindepth 1 -maxdepth 1 -type d | fzf)
+selected=$(find ~/git ~/personal ~/work -mindepth 1 -maxdepth 1 -type d | fzf)
 
 if [[ -z "$selected" ]]; then
     exit 0
@@ -17,4 +17,3 @@ if [[ -z "$TMUX" ]]; then
 else
     tmux switch-client -t "$selected_name"
 fi
-
