@@ -5,7 +5,7 @@ vim.api.nvim_create_autocmd({
 	command = vim.cmd.wincmd("H"),
 })
 
-vim.cmd.setlocal("spell")
+vim.cmd.setlocal("spell tw=75 wrap")
 
 local cmp = require("cmp")
 cmp.setup.buffer({

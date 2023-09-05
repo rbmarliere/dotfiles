@@ -1,4 +1,4 @@
 require("core.map")
-require("core.packer")
+require("core.lazy")
 require("core.set")
 require("core.tabmove")

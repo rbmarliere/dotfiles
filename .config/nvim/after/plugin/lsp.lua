@@ -9,7 +9,7 @@ require("mason-lspconfig").setup({
 		"bashls",
 		"tsserver",
 	},
-	-- prettier, stylua, black
+	-- black, prettier, stylua
 })
 
 -- override border for floating windows
@@ -21,7 +21,7 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 	return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
 
-local format_group = vim.api.nvim_create_augroup("LSPFormatting", {})
+-- local format_group = vim.api.nvim_create_augroup("LSPFormatting", {})
 -- local imports_group = vim.api.nvim_create_augroup("LSPOrganizeImports", {})
 
 -- global lsp on_attach function
@@ -50,14 +50,14 @@ LSPAttach = function(_, bufnr)
 	vim.keymap.set("n", "<Leader>f", vim.cmd.FormatWrite, opts)
 
 	-- automatically format on save
-	vim.api.nvim_clear_autocmds({ group = format_group, buffer = bufnr })
-	vim.api.nvim_create_autocmd("BufWritePost", {
-		group = format_group,
-		buffer = bufnr,
-		callback = function()
-			vim.cmd.FormatWrite()
-		end,
-	})
+	-- vim.api.nvim_clear_autocmds({ group = format_group, buffer = bufnr })
+	-- vim.api.nvim_create_autocmd("BufWritePost", {
+	-- 	group = format_group,
+	-- 	buffer = bufnr,
+	-- 	callback = function()
+	-- 		vim.cmd.FormatWrite()
+	-- 	end,
+	-- })
 end
 
 -- autocompletion
@@ -143,6 +143,7 @@ for _, server_name in ipairs(get_servers()) do
 		lspconfig[server_name].setup({
 			on_attach = LSPAttach,
 			capabilities = LSPCapabilities,
+			offset_encoding = "utf-16", -- https://github.com/neovim/nvim-lspconfig/issues/2184#issuecomment-1574848274
 		})
 	end
 end

@@ -1,6 +1,7 @@
 [user]
-    name = Ricardo Marliere
-    email = rbmarliere@gmail.com
+    name = Ricardo B. Marliere
+    email = ricardo@marliere.net
+
 [alias]
     aa = add --all
     amend = commit --amend
@@ -13,26 +14,46 @@
     ff = merge --ff-only
     noff = merge --no-ff
     po = push origin
-    pom = push origin master
+    pom = push --set-upstream origin main
     pullff = pull --ff-only
     r = !git l
     ra = !git r --all
     st = status
     l = log --graph --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
     la = !git l --name-status
+
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
+
 [diff]
     tool = nvimdiff
+
 [difftool "nvimdiff"]
     cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+
 [difftool]
     prompt = false
     trustExitCode = true
+
 [pull]
     ff = only
+
 [bash]
-	showDirtyState = true
+    showDirtyState = true
+
+[init]
+    defaultBranch = "main"
+
+[core]
+    editor = vim
+
+[format]
+    signoff = true
+
+[sendemail]
+    smtpuser =
+    smtpserver = "/usr/bin/msmtp"
+    smtpencryption = tls
