@@ -1,5 +1,5 @@
 if [ "$(tty)" = "/dev/tty1" ]; then
-	ch_wipe
+	~/.local/bin/ch_wipe
 	exec sway
 fi
 

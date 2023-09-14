@@ -27,7 +27,10 @@ def run_qemu():
                       help="append kernel parameters")
     argp.add_argument("--no-gdb",
                       action="store_true",
-                      help="do not use -s and -S")
+                      help="do not use -s")
+    argp.add_argument("--wait-gdb",
+                      action="store_true",
+                      help="use -S if -s is used")
     argp.add_argument("--no-snapshot",
                       action="store_true",
                       help="do not use -snapshot")
@@ -53,9 +56,11 @@ def run_qemu():
 
     gdb = ""
     if not args.no_gdb:
-        gdb = "-s -S"
+        gdb = "-s"
         cmdline += " nokaslr"
-        print("waiting for gdb to connect...")
+        if args.wait_gdb:
+            gdb += " -S"
+            print("waiting for gdb to connect...")
 
     snapshot = "" if args.no_snapshot else "-snapshot"
 
