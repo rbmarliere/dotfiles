@@ -1,0 +1,23 @@
+#!/bin/bash
+
+type schroot > /dev/null 2>&1 || exit
+
+if [ -z "$1" ]; then
+	echo "usage: ch <session>"
+	exit 1
+fi
+
+if schroot --list --all-sessions | grep -q chroot:$1; then
+	echo "session $1 not found"
+	exit 1
+fi
+
+if ls /var/lib/schroot/session | grep -q $1; then
+	if ! mount | grep -q /run/schroot/mount/$1; then
+		schroot --recover-session -c $1 > /dev/null
+	fi
+else
+	schroot -b -n $1 -c $1 > /dev/null
+fi
+
+exec schroot -r -c $1

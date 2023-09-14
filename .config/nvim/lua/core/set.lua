@@ -35,3 +35,4 @@ vim.opt.title = true
 vim.opt.undodir = os.getenv("HOME") .. "/.config/nvim/tmp"
 vim.opt.undofile = true
 vim.opt.updatetime = 50
+vim.opt.guicursor = "a:blinkon100"

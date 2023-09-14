@@ -13,12 +13,12 @@ output * bg $bg fill
 output DP-1 mode --custom 3440x1440@60Hz
 
 for_window [shell="xdg_shell" app_id="pcmanfm-qt"] floating enable
-for_window [title="^mutt |^weechat:*" shell="xdg_shell" app_id="foot"] floating enable
-for_window [title="^mutt |^weechat:*" shell="xdg_shell" app_id="foot"] border none
-for_window [title="^mutt |^weechat:*" shell="xdg_shell" app_id="foot"] resize set height 100 ppt
+for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] floating enable
+for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] border none
+for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] resize set height 100 ppt
 for_window [title="^mutt" shell="xdg_shell" app_id="foot"] resize set 1600
 for_window [title="^mutt" shell="xdg_shell" app_id="foot"] move right 300
-for_window [title="^weechat:*" shell="xdg_shell" app_id="foot"] resize set 1920
+for_window [title="^weechat*" shell="xdg_shell" app_id="foot"] resize set 1920
 
 exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
@@ -41,7 +41,7 @@ bindsym $mod+Print exec wl-copy < $(grimshot save area ~/Pictures/Screenshots/$(
 bindsym $mod+Control+l exec swaylock -f -c 000000 -i $bg
 
 bindsym $mod+Return exec $term
-bindsym $mod+Shift+q kill
+bindsym $mod+Shift+q exec ~/.config/sway/kill.sh
 bindsym $mod+d exec $menu
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'

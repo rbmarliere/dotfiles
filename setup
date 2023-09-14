@@ -1,0 +1,15 @@
+#!/bin/bash
+
+mkdir -p "$HOME/.config" "$HOME/.local/bin"
+
+files=(
+	.bash_profile
+	.bashrc
+	.config/**
+	.inputrc
+	.local/bin/**
+)
+
+for file in "${files[@]}"; do
+	ln -s -f -T "$(pwd)/$file" "$HOME/$file"
+done

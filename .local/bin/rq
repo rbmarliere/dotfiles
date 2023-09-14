@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+
+def run_qemu():
+    rootfs = os.path.expanduser("~/images/rootfs.img")
+    cmdline = "root=/dev/sda console=ttyS0 earlyprintk=serial net.ifnames=0"
+
+    argp = argparse.ArgumentParser()
+    argp.add_argument("--rootfs",
+                      help="rootfs image",
+                      default=rootfs)
+    argp.add_argument("-k",
+                      "--kernel",
+                      help="kernel bootable image",
+                      default="arch/x86/boot/bzImage")
+    argp.add_argument("-p",
+                      "--port",
+                      help="host's port to bind into guest's ssh port",
+                      default=10022)
+    argp.add_argument("-f",
+                      "--file",
+                      help="file to copy into the rootfs /root directory")
+    argp.add_argument("-a",
+                      "--append",
+                      help="append kernel parameters")
+    argp.add_argument("--no-gdb",
+                      action="store_true",
+                      help="do not use -s and -S")
+    argp.add_argument("--no-snapshot",
+                      action="store_true",
+                      help="do not use -snapshot")
+    args = argp.parse_args()
+
+    if not os.path.exists(args.rootfs):
+        print("rootfs image does not exist")
+        return 1
+
+    if not os.path.exists(args.kernel):
+        print("kernel image does not exist")
+        return 1
+
+    if args.file:
+        if not os.path.exists(args.file):
+            print("file does not exist")
+            return 1
+        tmp = os.path.expanduser("~/images/tmp")
+        os.system(f"mkdir -p {tmp}")
+        os.system(f"sudo mount -o loop {args.rootfs} {tmp}")
+        os.system(f"sudo cp {args.file} {tmp}/root")
+        os.system(f"sudo umount {tmp}")
+
+    gdb = ""
+    if not args.no_gdb:
+        gdb = "-s -S"
+        cmdline += " nokaslr"
+        print("waiting for gdb to connect...")
+
+    snapshot = "" if args.no_snapshot else "-snapshot"
+
+    os.system(f"qemu-system-x86_64 \
+        -m 2G \
+        -smp 2,sockets=2,cores=1 \
+        -net nic,model=e1000 \
+        -net user,host=10.0.2.25,hostfwd=tcp::{args.port}-:22 \
+        -enable-kvm \
+        -nographic \
+        -machine pc-q35-7.1 \
+        -kernel {args.kernel} \
+        -append '{cmdline} {args.append}' \
+        -drive format=raw,file={rootfs} \
+        {gdb} \
+        {snapshot} || sleep 5000")
+
+if __name__ == "__main__":
+    run_qemu()
+

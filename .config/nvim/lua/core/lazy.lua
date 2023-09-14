@@ -13,6 +13,7 @@ vim.opt.rtp:prepend(lazypath)
 
 return require("lazy").setup({
 	-- general
+  'christoomey/vim-tmux-navigator',
 	"ThePrimeagen/harpoon",
 	"folke/neodev.nvim",
 	"folke/zen-mode.nvim",

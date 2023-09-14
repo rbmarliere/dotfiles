@@ -1,0 +1,9 @@
+#!/bin/bash
+
+type schroot > /dev/null 2>&1 || exit
+
+sessions=$(schroot --list --all-sessions | awk -F: '{print $2}' | sort | uniq)
+
+for session in $sessions; do
+	schroot --end-session --chroot "$session"
+done

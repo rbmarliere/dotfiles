@@ -97,11 +97,13 @@
       "on-scroll-down": "tz_down"
     },
     "timezones": [
-      "Brazil/East",
+      "America/Sao_Paulo",
+      "America/New_York",
+      "America/Los_Angeles",
       "UTC",
-      "US/Eastern",
-      "US/Central",
-      "US/Pacific"
+      "Europe/London",
+      "Europe/Berlin",
+      "Asia/Shanghai"
     ]
   }
 

@@ -139,6 +139,15 @@ for _, server_name in ipairs(get_servers()) do
 				},
 			},
 		})
+  elseif server_name == "clangd" then
+    local compile_commands = vim.fn.getcwd() .. "/compile_commands.json"
+    if vim.fn.filereadable(compile_commands) == 1 then
+      lspconfig[server_name].setup({
+        on_attach = LSPAttach,
+        capabilities = LSPCapabilities,
+        offset_encoding = "utf-16", -- https://github.com/neovim/nvim-lspconfig/issues/2184#issuecomment-1574848274
+      })
+    end
 	else
 		lspconfig[server_name].setup({
 			on_attach = LSPAttach,
