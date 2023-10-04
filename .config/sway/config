@@ -1,4 +1,4 @@
-set $bg ~/Pictures/bg.png
+set $bg ~/Pictures/bg
 set $res 300px
 set $mod Mod4
 set $left h
@@ -23,21 +23,21 @@ for_window [title="^weechat*" shell="xdg_shell" app_id="foot"] resize set 1920
 exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 exec swayidle -w \
-         timeout 600 'swaylock -f -c 000000 -i $bg' \
-         timeout 900 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000 -i $bg'
+	timeout 600 'swaylock -f -c 000000 -i $bg' \
+	timeout 900 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -f -c 000000 -i $bg'
 
 input type:keyboard {
-    xkb_layout us,us,br
-    xkb_variant ,dvorak,
-    xkb_options caps:swapescape
-    # man 7 xkeyboard-config
+	xkb_layout us,us,br
+	xkb_variant ,dvorak,
+	xkb_options caps:swapescape
+	# man 7 xkeyboard-config
 }
 
 bindsym $mod+x exec cliphist list | bemenu $bemenu_opts | cliphist decode | wl-copy
 bindsym $mod+Shift+x exec cliphist list | bemenu $bemenu_opts | cliphist delete
-bindsym $mod+Shift+Print exec wl-copy < $(grimshot save screen ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png)
-bindsym $mod+Print exec wl-copy < $(grimshot save area ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png)
+bindsym Shift+Print exec wl-copy < $(grimshot save screen ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png)
+bindsym Print exec wl-copy < $(grimshot save area ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png)
 bindsym $mod+Control+l exec swaylock -f -c 000000 -i $bg
 
 bindsym $mod+Return exec $term
@@ -93,12 +93,12 @@ bindsym XF86MonBrightnessUp exec light -A 5
 bindsym XF86MonBrightnessDown exec light -U 5
 
 mode "resize" {
-    bindsym $left resize shrink width $res
-    bindsym $down resize grow height $res
-    bindsym $up resize shrink height $res
-    bindsym $right resize grow width $res
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+	bindsym $left resize shrink width $res
+	bindsym $down resize grow height $res
+	bindsym $up resize shrink height $res
+	bindsym $right resize grow width $res
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 

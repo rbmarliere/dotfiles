@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+	echo "usage: $0 <image> <mountpoint>"
+	echo ''
+	echo 'mounts a partition image file or the first partition of a disk image file'
+	exit 1
+fi
+
+if [ ! -f $1 ]; then
+	echo "error: file $1 does not exist"
+	exit 1
+fi
+
+if [ -f $2 ]; then
+	echo "error: file $2 already exists"
+	exit 1
+fi
+
+if [ ! -d $2 ]; then
+	mkdir $2
+fi
+
+file -L $1 | grep -q 'partition table'
+if [ $? -eq 0 ]; then
+	start=$( /sbin/fdisk -l -o Device,Start ${1} | grep "^${1}1" | gawk '{print $2}' )
+	sectors=$( /sbin/fdisk -l ${1} | grep '^Units: sectors of' | gawk '{print $(NF-1)}' )
+	offset=$(( $start * $sectors ))
+	sudo mount -o loop,offset=$offset $1 $2
+	exit 0
+fi
+
+file -L $1 | grep -q 'filesystem data'
+if [ $? -eq 0 ]; then
+	sudo mount -o loop $1 $2
+	exit 0
+fi
+
+exit 1

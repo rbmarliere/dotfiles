@@ -16,8 +16,6 @@ end
 
 local opts = { noremap = true }
 
-vim.g.mapleader = " "
-
 vim.keymap.set("n", "-", ":Ex<CR>", opts)
 vim.keymap.set("n", "<Bar>", "<C-W>v<C-W><Right>", opts)
 vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
@@ -36,6 +34,7 @@ vim.keymap.set("n", "<Leader>K", ":resize +10<CR>", opts)
 vim.keymap.set("n", "<Leader>L", ":vertical resize -10<CR>", opts)
 vim.keymap.set("n", "<Leader>W", ":w !sudo tee % > /dev/null<CR>", opts)
 vim.keymap.set("n", "<Leader>X", ":!chmod +x %<CR>", opts)
+vim.keymap.set("n", "<Leader>P", ":pu<CR>", opts)
 vim.keymap.set("n", "<Leader>q", toggle_qf, opts)
 vim.keymap.set("n", "<Leader>rs", ":source ~/.config/nvim/sessions/", opts)
 vim.keymap.set("n", "<Leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", opts)
@@ -48,6 +47,5 @@ vim.keymap.set("n", "n", "nzzzv", opts)
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", opts)
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts)
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
-vim.keymap.set({ "n", "v" }, "<Leader>P", '"+p', opts)
 vim.keymap.set({ "n", "v" }, "<Leader>p", '"_dP', opts)
 vim.keymap.set({ "n", "v" }, "<Leader>y", '"+y', opts)

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+	echo "usage: $0 <path> <output>"
+	echo ''
+	echo '  path: path to the directory containing the initramfs'
+	echo '  output: name of the output file (default: initramfs.cpio.gz)'
+	exit 1
+fi
+
+if [ $# -eq 1 ]; then
+	OUTPUT="$(pwd)/initramfs.cpio.gz"
+else
+	OUTPUT=$2
+fi
+
+OUTPUT=$(realpath $OUTPUT)
+pushd $1
+
+sudo sh -c 'find . | cpio -H newc -o | gzip -9 -n > '"$OUTPUT"''
+
+popd
+

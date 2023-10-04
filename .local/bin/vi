@@ -1,12 +1,12 @@
 #!/bin/bash
 
 if type nvim > /dev/null 2>&1; then
-	exec nvim $@
+	exec nvim "$@"
 elif type vim > /dev/null 2>&1; then
-	exec vim $@
+	exec vim "$@"
 elif type /usr/bin/vi > /dev/null 2>&1; then
-	exec /usr/bin/vi $@
+	exec /usr/bin/vi "$@"
 else
-	echo "no vi found"
+	echo 'error: no vi found'
 	exit 1
 fi

@@ -1,0 +1,55 @@
+#!/bin/bash
+
+if [ $# -lt 3 ]; then
+	echo "usage: $0 <root_fs> <path> <file1> <...>"
+	echo ''
+	echo '  root_fs: the root fs image or cpio archive'
+	echo '  path: the path to copy the file(s) to inside the root fs'
+	echo '  file(s): the file(s) to copy into root fs'
+	exit 1
+fi
+echo "root: $1"
+
+if [ ! -f $1 ]; then
+	echo "error: root fs $1 does not exist"
+	exit 1
+fi
+
+for i in "${@:3}"; do
+	if [ ! -f $i ]; then
+		echo "error: $i is not a file"
+		exit 1
+	fi
+done
+
+tmp=$(mktemp -d)
+if [ $? -ne 0 ]; then
+	echo 'error: failed to create temp dir'
+	exit 1
+fi
+echo "$tmp"
+
+if file -L $1 | grep -q 'gzip compressed data\|ASCII cpio archive'; then
+	cpio_extract $1 $tmp || exit 1
+else
+	mount-guest $1 $tmp || exit 1
+	mounted=1
+fi
+
+sudo mkdir -p $tmp/$2
+sudo cp "${@:3}" $tmp/$2
+if [ $? -ne 0 ]; then
+	echo 'error: failed to copy files'
+	if [ $mounted -eq 1 ]; then
+		sudo umount $tmp
+	fi
+	exit 1
+fi
+
+if file -L $1 | grep -q 'gzip compressed data\|ASCII cpio archive'; then
+	cpio_compile $tmp $1 || exit 1
+else
+	sudo umount $tmp || exit 1
+fi
+
+sudo rm -rf $tmp

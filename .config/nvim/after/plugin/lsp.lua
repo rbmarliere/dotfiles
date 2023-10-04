@@ -21,13 +21,9 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 	return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
 
--- local format_group = vim.api.nvim_create_augroup("LSPFormatting", {})
--- local imports_group = vim.api.nvim_create_augroup("LSPOrganizeImports", {})
-
 -- global lsp on_attach function
 LSPAttach = function(_, bufnr)
 	local opts = { noremap = true, silent = true, buffer = bufnr }
-
 	-- default mappings
 	vim.keymap.set("n", "<Leader>e", vim.diagnostic.open_float, opts)
 	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
@@ -47,17 +43,6 @@ LSPAttach = function(_, bufnr)
 	vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename, opts)
 	vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, opts)
 	vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-	vim.keymap.set("n", "<Leader>f", vim.cmd.FormatWrite, opts)
-
-	-- automatically format on save
-	-- vim.api.nvim_clear_autocmds({ group = format_group, buffer = bufnr })
-	-- vim.api.nvim_create_autocmd("BufWritePost", {
-	-- 	group = format_group,
-	-- 	buffer = bufnr,
-	-- 	callback = function()
-	-- 		vim.cmd.FormatWrite()
-	-- 	end,
-	-- })
 end
 
 -- autocompletion
@@ -74,8 +59,8 @@ cmp.setup({
 		documentation = cmp.config.window.bordered(),
 	},
 	mapping = cmp.mapping.preset.insert({
-		["<C-b>"] = cmp.mapping.scroll_docs(-4),
-		["<C-f>"] = cmp.mapping.scroll_docs(4),
+		["<C-u>"] = cmp.mapping.scroll_docs(-4),
+		["<C-d>"] = cmp.mapping.scroll_docs(4),
 		["<C-Space>"] = cmp.mapping.complete(),
 		["<C-e>"] = cmp.mapping.abort(),
 		["<CR>"] = cmp.mapping.confirm({ select = false }),
@@ -139,20 +124,18 @@ for _, server_name in ipairs(get_servers()) do
 				},
 			},
 		})
-  elseif server_name == "clangd" then
-    local compile_commands = vim.fn.getcwd() .. "/compile_commands.json"
-    if vim.fn.filereadable(compile_commands) == 1 then
-      lspconfig[server_name].setup({
-        on_attach = LSPAttach,
-        capabilities = LSPCapabilities,
-        offset_encoding = "utf-16", -- https://github.com/neovim/nvim-lspconfig/issues/2184#issuecomment-1574848274
-      })
-    end
+	elseif server_name == "clangd" then
+		local compile_commands = vim.fn.getcwd() .. "/compile_commands.json"
+		if vim.fn.filereadable(compile_commands) == 1 then
+			lspconfig[server_name].setup({
+				on_attach = LSPAttach,
+				capabilities = LSPCapabilities,
+			})
+		end
 	else
 		lspconfig[server_name].setup({
 			on_attach = LSPAttach,
 			capabilities = LSPCapabilities,
-			offset_encoding = "utf-16", -- https://github.com/neovim/nvim-lspconfig/issues/2184#issuecomment-1574848274
 		})
 	end
 end

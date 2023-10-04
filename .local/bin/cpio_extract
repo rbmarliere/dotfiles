@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+	echo "usage: $0 <input> <path>"
+	echo ''
+	echo '  input: initramfs file to extract'
+	echo '  path: path to the directory to extract to (default: mktemp)'
+	exit 1
+fi
+
+if [ ! -f $1 ]; then
+	echo "error: $1 is not a file"
+	exit 1
+fi
+
+if [ -z $2 ]; then
+	dest=$(mktemp -d)
+	if [ $? -ne 0 ]; then
+		echo 'error: failed to create temp dir'
+		exit 1
+	fi
+else
+	if [ ! -d $2 ]; then
+		mkdir -p $2 || exit 1
+	fi
+	if [ ! -z "$(ls -A $2)" ]; then
+		echo "error: $2 is not empty"
+		exit 1
+	fi
+	dest=$2
+fi
+
+fs=$(realpath $1)
+pushd $dest
+
+if file -L $fs | grep -q "gzip compressed data"; then
+	sudo sh -c 'zcat '"$fs"' | cpio -idm' || exit 1
+else
+	sudo sh -c 'cat '"$fs"' | cpio -idm' || exit 1
+fi
+
+popd

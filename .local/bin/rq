@@ -3,81 +3,158 @@
 import argparse
 import os
 
-def run_qemu():
-    rootfs = os.path.expanduser("~/images/rootfs.img")
-    cmdline = "root=/dev/sda console=ttyS0 earlyprintk=serial net.ifnames=0"
 
-    argp = argparse.ArgumentParser()
-    argp.add_argument("--rootfs",
-                      help="rootfs image",
-                      default=rootfs)
-    argp.add_argument("-k",
-                      "--kernel",
-                      help="kernel bootable image",
-                      default="arch/x86/boot/bzImage")
-    argp.add_argument("-p",
-                      "--port",
-                      help="host's port to bind into guest's ssh port",
-                      default=10022)
-    argp.add_argument("-f",
-                      "--file",
-                      help="file to copy into the rootfs /root directory")
-    argp.add_argument("-a",
-                      "--append",
-                      help="append kernel parameters")
-    argp.add_argument("--no-gdb",
-                      action="store_true",
-                      help="do not use -s")
-    argp.add_argument("--wait-gdb",
-                      action="store_true",
-                      help="use -S if -s is used")
-    argp.add_argument("--no-snapshot",
-                      action="store_true",
-                      help="do not use -snapshot")
+def run_qemu():
+    img_dir = os.path.expanduser(os.environ.get("RQ_IMGDIR", "~/images"))
+    disk = os.path.expanduser(f"{img_dir}/disk.img")
+    bios = os.path.expanduser(f"{img_dir}/seabios.bin")
+
+    argp = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description="Run qemu with sane defaults",
+    )
+    argp.add_argument(
+        "-I",
+        "--img-dir",
+        help="directory containing images (e.g. initramfs, disk, bios), "
+        "can be set through RQ_IMGDIR environment variable",
+        default=img_dir,
+    )
+    argp.add_argument(
+        "-k",
+        "--kernel",
+        type=str,
+        help="kernel bootable image to use with -kernel",
+        default="linux/arch/x86/boot/bzImage",
+    )
+    argp.add_argument("--no-kernel", action="store_true", help="do not use -kernel")
+    argp.add_argument(
+        "-d",
+        "--disk",
+        type=str,
+        help="disk image to use with -drive",
+        default=disk,
+    )
+    argp.add_argument("--no-disk", action="store_true", help="do not use -drive")
+    argp.add_argument(
+        "-i",
+        "--initrd",
+        type=str,
+        help="initrd image to use with -initrd",
+    )
+    argp.add_argument(
+        "-b", "--bios", type=str, help="bios image to use with -bios", default=bios
+    )
+    argp.add_argument(
+        "-p",
+        "--port",
+        type=int,
+        help="host's port to forward into guest's ssh port using -net",
+        default=10022,
+    )
+    argp.add_argument(
+        "-f",
+        nargs="*",
+        type=str,
+        help="file(s) to copy into the disk",
+    )
+    argp.add_argument(
+        "-F",
+        nargs="*",
+        type=str,
+        help="file(s) to copy into the cpio initrd",
+    )
+    argp.add_argument(
+        "-c", "--crash", action="store_true", help="append crashkernel= to cmdline"
+    )
+    argp.add_argument("-a", "--append", type=str, help="append kernel parameters")
+    argp.add_argument("-g", "--gdb", action="store_true", help="use -s")
+    argp.add_argument("--wait-gdb", action="store_true", help="use -S if -s is used")
+    argp.add_argument("--no-snapshot", action="store_true", help="do not use -snapshot")
+    argp.add_argument(
+        "--debug",
+        action="store_true",
+        help="print qemu command instead of running it",
+    )
     args = argp.parse_args()
 
-    if not os.path.exists(args.rootfs):
-        print("rootfs image does not exist")
-        return 1
-
-    if not os.path.exists(args.kernel):
-        print("kernel image does not exist")
-        return 1
-
-    if args.file:
-        if not os.path.exists(args.file):
-            print("file does not exist")
-            return 1
-        tmp = os.path.expanduser("~/images/tmp")
-        os.system(f"mkdir -p {tmp}")
-        os.system(f"sudo mount -o loop {args.rootfs} {tmp}")
-        os.system(f"sudo cp {args.file} {tmp}/root")
-        os.system(f"sudo umount {tmp}")
+    cmdline = args.append if args.append else ""
+    bios = f"-bios {args.bios}" if os.path.exists(args.bios) else ""
+    snapshot = "" if args.no_snapshot else "-snapshot"
+    debug = "" if not args.debug else "echo "
 
     gdb = ""
-    if not args.no_gdb:
+    if args.gdb:
         gdb = "-s"
         cmdline += " nokaslr"
         if args.wait_gdb:
             gdb += " -S"
             print("waiting for gdb to connect...")
 
-    snapshot = "" if args.no_snapshot else "-snapshot"
+    initrd = ""
+    if args.initrd:
+        initrd = f"-initrd {args.initrd}"
+        cmdline += " init=/linuxrc"
 
-    os.system(f"qemu-system-x86_64 \
-        -m 2G \
+    if args.no_disk:
+        disk = ""
+    elif not os.path.exists(args.disk):
+        print(f"disk image does not exist: {args.disk} {args.no_disk}")
+        return 1
+    else:
+        disk = f"-drive format=raw,file={args.disk}"
+
+    if args.crash:
+        cmdline += " crashkernel=1024M"
+
+    if args.no_kernel:
+        kernel = ""
+        cmdline = ""
+    elif not os.path.exists(args.kernel):
+        print("kernel image does not exist")
+        return 1
+    else:
+        kernel = f"-kernel {args.kernel}"
+
+    if cmdline:
+        cmdline = f"-append 'earlyprintk=serial console=ttyS0 {cmdline}'"
+
+    if args.f and not args.debug:
+        if not disk:
+            print("can not copy using -f without -d")
+            return 1
+        cp_cmd = f"cp2root {args.disk} / {' '.join(args.f)}"
+        if os.system(cp_cmd) != 0:
+            print("aborting...")
+            return 1
+
+    if args.F and not args.debug:
+        if not initrd:
+            print("can not copy using -F without -i")
+            return 1
+        cp_cmd = f"cp2root {args.initrd} / {' '.join(args.F)}"
+        if os.system(cp_cmd) != 0:
+            print("aborting...")
+            return 1
+
+    os.system(
+        f"{debug} \
+        qemu-system-x86_64 \
+        -m 8G \
         -smp 2,sockets=2,cores=1 \
         -net nic,model=e1000 \
         -net user,host=10.0.2.25,hostfwd=tcp::{args.port}-:22 \
         -enable-kvm \
         -nographic \
-        -machine pc-q35-7.1 \
-        -kernel {args.kernel} \
-        -append '{cmdline} {args.append}' \
-        -drive format=raw,file={rootfs} \
+        {bios} \
+        {snapshot} \
+        {kernel} \
+        {disk} \
+        {initrd} \
         {gdb} \
-        {snapshot} || sleep 5000")
+        {cmdline}"
+    )
+
 
 if __name__ == "__main__":
     run_qemu()
-

@@ -1,4 +1,5 @@
+vim.cmd.source(vim.fn.stdpath("config") .. "/ccr.vim")
+require("core.tabmove")
+require("core.set")
 require("core.map")
 require("core.lazy")
-require("core.set")
-require("core.tabmove")
