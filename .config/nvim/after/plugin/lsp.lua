@@ -1,16 +1,16 @@
 require("neodev").setup()
 
 require("mason").setup({ ui = { border = "rounded" } })
-require("mason-lspconfig").setup({
-	ensure_installed = {
-		"ruff_lsp",
-		"pyright",
-		"lua_ls",
-		"bashls",
-		"tsserver",
-	},
-	-- black, prettier, stylua
-})
+-- require("mason-lspconfig").setup({
+-- 	ensure_installed = {
+-- 		"ruff_lsp",
+-- 		"pyright",
+-- 		"lua_ls",
+-- 		"bashls",
+-- 		"tsserver",
+-- 	},
+-- 	-- black, prettier, stylua
+-- })
 
 -- override border for floating windows
 require("lspconfig.ui.windows").default_options.border = "rounded"
