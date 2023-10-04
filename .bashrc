@@ -14,7 +14,7 @@ function parse_git_dirty {
 function parse_git_branch {
 	git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ \1$(parse_git_dirty)/"
 }
-export PS1='\t \[\e[01;91m\]${debian_chroot:+($debian_chroot) }\[\e[00m\]\u@\h \[\e[01;32m\]\w\[\e[00;33m\]$(parse_git_branch)\[\e[00m\]\n\$ '
+export PS1='\[\e[00;36m\]\t \[\e[00;91m\]${debian_chroot:+$debian_chroot }\[\e[00m\]\u@\h \[\e[00;32m\]\w\[\e[00;33m\]$(parse_git_branch)\[\e[00m\]\n\$ '
 export PS0='\[\e]0;$(history 1 | cut -d " " -f6-)\a\]'
 
 alias ..="cd .."
