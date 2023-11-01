@@ -18,10 +18,10 @@
 	po = push origin
 	pom = push --set-upstream origin main
 	pullff = pull --ff-only
-	r = !git l
+	r = !git l --graph
 	ra = !git r --all
 	st = status
-	l = log --graph --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
+	l = log --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
 	la = !git l --name-status
 	w = worktree
 
@@ -60,3 +60,10 @@
 
 [push]
 	autoSetupRemote = true
+
+[core]
+	abbrev = 12
+[pretty]
+	fixes = Fixes: %h (\"%s\")
+[advice]
+	detachedHead = false
