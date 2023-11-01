@@ -20,6 +20,7 @@ for_window [title="^mutt" shell="xdg_shell" app_id="foot"] resize set 1600
 for_window [title="^mutt" shell="xdg_shell" app_id="foot"] move right 300
 for_window [title="^weechat*" shell="xdg_shell" app_id="foot"] resize set 1920
 
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 exec swayidle -w \
@@ -30,7 +31,7 @@ exec swayidle -w \
 input type:keyboard {
 	xkb_layout us,us,br
 	xkb_variant ,dvorak,
-	xkb_options caps:swapescape
+	#xkb_options caps:swapescape
 	# man 7 xkeyboard-config
 }
 
