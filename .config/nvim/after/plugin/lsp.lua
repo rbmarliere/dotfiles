@@ -132,6 +132,18 @@ for _, server_name in ipairs(get_servers()) do
 				capabilities = LSPCapabilities,
 			})
 		end
+	elseif server_name == "lua_ls" then
+		lspconfig[server_name].setup({
+			on_attach = LSPAttach,
+			capabilities = LSPCapabilities,
+			settings = {
+				Lua = {
+					workspace = {
+						checkThirdParty = false,
+					},
+				},
+			},
+		})
 	else
 		lspconfig[server_name].setup({
 			on_attach = LSPAttach,
