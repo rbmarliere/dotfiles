@@ -35,10 +35,10 @@ input type:keyboard {
 
 bindsym $mod+x exec cliphist list | bemenu $bemenu_opts | cliphist decode | wl-copy
 bindsym $mod+Shift+x exec cliphist list | bemenu $bemenu_opts | cliphist delete
-bindsym Shift+Print exec wl-copy < $(~/.local/bin/snag -d ~/Pictures/Screenshots -f $(date +%Y%m%d%H%M%S).png)
-bindsym Print exec wl-copy < $(~/.local/bin/snag -r -d ~/Pictures/Screenshots -f $(date +%Y%m%d%H%M%S).png)
-bindsym $mod+Shift+Print exec wl-copy < $(~/.local/bin/snag -V -d ~/Pictures/Screencasts -f $(date +%Y%m%d%H%M%S).mp4)
-bindsym $mod+Print exec wl-copy < $(~/.local/bin/snag -r -V -d ~/Pictures/Screencasts -f $(date +%Y%m%d%H%M%S).mp4)
+bindsym Shift+Print exec grim -t png -l 6 - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
+bindsym Print exec slurp | grim -t png -l 6 -g - - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
+bindsym $mod+Shift+Print exec wf-recorder -g "$(slurp)" -x yuv420p -f ~/Pictures/Screencasts/tmp.mp4 && convert -set delay 10 -layers Optimize ~/Pictures/Screencasts/tmp.mp4 ~/Pictures/Screencasts/$(date +%Y%m%d%H%M%S).gif && rm ~/Pictures/Screencasts/tmp.mp4
+bindsym $mod+Print exec wf-recorder -g "$(slurp)" -x yuv420p -f ~/Pictures/Screencasts/tmp.mp4 && wl-copy < ~/Pictures/Screencasts/tmp.mp4 && mv ~/Pictures/Screencasts/tmp.mp4 ~/Pictures/Screencasts/$(date +%Y%m%d%H%M%S).mp4
 bindsym alt+Print exec pkill -2 wf-recorder
 bindsym $mod+Control+l exec swaylock -f -c 000000 -i $bg
 
