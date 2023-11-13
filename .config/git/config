@@ -58,12 +58,18 @@
 	smtpserver = "/usr/bin/msmtp"
 	smtpencryption = tls
 
+[sendemail.linux]
+    tocmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
+    cccmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nom"
+
 [push]
 	autoSetupRemote = true
 
 [core]
 	abbrev = 12
+
 [pretty]
 	fixes = Fixes: %h (\"%s\")
+
 [advice]
 	detachedHead = false
