@@ -49,7 +49,7 @@ dapui.setup({
 	},
 })
 
-vim.keymap.set("n", "<C-x>", dapui.toggle, opts)
+vim.keymap.set("n", "<Leader><C-x>", dapui.toggle, opts)
 vim.keymap.set("n", "<F8>", vtext.toggle, opts)
 vim.keymap.set("n", "<F10>", dap.step_over, opts)
 vim.keymap.set("n", "<F11>", dap.step_into, opts)
