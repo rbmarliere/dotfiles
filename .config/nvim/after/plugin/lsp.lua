@@ -1,16 +1,6 @@
 require("neodev").setup()
 
 require("mason").setup({ ui = { border = "rounded" } })
--- require("mason-lspconfig").setup({
--- 	ensure_installed = {
--- 		"ruff_lsp",
--- 		"pyright",
--- 		"lua_ls",
--- 		"bashls",
--- 		"tsserver",
--- 	},
--- 	-- black, prettier, stylua
--- })
 
 -- override border for floating windows
 require("lspconfig.ui.windows").default_options.border = "rounded"
@@ -124,14 +114,6 @@ for _, server_name in ipairs(get_servers()) do
 				},
 			},
 		})
-	elseif server_name == "clangd" then
-		local compile_commands = vim.fn.getcwd() .. "/compile_commands.json"
-		if vim.fn.filereadable(compile_commands) == 1 then
-			lspconfig[server_name].setup({
-				on_attach = LSPAttach,
-				capabilities = LSPCapabilities,
-			})
-		end
 	elseif server_name == "lua_ls" then
 		lspconfig[server_name].setup({
 			on_attach = LSPAttach,
