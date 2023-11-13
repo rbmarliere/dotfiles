@@ -1,0 +1,39 @@
+set abort_nosubject=no
+set alias_file="~/.config/neomutt/aliases"
+set allow_ansi=yes
+set check_new=no  # https://github.com/neomutt/neomutt/issues/2223
+set crypt_use_gpgme=yes
+set date_format="%y/%m/%d %I:%M%p"
+set editor="~/.local/bin/vi"
+set folder="~/mail"
+set header_cache="~/.cache/neomutt"  # mkdir before using!
+set imap_check_subscribed = yes
+set include=yes
+set index_format="%4C %Z %[${date_format}] %-15.15L %s"
+set markers=no
+set message_cache_dir="~/.cache/neomutt"
+set mime_type_query_command="xdg-mime query filetype %s"
+set pager_stop=yes
+set postponed="=drafts"
+set realname="Ricardo B. Marliere"
+set record="=sent"
+set send_charset="us-ascii:utf-8"
+set sleep_time=0
+set spoolfile="~/mail/inbox"
+set trash="=trash"
+set use_threads=threads sort=reverse-last-date sort_aux=date
+
+attachments +I text/plain text/x-diff text/x-diff text/x-patch text/x-patch text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-perl text/x-python text/x-sh
+
+unignore list-id
+
+auto_view text/*
+auto_view application/pgp-encrypted
+alternative_order text/plain text/enriched text/html
+mime_lookup text/*
+
+source "~/.config/neomutt/accounts/all"
+source "~/.config/neomutt/aliases"
+source "~/.config/neomutt/binds"
+source "~/.config/neomutt/colors"
+source "~/.config/neomutt/mailboxes ~/mail/|"

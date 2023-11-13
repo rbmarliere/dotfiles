@@ -1,0 +1,33 @@
+# vim: ft=neomuttrc
+bind editor \Cn history-down
+bind editor \Cp history-up
+bind generic - exit
+bind generic gg first-entry
+bind generic z noop
+bind generic zb current-bottom
+bind generic zt current-top
+bind generic zz current-middle
+bind generic,index G last-entry
+bind generic,index,pager \Cb previous-page
+bind generic,index,pager \Cd half-down
+bind generic,index,pager \Ce next-line
+bind generic,index,pager \Cf next-page
+bind generic,index,pager \Cu half-up
+bind generic,pager \Cy previous-line
+bind index <Backtab> previous-new-then-unread
+bind index zA collapse-all
+bind index za collapse-thread
+bind index,pager N search-opposite
+bind index,pager R reply
+bind index,pager r group-reply
+bind index,pager,attach g noop
+bind pager - exit
+bind pager <down> next-line
+bind pager <up> previous-line
+bind pager G bottom
+bind pager gg top
+macro browser $ "<check-new><check-stats>"
+macro index - "<change-folder>?" "open mailbox..."
+macro index <esc>s ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>=spam\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
+macro index,pager L '| git am -s'\n
+macro pager \Co "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
