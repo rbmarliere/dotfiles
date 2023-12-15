@@ -14,11 +14,7 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 
 if ! tmux has-session -t="$selected_name" 2> /dev/null; then
-	if ! tmux ls 2>/dev/null && [ ! -f /etc/debian_chroot ]; then
-		ch dev -- tmux new-session -ds "$selected_name" -c "$selected"
-	else
-		tmux new-session -ds "$selected_name" -c "$selected"
-	fi
+	tmux new-session -ds "$selected_name" -c "$selected"
 fi
 
 if [ -z "$TMUX" ]; then
