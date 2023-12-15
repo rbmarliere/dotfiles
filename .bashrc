@@ -8,7 +8,7 @@ export PATH="$HOME/.local/bin:$PATH"
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 shopt -s histappend
 
-export PS1='\[\e[00;36m\]\t \[\e[00;91m\]${debian_chroot:+$debian_chroot }\[\e[00m\]\u@\h \[\e[00;32m\]\w\[\e[00;33m\]$(__git_ps1)\[\e[00m\]\n\$ '
+export PS1='\[\e[00;36m\]\t \[\e[00;91m\]${debian_chroot:+$debian_chroot }\[\e[00m\]\u@\h \[\e[00;32m\]\w\[\e[00;33m\]$(__git_ps1 " %s")\[\e[00m\]\n\$ '
 export PS0='\[\e]0;$(history 1 | cut -d " " -f5-)\a\]'
 
 alias ..="cd .."
