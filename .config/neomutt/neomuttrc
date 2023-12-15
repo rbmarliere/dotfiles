@@ -2,6 +2,7 @@ set abort_nosubject=no
 set alias_file="~/.config/neomutt/aliases"
 set allow_ansi=yes
 set check_new=no  # https://github.com/neomutt/neomutt/issues/2223
+set collapse_all=yes
 set crypt_use_gpgme=yes
 set date_format="%y/%m/%d %I:%M%p"
 set editor="~/.local/bin/vi"
@@ -16,7 +17,7 @@ set mime_type_query_command="xdg-mime query filetype %s"
 set pager_stop=yes
 set postponed="=drafts"
 set realname="Ricardo B. Marliere"
-set record="=sent"
+set record='^^'
 set send_charset="us-ascii:utf-8"
 set sleep_time=0
 set spoolfile="~/mail/inbox"
@@ -37,3 +38,5 @@ source "~/.config/neomutt/aliases"
 source "~/.config/neomutt/binds"
 source "~/.config/neomutt/colors"
 source "~/.config/neomutt/mailboxes ~/mail/|"
+
+folder-hook inbox "push <collapse-all>"
