@@ -89,3 +89,4 @@ require("formatter").setup({
 })
 
 vim.keymap.set("n", "<Leader>f", vim.cmd.FormatWrite, opts)
+vim.keymap.set("v", "<Leader>f", vim.cmd.FormatWrite, opts)
