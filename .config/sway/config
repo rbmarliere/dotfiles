@@ -12,6 +12,7 @@ set $menu j4-dmenu-desktop --dmenu='bemenu $bemenu_opts' --term='$term' --no-gen
 output * bg $bg fill
 output DP-1 mode --custom 3440x1440@60Hz
 
+for_window [app_id="org.kde.dolphin"] floating enable
 for_window [shell="xdg_shell" app_id="pcmanfm-qt"] floating enable
 for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] floating enable
 for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] border none
