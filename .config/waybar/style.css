@@ -9,8 +9,8 @@
 #waybar {
 	background: #323232;
 	color: white;
-	font-family: Hack;
-	font-size: 14px;
+	font-family: TerminessNerdFont;
+	font-size: 17;
 }
 
 #backlight,
@@ -21,6 +21,8 @@
 #language,
 #pulseaudio,
 #clock {
+	background-color: #323232;
+	color: white;
 	padding-left: 7px;
 	padding-right: 7px;
 }
@@ -64,7 +66,7 @@
 }
 
 #memory.warning {
-	color: orange;
+	color: #ff5f1f;
 }
 
 #memory.critical {
@@ -92,12 +94,12 @@
 }
 
 #workspaces button.focused {
-	border-color: #4c7899;
+	border-color: #6c782e;
 	color: white;
-	background-color: #285577;
+	background-color: #6c782e;
 }
 
 #workspaces button.urgent {
-	border-color: #c9545d;
-	color: #c9545d;
+	border-color: #ff5f1f;
+	color: #ff5f1f;
 }

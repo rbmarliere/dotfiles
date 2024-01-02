@@ -1,0 +1,58 @@
+#!/bin/bash
+
+usage() {
+	CMD=$(basename "$0")
+	cat <<END >&2
+Usage: $CMD [options] <start|stop>
+
+Options:
+	-g|--gif		Record GIF
+
+END
+	exit 1
+}
+
+start() {
+	region=$(slurp)
+	if [ -z "$region" ]; then
+		exit 1
+	fi
+
+	date=$(date +%Y%m%d%H%M%S)
+	tmp=$(mktemp /tmp/screencast-XXXXXX.mp4)
+	out="$HOME/Pictures/Screencasts/$date"
+
+	notify-send "REC"
+	echo y | wf-recorder -g "$region" -x yuv420p -f "$tmp"
+
+	if [ -z "$GIF" ]; then
+		mv "$tmp" "$out".mp4
+		wl-copy < "$out".mp4
+	else
+		notify-send "Converting to GIF"
+		convert -set delay 10 -layers Optimize "$tmp" "$out".gif
+		wl-copy < "$out".gif
+		rm "$tmp"
+	fi
+
+	exit 0
+}
+
+stop() {
+	pkill -2 wf-recorder
+	notify-send STOP
+	exit 0
+}
+
+[[ $# -gt 0 ]] || usage
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		start) start ;;
+		stop) stop ;;
+		-g|--gif) GIF=1 ;;
+		-*|h|help) usage ;;
+		*) break ;;
+	esac
+	shift
+done
+

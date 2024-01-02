@@ -4,7 +4,7 @@
 
 [alias]
 	aa = add --all
-	amend = commit --amend
+	amend = commit --verbose --amend
 	br = branch
 	ci = commit --verbose
 	co = checkout

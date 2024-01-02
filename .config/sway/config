@@ -1,24 +1,31 @@
+set $grey       #323232
+set $lgrey      #7c6f64
+set $orange     #ff5f1f
+set $white      #eff0f1
+set $black      #000000
+set $red        #CB4B16
+set $green      #6c782e
+set $lgreen     #a9b665
+set $blue       #076678
+
 set $bg ~/Pictures/bg
-set $res 300px
+set $res 286px
 set $mod Mod4
 set $left h
 set $down j
 set $up k
 set $right l
 set $term foot
-set $bemenu_opts -i --nb "#323232" --ab "#323232" --fb "#323232" --hb "#323232" --fn "pango:Hack 12" -p "" -b -l 20 --fixed-height
+set $bemenu_opts -i --nb "$grey" --ab "$grey" --fb "$grey" --hb "$green" --hf "$black" --fn "TerminessNerdFont 16" -p "" -b -l 20 --fixed-height
 set $menu j4-dmenu-desktop --dmenu='bemenu $bemenu_opts' --term='$term' --no-generic --usage-log=$HOME/.bemenu
 
 output * bg $bg fill
-output DP-1 mode --custom 3440x1440@60Hz
+#output DP-1 mode --custom 3440x1440@60Hz
+#output DP-1 scale 1
 
-for_window [app_id="org.kde.dolphin"] floating enable
-for_window [shell="xdg_shell" app_id="pcmanfm-qt"] floating enable
-for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] floating enable
-for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] border none
-for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] resize set height 100 ppt
-for_window [title="^mutt" shell="xdg_shell" app_id="foot"] resize set 1600
-for_window [title="^mutt" shell="xdg_shell" app_id="foot"] move right 300
+for_window [app_id="org.kde.dolphin"] floating enable; resize set height 80 ppt; resize set 1920
+for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] floating enable; border none; resize set height 100 ppt
+for_window [title="^mutt" shell="xdg_shell" app_id="foot"] resize set 1600; move right 300
 for_window [title="^weechat*" shell="xdg_shell" app_id="foot"] resize set 1920
 
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
@@ -38,9 +45,9 @@ bindsym $mod+x exec cliphist list | bemenu $bemenu_opts | cliphist decode | wl-c
 bindsym $mod+Shift+x exec cliphist list | bemenu $bemenu_opts | cliphist delete
 bindsym Shift+Print exec grim -t png -l 6 - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
 bindsym Print exec slurp | grim -t png -l 6 -g - - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
-bindsym $mod+Shift+Print exec wf-recorder -g "$(slurp)" -x yuv420p -f ~/Pictures/Screencasts/tmp.mp4 && convert -set delay 10 -layers Optimize ~/Pictures/Screencasts/tmp.mp4 ~/Pictures/Screencasts/$(date +%Y%m%d%H%M%S).gif && rm ~/Pictures/Screencasts/tmp.mp4
-bindsym $mod+Print exec wf-recorder -g "$(slurp)" -x yuv420p -f ~/Pictures/Screencasts/tmp.mp4 && wl-copy < ~/Pictures/Screencasts/tmp.mp4 && mv ~/Pictures/Screencasts/tmp.mp4 ~/Pictures/Screencasts/$(date +%Y%m%d%H%M%S).mp4
-bindsym alt+Print exec pkill -2 wf-recorder
+bindsym $mod+Shift+Print exec ~/.local/bin/screencast -g start
+bindsym $mod+Print exec ~/.local/bin/screencast start
+bindsym alt+Print exec ~/.local/bin/screencast stop
 bindsym $mod+Control+l exec swaylock -f -c 000000 -i $bg
 
 bindsym $mod+Return exec $term
@@ -67,6 +74,7 @@ bindsym $mod+7 workspace number 7
 bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
+bindsym $mod+minus workspace number 11
 bindsym $mod+Shift+1 move container to workspace number 1
 bindsym $mod+Shift+2 move container to workspace number 2
 bindsym $mod+Shift+3 move container to workspace number 3
@@ -77,6 +85,7 @@ bindsym $mod+Shift+7 move container to workspace number 7
 bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
+bindsym $mod+Shift+minus move container to workspace number 11
 bindsym $mod+b splith
 bindsym $mod+v splitv
 bindsym $mod+s layout stacking
@@ -112,9 +121,9 @@ include /etc/sway/config.d/*
 
 # Window borders
 default_border pixel 3
-smart_borders on
-smart_gaps on
-gaps inner 8
+# smart_borders on
+# smart_gaps on
+# gaps inner 8
 
 seat seat0 xcursor_theme "breeze_cursors"
 
@@ -125,16 +134,9 @@ exec_always {
     gsettings set $gnome-schema cursor-theme 'breeze_cursors'
 }
 
-set $grey       #323232
-set $lightblue #3daee9
-set $white      #eff0f1
-set $bg         #31363b
-set $black      #900000
-set $red        #CB4B16
-
 # Sway theme
-# class                   border     backgr.    text    indic.     child_border
-client.focused          $lightblue $bg        $white  $lightblue $lightblue
-client.focused_inactive $bg        $bg        $white  $bg        $bg
-client.unfocused        $bg        $bg        $white  $bg        $bg
+# class                 border     backgr.    text    indic.     child_border
+client.focused          $green     $green     $white  $green     $green
+client.focused_inactive $grey      $green     $white  $grey      $grey
+client.unfocused        $grey      $grey      $white  $grey      $grey
 client.urgent           $red       $red       $white  $black     $black

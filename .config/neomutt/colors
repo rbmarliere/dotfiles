@@ -1,31 +1,33 @@
 # vim: ft=neomuttrc
+color normal color232 default
 color attachment blue default
 color bold magenta default
 color error red default
 color hdrdefault blue default
-color indicator black green
+color indicator color232 green
 color markers cyan default
-color normal white default
 color quoted magenta default
 color quoted1 blue default
 color quoted2 cyan default
 color quoted3 green default
 color quoted4 yellow default
 color quoted5 red default
-color search black brightred
+color search color232 brightred
 color signature cyan default
-color status black green
+color status color232 green
 color tilde red default
 color tree green default
 color underline white default
-color index brightred default ~N
-color index brightred default ~O
-color index blue default ~P
-color index yellow default ~F
+color index color232 default
+color index color232 default ~N
+color index color232 default ~O
+color index yellow default ~P
+color index color243 default ~R
 color index magenta default ~Q
 color index brightyellow default ~=
-color index black blue ~T
-color index black red ~D
+color index color232 blue ~T
+color index color232 red ~D
+color index brightred default ~F
 color header cyan default "^list-id:"
 color header brightblue default "^(to:|from:)"
 color header brightyellow default "^subject:"

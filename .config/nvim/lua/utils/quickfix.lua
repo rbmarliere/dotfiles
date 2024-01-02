@@ -2,14 +2,17 @@ local toggle_qf = function()
 	local qf_exists = false
 	for _, win in pairs(vim.fn.getwininfo()) do
 		if win["quickfix"] == 1 then
+			if win["winid"] ~= vim.fn.win_getid() then
+				vim.api.nvim_win_close(win["winid"], true)
+				break
+			end
 			qf_exists = true
+			break
 		end
 	end
 	if qf_exists == true then
 		vim.cmd("cclose")
-		return
-	end
-	if not vim.tbl_isempty(vim.fn.getqflist()) then
+	else
 		vim.cmd("copen")
 	end
 end
@@ -26,9 +29,10 @@ local save_qf = function(opts)
 	vim.fn.writefile({ _setqflist, _setqfinfo }, filename)
 end
 
+vim.api.nvim_create_user_command("ToggleQf", toggle_qf, { nargs = 0 })
 vim.api.nvim_create_user_command("SaveQf", save_qf, { nargs = 1 })
 
 local opts = { noremap = true }
-vim.keymap.set("n", "<Leader>sq", ":SaveQf ~/.config/nvim/qf/", opts)
-vim.keymap.set("n", "<Leader>rq", ":source ~/.config/nvim/qf/", opts)
-vim.keymap.set("n", "<Leader>q", toggle_qf, opts)
+vim.keymap.set("n", "<Leader>sq", ":SaveQf " .. vim.fn.stdpath("data") .. "/qf/", opts)
+vim.keymap.set("n", "<Leader>rq", ":source " .. vim.fn.stdpath("data") .. "/qf/", opts)
+vim.keymap.set("n", "<Leader>q", ":ToggleQf<CR>", opts)
