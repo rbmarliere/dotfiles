@@ -22,7 +22,6 @@ vim.opt.mouse = "a"
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.ruler = true
-vim.opt.sessionoptions:remove({ "blank", "terminal" }) -- exclude nvim-dap buffers
 vim.opt.signcolumn = "yes"
 vim.opt.swapfile = false
 vim.opt.title = true
