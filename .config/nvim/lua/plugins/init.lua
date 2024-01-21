@@ -8,7 +8,7 @@ return {
 	{
 		"glts/vim-radical",
 		dependencies = {
-			"glts/vim-magnum"
-		}
-	}
+			"glts/vim-magnum",
+		},
+	},
 }
