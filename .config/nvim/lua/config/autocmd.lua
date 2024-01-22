@@ -4,7 +4,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local opts = { noremap = true, silent = true, buffer = ev.buf }
 		vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 		vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-		vim.keymap.set("n", "<C-q>", vim.diagnostic.setqflist, opts)
+		vim.keymap.set("n", "<M-q>", vim.diagnostic.setqflist, opts)
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
