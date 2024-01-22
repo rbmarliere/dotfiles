@@ -18,6 +18,9 @@ local toggle_qf = function()
 end
 
 local save_qf = function(opts)
+	if vim.fn.isdirectory(vim.fn.stdpath("data") .. "/qf") == 0 then
+		vim.fn.mkdir(vim.fn.stdpath("data") .. "/qf", "p")
+	end
 	local filename = vim.fn.expand(opts.args)
 	local _qflist = vim.fn.getqflist()
 	local _qfinfo = vim.fn.getqflist({ title = 1 })
