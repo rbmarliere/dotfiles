@@ -39,5 +39,5 @@ source "~/.config/neomutt/binds"
 source "~/.config/neomutt/colors"
 source "~/.config/neomutt/mailboxes ~/mail/|"
 
-folder-hook inbox "push <collapse-all>"
+folder-hook inbox "set record=^; push <collapse-all>"
 folder-hook . "set check_new=no"  # https://github.com/neomutt/neomutt/issues/2223
