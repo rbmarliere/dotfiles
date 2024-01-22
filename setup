@@ -1,6 +1,22 @@
 #!/bin/bash
 
-mkdir -p $HOME/.config $HOME/.local/bin $HOME/.local/share/nvim/qf
+DEPS=(
+	bash-completion
+	fd-find
+	fzf
+	ripgrep
+	source-highlight
+	urlscan
+)
+echo "DEPS=(${DEPS[*]})"
+read -p "Install dependencies? [y|N] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	sudo apt install -y "${DEPS[@]}"
+fi
+
+mkdir -p "$HOME"/.config "$HOME"/.local/bin
 
 files=(
 	.bash_profile
@@ -13,3 +29,4 @@ files=(
 for file in "${files[@]}"; do
 	ln -s -f -T "$(pwd)/$file" "$HOME/$file"
 done
+
