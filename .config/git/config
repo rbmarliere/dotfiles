@@ -10,10 +10,12 @@
 	co = checkout
 	d = diff
 	dc = diff --cached
-	dt = difftool
 	dct = difftool --cached
+	dt = difftool
 	fa = fetch --all
 	ff = merge --ff-only
+	l = log --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
+	la = !git l --name-status
 	noff = merge --no-ff
 	po = push origin
 	pom = push --set-upstream origin main
@@ -21,8 +23,6 @@
 	r = !git l --graph
 	ra = !git r --all
 	st = status
-	l = log --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
-	la = !git l --name-status
 	w = worktree
 
 [filter "lfs"]
@@ -67,9 +67,31 @@
 
 [core]
 	abbrev = 12
+	pager = diff-so-fancy | less --tabs=4 -RF
 
 [pretty]
 	fixes = Fixes: %h (\"%s\")
 
 [advice]
 	detachedHead = false
+
+[interactive]
+	diffFilter = diff-so-fancy --patch
+
+[color]
+	ui = true
+
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	func = 146 bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
