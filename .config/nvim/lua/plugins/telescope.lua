@@ -4,6 +4,7 @@ return {
 	dependencies = {
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		"nvim-lua/plenary.nvim",
+		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 	opts = {
 		defaults = {
@@ -70,4 +71,9 @@ return {
 		{ "<M-P>", ":Telescope live_grep_args<CR>" },
 		{ "<M-p>", ":Telescope find_files<CR>" },
 	},
+	config = function(_, opts)
+		require("telescope").setup(opts)
+		require("telescope").load_extension("live_grep_args")
+		require("telescope").load_extension("fzf")
+	end
 }
