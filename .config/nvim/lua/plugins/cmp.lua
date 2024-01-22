@@ -5,13 +5,13 @@ return {
 			"hrsh7th/vim-vsnip",
 			-- sources
 			"davidsierradz/cmp-conventionalcommits",
-			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-cmdline",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lsp-signature-help",
 			"hrsh7th/cmp-nvim-lua",
-			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-vsnip",
+			{ "tzachar/cmp-fuzzy-buffer", dependencies = { "tzachar/fuzzy.nvim" } },
+			{ "tzachar/cmp-fuzzy-path", dependencies = { "tzachar/fuzzy.nvim" } },
 		},
 		config = function()
 			local cmp = require("cmp")
@@ -35,31 +35,57 @@ return {
 					["<CR>"] = cmp.mapping.confirm({ select = false }),
 				}),
 				sources = cmp.config.sources({
-					{ name = "buffer" },
+					{ name = "vsnip" },
 					{ name = "nvim_lsp" },
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lua" },
-					{ name = "path" },
-					{ name = "vsnip" },
+					{ name = "fuzzy_buffer" },
+					{
+						name = "fuzzy_path",
+						option = {
+							fd_cmd = { "fdfind", "-d", "20", "-p" }, -- fd-find in Debian is /usr/bin/fdfind
+						},
+					},
 				}),
+				sorting = {
+					priority_weight = 2,
+					comparators = {
+						require("cmp_fuzzy_path.compare"),
+						cmp.config.compare.offset,
+						cmp.config.compare.exact,
+						-- cmp.config.compare.scopes,
+						cmp.config.compare.score,
+						cmp.config.compare.recently_used,
+						cmp.config.compare.locality,
+						cmp.config.compare.kind,
+						-- cmp.config.compare.sort_text,
+						cmp.config.compare.length,
+						cmp.config.compare.order,
+					},
+				},
 			})
 			cmp.setup.cmdline({ "/", "?" }, {
 				mapping = cmp.mapping.preset.cmdline(),
 				sources = {
-					{ name = "buffer" },
+					{ name = "fuzzy_buffer" },
 				},
 			})
 			cmp.setup.cmdline(":", {
 				mapping = cmp.mapping.preset.cmdline(),
 				sources = cmp.config.sources({
-					{ name = "path" },
 					{ name = "cmdline" },
+					{
+						name = "fuzzy_path",
+						option = {
+							fd_cmd = { "fdfind", "-d", "20", "-p" }, -- fd-find in Debian is /usr/bin/fdfind
+						},
+					},
 				}),
 			})
 			cmp.setup.filetype("gitcommit", {
 				sources = cmp.config.sources({
 					{ name = "conventionalcommits" },
-					{ name = "buffer" },
+					{ name = "fuzzy_buffer" },
 				}),
 			})
 		end,
