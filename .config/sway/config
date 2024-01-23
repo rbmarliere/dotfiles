@@ -41,6 +41,8 @@ input type:keyboard {
 	# man 7 xkeyboard-config
 }
 
+bindsym Shift+Insert exec wlrctl keyboard type "$(wl-paste -p)"
+
 bindsym $mod+x exec cliphist list | bemenu $bemenu_opts | cliphist decode | wl-copy
 bindsym $mod+Shift+x exec cliphist list | bemenu $bemenu_opts | cliphist delete
 bindsym Shift+Print exec grim -t png -l 6 - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
