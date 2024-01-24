@@ -1,16 +1,14 @@
 local toggle_qf = function()
-	local qf_exists = false
+	local opened_in_tab = false
 	for _, win in pairs(vim.fn.getwininfo()) do
 		if win["quickfix"] == 1 then
-			if win["winid"] ~= vim.fn.win_getid() then
-				vim.api.nvim_win_close(win["winid"], true)
-				break
+			vim.api.nvim_win_close(win["winid"], true)
+			if win["tabnr"] == vim.fn.tabpagenr() then
+				opened_in_tab = true
 			end
-			qf_exists = true
-			break
 		end
 	end
-	if qf_exists == true then
+	if opened_in_tab then
 		vim.cmd("cclose")
 	else
 		vim.cmd("copen")
