@@ -8,34 +8,30 @@ return {
 	},
 	opts = {
 		defaults = {
-			preview = {
-				treesitter = false,
-			},
-			layout_strategy = "center",
-			layout_config = {
-				anchor = "N",
-				height = 0.35,
-				width = 0.80,
-			},
 			border = true,
-			-- borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-			borderchars = { "─", "", "", "", "─", "─", "", "" },
+			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 			sorting_strategy = "ascending",
 		},
 		pickers = {
 			find_files = {
 				find_command = { "rg", "--files", "--hidden", "--glob", "!.git", "--no-ignore-vcs" },
 			},
-			-- lsp_dynamic_workspace_symbols = {
-			-- 	fname_width = 100,
-			-- 	symbol_width = 50,
-			-- 	symbol_type_width = 15,
-			-- },
+			lsp_workspace_symbols = {
+				fname_width = 60,
+				symbol_width = 50,
+				symbol_type_width = 15,
+			},
+			lsp_dynamic_workspace_symbols = {
+				fname_width = 60,
+				symbol_width = 50,
+				symbol_type_width = 15,
+			},
 		},
 		extensions = {
 			live_grep_args = {
 				vimgrep_arguments = {
 					"rg",
+					"--pcre2",
 					"--glob",
 					"!.git",
 					"--hidden",
@@ -62,14 +58,10 @@ return {
 		},
 	},
 	keys = {
-		{ "<C-Space>", ":Telescope lsp_document_symbols<CR>" },
-		{ "<C-q>", ":Telescope quickfix<CR>" },
+		{ "<C-Space>", ":Telescope<CR>" },
 		{ "<C-p>", ":Telescope git_files<CR>" },
-		{ "<Leader>dd", ":Telescope diagnostics<CR>" },
-		{ "<M-1>", ":Telescope lsp_definitions<CR>" },
-		{ "<M-2>", ":Telescope lsp_dynamic_workspace_symbols<CR>" },
-		{ "<M-P>", ":Telescope live_grep_args<CR>" },
 		{ "<M-p>", ":Telescope find_files<CR>" },
+		{ "<M-P>", ":Telescope live_grep_args<CR>" },
 	},
 	config = function(_, opts)
 		require("telescope").setup(opts)
