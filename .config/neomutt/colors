@@ -31,6 +31,7 @@ color index brightred default ~F
 color header cyan default "^list-id:"
 color header brightblue default "^(to:|from:)"
 color header brightyellow default "^subject:"
+color header blue default "^message-id:"
 color body green default "[a-z]{3,255}://[[:graph:]]*" # URLs
 color body brightwhite default "[-a-z_0-9_\+.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+" # mail addr
 color body brightwhite default "mailto:[-a-z_0-9_\+.]+@[-a-z_0-9.]+" # mailto URLs
