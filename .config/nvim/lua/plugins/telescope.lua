@@ -26,6 +26,9 @@ return {
 				symbol_width = 50,
 				symbol_type_width = 15,
 			},
+			man_pages = {
+				sections = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+			},
 		},
 		extensions = {
 			live_grep_args = {
