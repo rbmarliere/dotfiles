@@ -4,7 +4,6 @@ return {
 		ui = {
 			border = "none",
 		},
-		-- log_level = vim.log.levels.DEBUG,
 	},
 	dependencies = {
 		{
