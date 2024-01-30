@@ -11,9 +11,11 @@ DEPS=(
 echo "DEPS=(${DEPS[*]})"
 read -p "Install dependencies? [y|N] " -n 1 -r
 echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-	sudo apt install -y "${DEPS[@]}"
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	if [ $(id -u) -ne 0 ]; then
+		sudo=sudo
+	fi
+	$sudo apt install -y "${DEPS[@]}"
 fi
 
 mkdir -p "$HOME"/.config "$HOME"/.local/bin
