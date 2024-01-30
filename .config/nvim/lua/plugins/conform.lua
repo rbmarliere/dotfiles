@@ -28,6 +28,7 @@ return {
 				end
 			end,
 			-- Use a sub-list to run only the first available formatter
+			rust = { "rustfmt" },
 			javascript = { "prettier" },
 			typescript = { "prettier" },
 			html = { "prettier" },
