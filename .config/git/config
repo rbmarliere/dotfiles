@@ -1,12 +1,16 @@
 [user]
 	name = Ricardo B. Marliere
 	email = ricardo@marliere.net
+	signingkey = C90B8A7C638658A6!
+
+[commit]
+	gpgsign = true
 
 [alias]
 	aa = add --all
-	amend = commit --verbose --amend
+	amend = commit -S -s -v --amend
 	br = branch
-	ci = commit --verbose
+	ci = commit -S -s -v
 	co = checkout
 	d = diff
 	dc = diff --cached
@@ -57,10 +61,11 @@
 	smtpuser =
 	smtpserver = "/usr/bin/msmtp"
 	smtpencryption = tls
+	b4-really-reflect-via = /usr/bin/msmtp
 
 [sendemail.linux]
-    tocmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
-    cccmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nom"
+	tocmd ="get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
+	cccmd ="get_maintainer.pl --nogit --nogit-fallback --norolestats --nom"
 
 [push]
 	autoSetupRemote = true
