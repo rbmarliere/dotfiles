@@ -2,6 +2,7 @@ return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.5",
 	dependencies = {
+		"rbmarliere/telescope-cscope.nvim",
 		"keyvchan/telescope-find-pickers.nvim",
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		"nvim-lua/plenary.nvim",
@@ -63,6 +64,7 @@ return {
 	},
 	keys = {
 		{ "<C-Space>", ":Telescope find_pickers<CR>" },
+		{ "<C-p>", ":Telescope git_files<CR>" },
 	},
 	config = function(_, opts)
 		local telescope = require("telescope")
@@ -70,5 +72,6 @@ return {
 		telescope.load_extension("live_grep_args")
 		telescope.load_extension("fzf")
 		telescope.load_extension("find_pickers")
+		telescope.load_extension("cscope")
 	end,
 }
