@@ -9,9 +9,9 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lsp-signature-help",
 			"hrsh7th/cmp-nvim-lua",
+			"hrsh7th/cmp-path",
 			"saadparwaiz1/cmp_luasnip",
 			{ "tzachar/cmp-fuzzy-buffer", dependencies = { "tzachar/fuzzy.nvim" } },
-			{ "tzachar/cmp-fuzzy-path", dependencies = { "tzachar/fuzzy.nvim" } },
 		},
 		config = function()
 			local cmp = require("cmp")
@@ -40,12 +40,7 @@ return {
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lua" },
 					{ name = "fuzzy_buffer" },
-					{
-						name = "fuzzy_path",
-						option = {
-							fd_cmd = { "fdfind", "-d", "20", "-p" }, -- fd-find in Debian is /usr/bin/fdfind
-						},
-					},
+					{ name = "path" },
 				}),
 				sorting = {
 					comparators = {
@@ -63,12 +58,7 @@ return {
 				mapping = cmp.mapping.preset.cmdline(),
 				sources = cmp.config.sources({
 					{ name = "cmdline" },
-					{
-						name = "fuzzy_path",
-						option = {
-							fd_cmd = { "fdfind", "-d", "20", "-p" }, -- fd-find in Debian is /usr/bin/fdfind
-						},
-					},
+					{ name = "path" },
 				}),
 			})
 			cmp.setup.filetype("gitcommit", {
