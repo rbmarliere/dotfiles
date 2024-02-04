@@ -1,5 +1,4 @@
 vim.cmd.source(vim.fn.stdpath("config") .. "/ccr.vim")
-require("config.autocmd")
 require("config.options")
 require("config.keymaps")
 require("config.lazy")
