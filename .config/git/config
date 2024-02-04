@@ -16,6 +16,7 @@
 	dc = diff --cached
 	dct = difftool --cached
 	dt = difftool
+	pa = !git --no-pager diff --no-color
 	fa = fetch --all
 	ff = merge --ff-only
 	l = log --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
