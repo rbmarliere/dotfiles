@@ -2,6 +2,7 @@
   "layer": "bottom",
   "position": "top",
   "height": 30,
+  "ipc": true,
 
   "modules-left": [
 	"sway/workspaces"

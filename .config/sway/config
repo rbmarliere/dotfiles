@@ -116,7 +116,11 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-bar swaybar_command waybar
+bar {
+	swaybar_command waybar
+	hidden_state hide
+	mode hide
+}
 
 # debian stuff
 include /etc/sway/config.d/*
