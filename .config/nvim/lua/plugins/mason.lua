@@ -15,6 +15,11 @@ return {
 					function(server_name)
 						lspconfig[server_name].setup({})
 					end,
+					["clangd"] = function()
+						lspconfig["clangd"].setup({
+							cmd = { "clangd", "--offset-encoding=utf-16" },
+						})
+					end,
 					["ruff_lsp"] = function()
 						lspconfig["ruff_lsp"].setup({
 							settings = {
