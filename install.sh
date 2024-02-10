@@ -11,7 +11,7 @@ DEPS=(
 	urlscan
 )
 echo "DEPS=(${DEPS[*]})"
-read -p "Install dependencies? [y|N] " -n 1 -r
+read -p "Install dependencies with apt? [y|N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	if [ "$(id -u)" -ne 0 ]; then
