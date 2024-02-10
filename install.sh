@@ -1,33 +1,24 @@
 #!/bin/bash
 
+set -euo pipefail
+
 DEPS=(
 	bash-completion
 	fzf
 	ripgrep
 	source-highlight
+	stow
 	urlscan
 )
 echo "DEPS=(${DEPS[*]})"
 read -p "Install dependencies? [y|N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-	if [ $(id -u) -ne 0 ]; then
+	if [ "$(id -u)" -ne 0 ]; then
 		sudo=sudo
 	fi
 	$sudo apt install -y "${DEPS[@]}"
 fi
 
-mkdir -p "$HOME"/.config "$HOME"/.local/bin
-
-files=(
-	.bash_profile
-	.bashrc
-	.config/**
-	.inputrc
-	.local/bin/**
-)
-
-for file in "${files[@]}"; do
-	ln -s -f -T "$(pwd)/$file" "$HOME/$file"
-done
-
+packages=$(find . -mindepth 1 -maxdepth 1 -type d ! -name '.*' -printf '%P\n')
+stow -Rv $packages
