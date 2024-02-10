@@ -24,8 +24,8 @@ output * bg $bg fill
 #output DP-1 scale 1
 
 for_window [app_id="org.kde.dolphin"] floating enable; resize set height 80 ppt; resize set 1920
-for_window [title="^mutt|^weechat*" shell="xdg_shell" app_id="foot"] floating enable; border none; resize set height 100 ppt
-for_window [title="^mutt" shell="xdg_shell" app_id="foot"] resize set 1600; move right 300
+for_window [title="^mutt|^weechat*|^news*" shell="xdg_shell" app_id="foot"] floating enable; border none; resize set height 100 ppt
+for_window [title="^mutt|^news*" shell="xdg_shell" app_id="foot"] resize set 1600; move right 300
 for_window [title="^weechat*" shell="xdg_shell" app_id="foot"] resize set 1920
 
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
