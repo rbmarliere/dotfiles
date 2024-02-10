@@ -20,5 +20,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	$sudo apt install -y "${DEPS[@]}"
 fi
 
+mkdir -p ~/.cache/neomutt
+
 packages=$(find . -mindepth 1 -maxdepth 1 -type d ! -name '.*' -printf '%P\n')
 stow -Rv $packages

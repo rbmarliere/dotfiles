@@ -1,3 +1,5 @@
+set from="ricardo@marliere.net"
+set sendmail="msmtp -a marliere.net"
 set abort_nosubject=no
 set alias_file="~/.config/neomutt/aliases"
 set allow_ansi=yes
@@ -21,6 +23,8 @@ set sleep_time=0
 set spoolfile="~/mail/inbox"
 set trash="=trash"
 set use_threads=yes sort=reverse-last-date sort_aux=date
+set mailcap_path=~/.config/neomutt/mailcap:$mailcap_path
+set display_filter="sed -e '/\\[-- Autoview using .* --]$/d'"
 
 attachments +I text/plain text/x-diff text/x-diff text/x-patch text/x-patch text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-perl text/x-python text/x-sh
 
@@ -32,7 +36,6 @@ auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
 mime_lookup text/*
 
-source "~/.config/neomutt/accounts/all"
 source "~/.config/neomutt/aliases"
 source "~/.config/neomutt/binds"
 source "~/.config/neomutt/colors"
