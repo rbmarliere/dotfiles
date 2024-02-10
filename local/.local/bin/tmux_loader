@@ -5,7 +5,7 @@ if [ -z "$PROJECTS" ]; then
 	exit 1
 fi
 
-selected=$(find $PROJECTS -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
+selected=$(find $PROJECTS -mindepth 1 -maxdepth 1 -type d -follow 2>/dev/null | fzf)
 
 if [ -z "$selected" ]; then
 	exit 0
