@@ -5,12 +5,17 @@
 
 [commit]
 	gpgsign = true
+	verbose = true
+	template = ~/.config/git/template
+
+[format]
+	signoff = true
 
 [alias]
 	aa = add --all
-	amend = commit -S -s -v --amend
+	amend = commit --amend
 	br = branch
-	ci = commit -S -s -v
+	ci = commit
 	co = checkout
 	d = diff
 	dc = diff --cached
@@ -27,6 +32,7 @@
 	pullff = pull --ff-only
 	r = !git l --graph
 	ra = !git r --all
+	ri = rebase -i
 	st = status
 	w = worktree
 
@@ -54,9 +60,6 @@
 
 [init]
 	defaultBranch = "main"
-
-[format]
-	signoff = true
 
 [sendemail]
 	smtpuser =
