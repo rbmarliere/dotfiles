@@ -1,3 +1,18 @@
 text/plain; cat %s | diff-so-fancy --patch; copiousoutput;
 text/x-diff; cat %s | diff-so-fancy --patch; copiousoutput;
 text/x-patch; cat %s | diff-so-fancy --patch; copiousoutput;
+text/html; lynx -assume_charset=%{charset} -dump -width=1024 %s; nametemplate=%s.html; copiousoutput;
+text/x-c++src; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-chdr; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-csrc; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-perl; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-python; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-sh; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-c++hdr; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-c++hdr; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-c++src; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-chdr; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-csrc; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-perl; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-python; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
+text/x-sh; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;
