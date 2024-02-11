@@ -1,3 +1,4 @@
+export GPG_TTY=$(tty)
 export EDITOR="$HOME/.local/bin/vi"
 export HISTFILE="$HOME/.bash_eternal_history"
 export HISTFILESIZE=
