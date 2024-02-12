@@ -20,6 +20,10 @@ return {
 	keys = {
 		{ "<C-Space>", ":Telescope find_pickers<CR>" },
 		{ "<C-p>", ":Telescope git_files<CR>" },
+		{ -- grep in current netrw directory
+			"<M-p>",
+			":lua require('telescope.builtin').live_grep({search_dirs={vim.fn['netrw#Call']('NetrwFile', '.')}})<CR>",
+		},
 	},
 	config = function()
 		local telescope = require("telescope")
