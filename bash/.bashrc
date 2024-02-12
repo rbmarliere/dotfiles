@@ -4,22 +4,27 @@ export HISTFILE="$HOME/.bash_eternal_history"
 export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="%F %T "
+export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 export LESS="-R --mouse"
 export PATH="$HOME/.local/bin:$PATH"
 export PS0='\[\e]0;$(history 1 | cut -d " " -f5-)\a\]'
 export PS1='\[\e[00;36m\]\t \[\e[00;91m\]${debian_chroot:+$debian_chroot }\[\e[00m\]\u@\h \[\e[00;32m\]\w\[\e[00;33m\]$(__git_ps1 " %s")\[\e[00m\]\n\$ '
 
+type nvim > /dev/null 2>&1 && export MANPAGER='nvim +Man!'
+
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 shopt -s histappend
 
-type nvim > /dev/null 2>&1 && export MANPAGER='nvim +Man!'
-
 alias ..="cd .."
+alias apt="sudo apt"
 alias g="git"
 alias grep="grep --color=auto"
 alias la="ls --color=auto -la"
 alias ll="ls --color=auto -l"
 alias ls="ls --color=auto"
+alias rr="source ~/.bashrc"
+alias shut="sudo shutdown -h now"
+alias ss="sudo su -"
 
 [ -f "$HOME/.bash_aliases" ] && source "$HOME/.bash_aliases"
 [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
