@@ -40,7 +40,7 @@ return {
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.abort(),
 					["<CR>"] = cmp.mapping.confirm({ select = false }),
-					["<Tab>"] = cmp.mapping(function(fallback)
+					["<C-n>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item()
 						-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
@@ -53,7 +53,7 @@ return {
 							fallback()
 						end
 					end, { "i", "s" }),
-					["<S-Tab>"] = cmp.mapping(function(fallback)
+					["<C-p>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_prev_item()
 						elseif ls.jumpable(-1) then
