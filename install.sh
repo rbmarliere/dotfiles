@@ -31,7 +31,10 @@ DEPS=(
 
 	# sway
 	acpi
+	breeze
+	breeze-gtk-theme
 	bemenu
+	dmenu
 	cliphist
 	desktop-base
 	dolphin
