@@ -1,3 +1,5 @@
+set $mod Mod4
+
 set $grey       #323232
 set $lgrey      #7c6f64
 set $orange     #ff5f1f
@@ -10,7 +12,6 @@ set $blue       #076678
 
 set $bg ~/Pictures/bg
 set $res 286px
-set $mod Mod4
 set $left h
 set $down j
 set $up k
@@ -49,7 +50,7 @@ bindsym Shift+Print exec grim -t png -l 6 - | wl-copy && wl-paste > ~/Pictures/S
 bindsym Print exec slurp | grim -t png -l 6 -g - - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
 bindsym $mod+Shift+Print exec ~/.local/bin/screencast -g start
 bindsym $mod+Print exec ~/.local/bin/screencast start
-bindsym alt+Print exec ~/.local/bin/screencast stop
+bindsym $mod+Ctrl+Print exec ~/.local/bin/screencast stop
 bindsym $mod+Control+l exec swaylock -f -c 000000 -i $bg
 
 bindsym $mod+Return exec $term
