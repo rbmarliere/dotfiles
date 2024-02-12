@@ -1,3 +1,12 @@
+local grepprg =
+	"rg --pcre2 --vimgrep --no-heading --smart-case --hidden --glob !.git --line-number --column"
+local grepprg_tbl = {}
+for word in grepprg:gmatch("%S+") do
+	table.insert(grepprg_tbl, word)
+end
+
+vim.opt.grepprg = grepprg
+
 return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.5",
@@ -38,22 +47,13 @@ return {
 				man_pages = {
 					sections = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
 				},
+				live_grep = {
+					vimgrep_arguments = grepprg_tbl,
+				},
 			}),
 			extensions = {
 				live_grep_args = {
-					vimgrep_arguments = {
-						"rg",
-						"--pcre2",
-						"--glob",
-						"!.git",
-						"--hidden",
-						"--color=never",
-						"--no-heading",
-						"--with-filename",
-						"--line-number",
-						"--column",
-						"--smart-case",
-					},
+					vimgrep_arguments = grepprg_tbl,
 					mappings = {
 						i = {
 							["<C-k>"] = function(prompt_bufnr)
