@@ -1,5 +1,4 @@
-local grepprg =
-	"rg --pcre2 --vimgrep --no-heading --smart-case --hidden --glob !.git --line-number --column"
+local grepprg = "rg --pcre2 --vimgrep --no-heading --smart-case --hidden --glob !.git --line-number --column"
 local grepprg_tbl = {}
 for word in grepprg:gmatch("%S+") do
 	table.insert(grepprg_tbl, word)
@@ -20,10 +19,6 @@ return {
 	keys = {
 		{ "<C-Space>", ":Telescope find_pickers<CR>" },
 		{ "<C-p>", ":Telescope git_files<CR>" },
-		{ -- grep in current netrw directory
-			"<M-p>",
-			":lua require('telescope.builtin').live_grep({search_dirs={vim.fn['netrw#Call']('NetrwFile', '.')}})<CR>",
-		},
 	},
 	config = function()
 		local telescope = require("telescope")
@@ -80,5 +75,13 @@ return {
 		telescope.load_extension("fzf")
 		telescope.load_extension("find_pickers")
 		telescope.load_extension("cscope")
+
+		-- grep in current netrw directory
+		vim.api.nvim_set_keymap(
+			"n",
+			"<M-p>",
+			":lua require('telescope').extensions.live_grep_args.live_grep_args({search_dirs={vim.fn['netrw#Call']('NetrwFile', '.')}})<CR>",
+			{ noremap = true, silent = true }
+		)
 	end,
 }
