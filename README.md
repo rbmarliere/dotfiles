@@ -3,12 +3,13 @@
 ```bash
 git clone --recursive https://github.com/rbmarliere/dotfiles ~/.dotfiles
 cd ~/.dotfiles
-./install.sh
+make deps  # optional
+make
 ```
 
 # Removal
 
 ```bash
 cd ~/.dotfiles
-./uninstall.sh
+make clean
 ```
