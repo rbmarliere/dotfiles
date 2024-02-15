@@ -1,5 +1,10 @@
+http://arighi.blogspot.com/feeds/posts/default?alt=rss
+http://research.swtch.com/feed.atom
+http://tarruda.github.io/feed.xml
+http://www.allaboutcircuits.com/rss/
+http://www.kroah.com/log/index.rss
+http://www.righto.com/feeds/posts/default
 https://0pointer.net/blog/index.atom
-https://arighi.blogspot.com/feeds/posts/default?alt=rss
 https://asahilinux.org/blog/index.xml
 https://blog.lenot.re/rss
 https://bzed.de/index.xml
@@ -26,6 +31,7 @@ https://linuxgizmos.com/feed/
 https://lwn.net/headlines/newrss
 https://matze.rocks/posts/index.xml
 https://michael.stapelberg.ch/feed.xml
+https://mischavandenburg.com/index.xml
 https://muxup.com/feed.xml
 https://neovim.io/news.xml
 https://os.phil-opp.com/rss.xml
@@ -33,7 +39,6 @@ https://pandysong.github.io/blog/index.xml
 https://paul-moore.com/blog/rss.xml
 https://people.kernel.org/read/feed/
 https://planet.gnu.org/rss20.xml
-https://research.swtch.com/feed.atom
 https://riscv.org/feed/
 https://rssproxy.migor.org/api/tf?url=https%3A%2F%2Fakashkollipara.blogspot.com%2Ffeeds%2Fposts%2Fdefault&re=none&out=atom
 https://ryanlue.com/feed.xml
@@ -42,12 +47,10 @@ https://sanjeev1sharma.wordpress.com/feed/
 https://sergioprado.blog/index.xml
 https://social.kernel.org/users/torvalds/feed.atom
 https://staticthinking.wordpress.com/feed.xml
-https://tarruda.github.io/feed.xml
+https://venthur.de/atom.xml
 https://wordsandbuttons.online/rss.rss
-https://www.allaboutcircuits.com/rss/
 https://www.cyphar.com/blog/posts.atom
 https://www.eyrie.org/~eagle/journal/index.rss
-https://www.kroah.com/log/index.rss
 https://www.marcusfolkesson.se/blog/index.xml
 https://www.marcusfolkesson.se/index.xml
 https://www.pagetable.com/?feed=rss2
