@@ -1,6 +1,7 @@
 vim.g.mapleader = " "
 vim.g.netrw_bufsettings = "noma nomod nu nobl nowrap ro"
 vim.g.c_syntax_for_h = 1
+vim.g.editorconfig = false
 
 vim.opt.autoindent = true
 vim.opt.autoread = true
