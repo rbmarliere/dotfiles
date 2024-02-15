@@ -1,7 +1,7 @@
 return {
 	"github/copilot.vim",
+	enabled = false,
 	init = function()
-		-- vim.g.copilot_enabled = false
 		vim.g.copilot_filetypes = {
 			["dap-repl"] = false,
 			["text"] = false,
