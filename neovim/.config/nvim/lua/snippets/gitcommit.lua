@@ -23,4 +23,40 @@ return {
 		t({ "", "", "Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>" }),
 		t({ "", "Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>" }),
 	}),
+
+	s("fixme", {
+		t("*****************************FIXME*************************************"),
+		t({ "", "FIXME: " }),
+		i(1, "description"),
+		t({ "", "*****************************FIXME*************************************" }),
+	}),
+
+	s("device type const", {
+		i(1, "subsystem"),
+		t(" constantify the struct device_type usage"),
+		t({ "", "", "" }),
+		t('Since commit aed65af1cc2f ("drivers: make device_type const"), the'),
+		t({ "", "" }),
+		t("driver core can properly handle constant struct bus_type. Move the"),
+		t({ "", "" }),
+		i(2, "variable"),
+		t(" variable to be a constant structure as well, placing it into"),
+		t({ "", "" }),
+		t("read-only memory which can not be modified at runtime."),
+	}),
+
+	s("device typeS const", {
+		i(1, "subsystem"),
+		t(" constantify the struct device_type usage"),
+		t({ "", "", "" }),
+		t('Since commit aed65af1cc2f ("drivers: make device_type const"), the'),
+		t({ "", "" }),
+		t("driver core can properly handle constant struct bus_type. Move the"),
+		t({ "", "" }),
+		i(2, "variable"),
+		t({ "", "" }),
+		t(" variables to be constant structures as well, placing it into read-only"),
+		t({ "", "" }),
+		t("memory which can not be modified at runtime."),
+	}),
 }
