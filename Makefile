@@ -12,7 +12,6 @@ DEPS += isync \
 	neomutt \
 	source-highlight \
 	urlscan
-	# diff-so-fancy
 	# oauth2.py
 	# libsasl2-modules-kdexoauth2
 
@@ -55,6 +54,7 @@ all:
 	sudo apt install $(BASE)
 	stow -Rv -t $$HOME */
 	fc-cache
+	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
 
 deps:
 	mkdir -p ~/.cache/neomutt
