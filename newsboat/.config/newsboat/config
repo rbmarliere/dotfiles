@@ -1,6 +1,6 @@
 auto-reload yes
 suppress-first-reload yes
-reload-time 180
+reload-time 10
 reload-threads 4
 download-retries 4
 download-timeout 10
