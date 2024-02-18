@@ -1,4 +1,5 @@
 http://arighi.blogspot.com/feeds/posts/default?alt=rss
+http://osblog.stephenmarz.com/feed.rss
 http://research.swtch.com/feed.atom
 http://tarruda.github.io/feed.xml
 http://www.allaboutcircuits.com/rss/
@@ -6,7 +7,10 @@ http://www.kroah.com/log/index.rss
 http://www.righto.com/feeds/posts/default
 https://0pointer.net/blog/index.atom
 https://asahilinux.org/blog/index.xml
+https://austinhenley.com/blog/feed.rss
 https://blog.lenot.re/rss
+https://blog.stephenmarz.com/feed/
+https://blogs.oracle.com/rss
 https://bzed.de/index.xml
 https://calomel.org/calomel_rss.xml
 https://carminatialessandro.blogspot.com/feeds/posts/default?alt=rss
@@ -56,5 +60,5 @@ https://www.marcusfolkesson.se/blog/index.xml
 https://www.marcusfolkesson.se/index.xml
 https://www.pagetable.com/?feed=rss2
 https://www.phoronix.com/rss.php
-https://www.righto.com/feeds/posts/default
+https://www.tomshardware.com/feeds/all
 https://www.willsroot.io/feeds/posts/default?alt=rss
