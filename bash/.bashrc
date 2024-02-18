@@ -32,6 +32,7 @@ alias ss="sudo su -"
 
 if [ -f /usr/share/bash-completion/bash_completion ]; then
 	source /usr/share/bash-completion/bash_completion
+	source /usr/share/bash-completion/completions/fzf  #1013356 ("fzf: Bash completions not active by default")
 	if [ -f /usr/share/bash-completion/completions/git ]; then
 		source /usr/share/bash-completion/completions/git
 		__git_complete g __git_main
