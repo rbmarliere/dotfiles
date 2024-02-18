@@ -55,7 +55,7 @@ all:
 	mkdir -p ~/.cache/vim/swp
 	mkdir -p ~/.cache/vim/und
 	sudo apt install $(BASE)
-	stow --verbose --restow --target=$$HOME */
+	stow --verbose --restow --target=$$HOME .
 	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
 	fc-cache
 
@@ -64,5 +64,5 @@ deps:
 	sudo apt install $(DEPS)
 
 clean:
-	stow --verbose --delete --target=$$HOME */
+	stow --verbose --delete --target=$$HOME .
 	fc-cache

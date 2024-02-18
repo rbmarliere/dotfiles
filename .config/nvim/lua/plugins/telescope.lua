@@ -73,11 +73,11 @@ return {
 
 		telescope.setup(opts)
 
-		telescope.load_extension("file_browser")
-		telescope.load_extension("live_grep_args")
-		telescope.load_extension("fzf")
-		telescope.load_extension("find_pickers")
 		telescope.load_extension("cscope")
+		telescope.load_extension("file_browser")
+		telescope.load_extension("find_pickers")
+		telescope.load_extension("fzf")
+		telescope.load_extension("live_grep_args")
 
 		-- grep in current netrw directory
 		-- vim.api.nvim_set_keymap(
