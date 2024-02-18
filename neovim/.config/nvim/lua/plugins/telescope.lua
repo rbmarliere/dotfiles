@@ -10,15 +10,17 @@ return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.5",
 	dependencies = {
-		"rbmarliere/telescope-cscope.nvim",
 		"keyvchan/telescope-find-pickers.nvim",
-		"nvim-telescope/telescope-live-grep-args.nvim",
 		"nvim-lua/plenary.nvim",
+		"nvim-telescope/telescope-file-browser.nvim",
+		"nvim-telescope/telescope-live-grep-args.nvim",
+		"rbmarliere/telescope-cscope.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 	keys = {
 		{ "<C-Space>", ":Telescope find_pickers<CR>" },
 		{ "<C-p>", ":Telescope git_files<CR>" },
+		{ "-", ":Telescope file_browser path=%:p:h<CR>" },
 	},
 	config = function()
 		local telescope = require("telescope")
@@ -71,17 +73,18 @@ return {
 
 		telescope.setup(opts)
 
+		telescope.load_extension("file_browser")
 		telescope.load_extension("live_grep_args")
 		telescope.load_extension("fzf")
 		telescope.load_extension("find_pickers")
 		telescope.load_extension("cscope")
 
 		-- grep in current netrw directory
-		vim.api.nvim_set_keymap(
-			"n",
-			"<M-p>",
-			":lua require('telescope').extensions.live_grep_args.live_grep_args({search_dirs={vim.fn['netrw#Call']('NetrwFile', '.')}})<CR>",
-			{ noremap = true, silent = true }
-		)
+		-- vim.api.nvim_set_keymap(
+		-- 	"n",
+		-- 	"<M-p>",
+		-- 	":lua require('telescope').extensions.live_grep_args.live_grep_args({search_dirs={vim.fn['netrw#Call']('NetrwFile', '.')}})<CR>",
+		-- 	{ noremap = true, silent = true }
+		-- )
 	end,
 }

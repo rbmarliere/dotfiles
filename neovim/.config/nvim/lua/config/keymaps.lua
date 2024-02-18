@@ -1,6 +1,5 @@
 local opts = { noremap = true }
 
-vim.keymap.set("n", "-", ":Ex<CR>", opts)
 vim.keymap.set("n", "<Bar>", "<C-W>v<C-W><Right>", opts)
 vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
 vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
