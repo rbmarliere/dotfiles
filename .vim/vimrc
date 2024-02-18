@@ -15,12 +15,11 @@ set encoding=utf-8
 set grepformat=%f:%l:%c:%m
 set hidden
 set hlsearch
-set ignorecase
 set incsearch
 set laststatus=2
 set list
-set listchars=tab:\~\ ,trail:~
-set mouse="a"
+set listchars=tab:~\ ,trail:~
+set mouse=a
 set number
 set relativenumber
 set ruler
@@ -41,6 +40,8 @@ set tabstop=8
 set bdir=$HOME/.cache/vim/bkp/
 set dir=$HOME/.cache/vim/swp/
 set undodir=$HOME/.cache/vim/und/
+set backup
+set undofile
 
 nnoremap - :Ex<CR>
 
@@ -71,7 +72,7 @@ nnoremap Y y$
 nnoremap _ <C-W>s<C-W><Down>
 nnoremap gp `[v`]
 nnoremap n nzzzv
-noremap <Leader><Leader>y \"*y
-noremap <Leader>y \"y+y
+noremap <Leader><Leader>y "*y
+noremap <Leader>y "+y
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
