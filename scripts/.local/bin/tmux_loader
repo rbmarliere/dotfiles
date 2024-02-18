@@ -1,4 +1,5 @@
 #!/bin/bash
+# from https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer
 
 if [ -z "$PROJECTS" ]; then
 	echo 'PROJECTS var not set'
