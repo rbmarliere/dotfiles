@@ -51,15 +51,18 @@ DEPS += acpi \
 	xdg-desktop-portal-wlr
 
 all:
+	mkdir -p ~/.cache/vim/bkp
+	mkdir -p ~/.cache/vim/swp
+	mkdir -p ~/.cache/vim/und
 	sudo apt install $(BASE)
-	stow -Rv -t $$HOME */
-	fc-cache
+	stow --verbose --restow --target=$$HOME */
 	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
+	fc-cache
 
 deps:
 	mkdir -p ~/.cache/neomutt
 	sudo apt install $(DEPS)
 
 clean:
-	stow -Dv -t $$HOME */
+	stow --verbose --delete --target=$$HOME */
 	fc-cache

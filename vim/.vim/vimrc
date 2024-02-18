@@ -1,0 +1,77 @@
+syntax on
+
+let g:mapleader=" "
+let g:c_syntax_for_h=1
+
+let g:solarized_termcolors=256
+let g:solarized_termtrans=1
+set background=light
+set t_Co=256
+silent! colorscheme solarized
+
+set autoread
+set backspace=indent,eol,start
+set encoding=utf-8
+set grepformat=%f:%l:%c:%m
+set hidden
+set hlsearch
+set ignorecase
+set incsearch
+set laststatus=2
+set list
+set listchars=tab:\~\ ,trail:~
+set mouse="a"
+set number
+set relativenumber
+set ruler
+set statusline=%{expand('%:h')}/%t\ [%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ %h%m%r%y%=%c,%l/%L\ %P
+set tags+=.git/tags,tags,$HOME/.tags
+set title
+set updatetime=50
+
+set autoindent
+set noexpandtab
+set nosmarttab
+set shiftround
+set shiftwidth=8
+set smartindent
+set softtabstop=8
+set tabstop=8
+
+set bdir=$HOME/.cache/vim/bkp/
+set dir=$HOME/.cache/vim/swp/
+set undodir=$HOME/.cache/vim/und/
+
+nnoremap - :Ex<CR>
+
+nnoremap <C-d> <C-d>zz
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap <C-u> <C-u>zz
+nnoremap <C-w><C-t> :tabnew<CR>
+nnoremap <C-w>C :tabclose<CR>
+nnoremap <Leader><Leader>H :vertical resize +50<CR>
+nnoremap <Leader><Leader>J :resize -10<CR>
+nnoremap <Leader><Leader>K :resize +10<CR>
+nnoremap <Leader><Leader>L :vertical resize -50<CR>
+nnoremap <Leader><Space> :nohlsearch<CR>
+nnoremap <Leader>P :pu<CR>
+nnoremap <Leader>S :%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>
+nnoremap <Leader>W :w !sudo tee % > /dev/null<CR>
+nnoremap <Leader>X :!chmod +x %<CR>
+nnoremap <Leader>p "0p<CR>
+nnoremap <Leader>w :w<CR>
+nnoremap <expr><silent> <Bar> v:count == 0 ? "<C-W>v<C-W><Right>" : ":<C-U>normal! 0".v:count."<Bar><CR>"
+nnoremap <expr><silent> _ v:count == 0 ? "<C-W>s<C-W><Down>"  : ":<C-U>normal! ".v:count."_<CR>"
+nnoremap <silent> <Leader>fws :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
+nnoremap N Nzzzv
+nnoremap Y y$
+nnoremap _ <C-W>s<C-W><Down>
+nnoremap gp `[v`]
+nnoremap n nzzzv
+noremap <Leader><Leader>y \"*y
+noremap <Leader>y \"y+y
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
