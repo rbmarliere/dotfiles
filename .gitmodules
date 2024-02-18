@@ -1,9 +1,9 @@
-[submodule "tmux/.config/tmux/plugins/tpm"]
-	path = tmux/.config/tmux/plugins/tpm
-	url = https://github.com/tmux-plugins/tpm
 [submodule ".diff-so-fancy"]
 	path = .deps/diff-so-fancy
 	url = https://github.com/so-fancy/diff-so-fancy.git
 [submodule ".vim-colors-solarized"]
 	path = .deps/vim-colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule ".deps/tpm"]
+	path = .deps/tpm
+	url = https://github.com/tmux-plugins/tpm.git
