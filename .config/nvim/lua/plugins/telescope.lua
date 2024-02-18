@@ -25,6 +25,10 @@ return {
 	config = function()
 		local telescope = require("telescope")
 		local builtin = require("telescope.builtin")
+		local action_state = require("telescope.actions.state")
+		local actions = require("telescope.actions")
+		local fb_utils = require("telescope._extensions.file_browser.utils")
+		local Path = require("plenary.path")
 
 		local picker_config = {}
 		for b, _ in pairs(builtin) do
@@ -68,23 +72,53 @@ return {
 						},
 					},
 				},
+				file_browser = {
+					mappings = {
+						["i"] = {
+							-- from https://github.com/nvim-telescope/telescope-file-browser.nvim/wiki/Configuration-Recipes
+							["<M-g>"] = function(prompt_bufnr)
+								local selections = fb_utils.get_selected_files(prompt_bufnr, false)
+								local search_dirs = vim.tbl_map(function(path)
+									return path:absolute()
+								end, selections)
+								if vim.tbl_isempty(search_dirs) then
+									local current_finder = action_state.get_current_picker(prompt_bufnr).finder
+									search_dirs = { current_finder.path }
+								end
+								actions.close(prompt_bufnr)
+								require("telescope").extensions.live_grep_args.live_grep_args({
+									search_dirs = search_dirs ,
+								})
+							end,
+							["<C-e>"] = function(prompt_bufnr)
+								local current_picker = action_state.get_current_picker(prompt_bufnr)
+								local finder = current_picker.finder
+								local bufr_path = Path:new(vim.fn.expand("#:p"))
+								local bufr_parent_path = bufr_path:parent():absolute()
+								if finder.path ~= bufr_parent_path then
+									finder.path = bufr_parent_path
+									fb_utils.selection_callback(current_picker, bufr_path:absolute())
+								else
+									finder.path = vim.loop.cwd()
+								end
+								fb_utils.redraw_border_title(current_picker)
+								current_picker:refresh(finder, {
+									new_prefix = fb_utils.relative_path_prefix(finder),
+									reset_prompt = true,
+									multi = current_picker._multi,
+								})
+							end,
+						},
+					},
+				},
 			},
 		}
 
 		telescope.setup(opts)
-
 		telescope.load_extension("cscope")
 		telescope.load_extension("file_browser")
 		telescope.load_extension("find_pickers")
 		telescope.load_extension("fzf")
 		telescope.load_extension("live_grep_args")
-
-		-- grep in current netrw directory
-		-- vim.api.nvim_set_keymap(
-		-- 	"n",
-		-- 	"<M-p>",
-		-- 	":lua require('telescope').extensions.live_grep_args.live_grep_args({search_dirs={vim.fn['netrw#Call']('NetrwFile', '.')}})<CR>",
-		-- 	{ noremap = true, silent = true }
-		-- )
 	end,
 }
