@@ -33,7 +33,7 @@ return {
 		vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave", "TextChanged" }, {
 			callback = function()
 				lint.try_lint()
-				lint.try_lint("codespell", { ignore_errors = true })
+				-- lint.try_lint("codespell", { ignore_errors = true })
 			end,
 		})
 	end,
