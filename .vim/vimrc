@@ -44,7 +44,6 @@ set backup
 set undofile
 
 nnoremap - :Ex<CR>
-
 nnoremap <C-d> <C-d>zz
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -58,11 +57,11 @@ nnoremap <Leader><Leader>J :resize -10<CR>
 nnoremap <Leader><Leader>K :resize +10<CR>
 nnoremap <Leader><Leader>L :vertical resize -50<CR>
 nnoremap <Leader><Space> :nohlsearch<CR>
-nnoremap <Leader>P :pu<CR>
+nnoremap <Leader>P O<Esc>pk<CR>
 nnoremap <Leader>S :%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>
 nnoremap <Leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap <Leader>X :!chmod +x %<CR>
-nnoremap <Leader>p "0p<CR>
+nnoremap <Leader>p :pu<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <expr><silent> <Bar> v:count == 0 ? "<C-W>v<C-W><Right>" : ":<C-U>normal! 0".v:count."<Bar><CR>"
 nnoremap <expr><silent> _ v:count == 0 ? "<C-W>s<C-W><Down>"  : ":<C-U>normal! ".v:count."_<CR>"
@@ -76,3 +75,4 @@ noremap <Leader><Leader>y "*y
 noremap <Leader>y "+y
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+xnoremap <Leader><Leader>p "_dP<CR>
