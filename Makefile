@@ -4,7 +4,6 @@ BASE  = stow \
 	tmux \
 	vim
 
-
 # mail
 DEPS += isync \
 	lynx \
@@ -20,7 +19,8 @@ DEPS += newsboat
 
 # neovim
 DEPS += codespell \
-	ripgrep
+	ripgrep \
+	fd-find
 	# neovim
 
 # sway
@@ -49,6 +49,8 @@ DEPS += acpi \
 	xdg-desktop-portal-gtk \
 	xdg-desktop-portal-kde \
 	xdg-desktop-portal-wlr
+
+.PHONY: all deps clean
 
 all:
 	mkdir -p ~/.cache/vim/bkp
