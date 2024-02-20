@@ -30,7 +30,6 @@ for_window [title="^mutt|^news*" shell="xdg_shell" app_id="foot"] resize set 160
 for_window [title="^weechat*" shell="xdg_shell" app_id="foot"] resize set 1920
 
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-exec systemctl --user start tmux
 exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 exec swayidle -w \
