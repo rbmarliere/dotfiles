@@ -15,25 +15,26 @@
 	aa = add --all
 	amend = commit --amend
 	br = branch
+	ch = cherry
 	ci = commit
 	co = checkout
-	ch = cherry
 	cp = cherry-pick
 	d = diff
 	dc = diff --cached
 	dct = difftool --cached
 	dt = difftool
-	pa = !git --no-pager diff --no-color
 	fa = fetch --all
 	ff = merge --ff-only
 	l = log --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
 	la = !git l --name-status
 	noff = merge --no-ff
+	pa = !git --no-pager diff --no-color
 	po = push origin
 	pom = push --set-upstream origin main
 	pullff = pull --ff-only
 	r = !git l --graph
 	ra = !git r --all
+	re = remote
 	ri = rebase -i
 	st = status
 	w = worktree
@@ -78,7 +79,7 @@
 
 [core]
 	abbrev = 12
-	pager = diff-so-fancy | less --tabs=4 -RF
+	pager = diff-so-fancy | less --tabs=8 -RF
 
 [pretty]
 	fixes = Fixes: %h (\"%s\")
