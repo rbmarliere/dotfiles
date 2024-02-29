@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source "$HOME/.bashrc"
+
+# for wl-copy:
+export WAYLAND_DISPLAY=wayland-1
+
+/usr/bin/tmux new-session -d
