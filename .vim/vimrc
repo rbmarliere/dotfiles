@@ -13,20 +13,23 @@ set autoread
 set backspace=indent,eol,start
 set encoding=utf-8
 set grepformat=%f:%l:%c:%m
+set helpheight=9999
 set hidden
 set hlsearch
 set incsearch
 set laststatus=2
 set list
-set listchars=tab:~\ ,trail:~
+set listchars=tab:~\ ,trail:~,eol:↲
 set mouse=a
 set number
 set relativenumber
 set ruler
+set showtabline=2
 set statusline=%{expand('%:h')}/%t\ [%{strlen(&fenc)?&fenc:'none'},%{&ff}]\ %h%m%r%y%=%c,%l/%L\ %P
 set tags+=.git/tags,tags,$HOME/.tags
 set title
 set updatetime=50
+set sessionoptions=curdir,folds,globals,help,tabpages,terminal,winsize
 
 set autoindent
 set noexpandtab
@@ -37,10 +40,10 @@ set smartindent
 set softtabstop=8
 set tabstop=8
 
+set backup
 set bdir=$HOME/.cache/vim/bkp/
 set dir=$HOME/.cache/vim/swp/
 set undodir=$HOME/.cache/vim/und/
-set backup
 set undofile
 
 nnoremap - :Ex<CR>
@@ -52,6 +55,7 @@ nnoremap <C-l> <C-w>l
 nnoremap <C-u> <C-u>zz
 nnoremap <C-w><C-t> :tabnew<CR>
 nnoremap <C-w>C :tabclose<CR>
+nnoremap <C-w>z <C-w><Bar><C-w>_
 nnoremap <Leader><Leader>H :vertical resize +50<CR>
 nnoremap <Leader><Leader>J :resize -10<CR>
 nnoremap <Leader><Leader>K :resize +10<CR>
@@ -73,6 +77,7 @@ nnoremap gp `[v`]
 nnoremap n nzzzv
 noremap <Leader><Leader>y "*y
 noremap <Leader>y "+y
+vnoremap <Leader>s :sort<CR>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 xnoremap <Leader><Leader>p "_dP<CR>
