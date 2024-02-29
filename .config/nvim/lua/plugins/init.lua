@@ -1,5 +1,6 @@
 return {
 	"christoomey/vim-tmux-navigator",
+	"j-hui/fidget.nvim",
 	"jamessan/vim-gnupg",
 	"tpope/vim-commentary",
 	"tpope/vim-repeat",
