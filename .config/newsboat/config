@@ -25,11 +25,11 @@ bind-key k prev articlelist
 bind-key J next-feed articlelist
 bind-key K prev-feed articlelist
 bind-key G end
-bind-key g home
-bind-key d pagedown
-bind-key u pageup
+bind-key gg home
+bind-key ^D pagedown
+bind-key ^U pageup
 bind-key - quit
-bind-key a toggle-article-read
+bind-key ^R toggle-article-read
 bind-key TAB next-unread
 bind-key N prev-unread
 bind-key D pb-download
