@@ -19,6 +19,7 @@ return {
 	},
 	keys = {
 		{ "<C-Space>", ":Telescope find_pickers<CR>" },
+		{ "<M-p>", ":Telescope find_files<CR>" },
 		{ "<C-p>", ":Telescope git_files<CR>" },
 		{ "-", ":Telescope file_browser path=%:p:h<CR>" },
 		{ "<M-g>", ":Telescope live_grep_args<CR>" },
