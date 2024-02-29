@@ -7,10 +7,12 @@ return {
 	green = "#6c782e",
 	lightgray = "#7c6f64",
 	lightgreen = "#a9b665",
+	lightergreen = "#f1f2df",
 	orange = "#fb4934",
 	purple = "#6c2f9c",
 	red = "#cc241d",
 	white = "#d5c4a1",
 	lightwhite = "#f5f2ed",
+	lighterwhite = "#f8f7f5",
 	yellow = "#b57614",
 }
