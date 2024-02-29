@@ -25,8 +25,6 @@ DEPS += codespell \
 
 # sway
 DEPS += acpi \
-	breeze \
-	breeze-gtk-theme \
 	bemenu \
 	dmenu \
 	cliphist \
@@ -58,8 +56,13 @@ all:
 	mkdir -p ~/.cache/vim/und
 	sudo apt install $(BASE)
 	stow --verbose --restow --target=$$HOME .
-	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
+
+	# flatpak
+	mkdir -p ~/.icons/default
+	cp /usr/share/icons/default/index.theme ~/.icons/default
+
 	fc-cache
+	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
 
 deps:
 	mkdir -p ~/.cache/neomutt
