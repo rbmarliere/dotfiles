@@ -85,10 +85,10 @@
 		"on-scroll": 1,
 		"format": {
 		"months": "<span color='#6c782e'><b>{}</b></span>",
-		"days": "<span color='#000000'><b>{}</b></span>",
-		"weeks": "<span color='#076678'><b>W{}</b></span>",
+		"days": "<span color='#FFFFFF'><b>{}</b></span>",
+		"weeks": "<span color='#458588'><b>W{}</b></span>",
 		"weekdays": "<span color='#b57614'><b>{}</b></span>",
-		"today": "<span color='#9d0006'><b><u>{}</u></b></span>"
+		"today": "<span color='#ff5f1f'><b><u>{}</u></b></span>"
 		}
 	},
 	"actions": {
