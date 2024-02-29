@@ -42,4 +42,4 @@ source "~/.config/neomutt/colors"
 source "~/.config/neomutt/mailboxes ~/mail/|"
 
 folder-hook . "set record='=sent'; set check_new=no"  # https://github.com/neomutt/neomutt/issues/2223
-folder-hook inbox "set record=^; push <collapse-all>"
+folder-hook inbox "set record=^; push <collapse-all>; set check_new=yes"
