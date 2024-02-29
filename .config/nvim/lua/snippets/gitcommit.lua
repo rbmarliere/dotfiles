@@ -33,7 +33,7 @@ return {
 
 	s("device type const", {
 		i(1, "subsystem"),
-		t(" constantify the struct device_type usage"),
+		t(" constify the struct device_type usage"),
 		t({ "", "", "" }),
 		t('Since commit aed65af1cc2f ("drivers: make device_type const"), the'),
 		t({ "", "" }),
@@ -47,7 +47,7 @@ return {
 
 	s("device typeS const", {
 		i(1, "subsystem"),
-		t(" constantify the struct device_type usage"),
+		t(" constify the struct device_type usage"),
 		t({ "", "", "" }),
 		t('Since commit aed65af1cc2f ("drivers: make device_type const"), the'),
 		t({ "", "" }),
@@ -58,5 +58,28 @@ return {
 		t(" variables to be constant structures as well, placing it into read-only"),
 		t({ "", "" }),
 		t("memory which can not be modified at runtime."),
+	}),
+
+	s("class const", {
+		i(1, "subsystem"),
+		t(" make "),
+		i(2, "variable"),
+		t(" constant"),
+		t({ "", "", "" }),
+		t('Since commit 43a7206b0963 ("driver core: class: make class_register() take'),
+		t({ "", "" }),
+		t('a const *"), the driver core allows for struct class to be in read-only'),
+		t({ "", "" }),
+		t("memory, so move the "),
+		d(3, simple_restore, 2),
+		t(" structure to be declared at build"),
+		t({ "", "" }),
+		t("time placing it into read-only memory, instead of having to be dynamically"),
+		t({ "", "" }),
+		t("allocated at boot time."),
+		t({ "", "", "" }),
+		t("Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>"),
+		t({ "", "" }),
+		t("Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>"),
 	}),
 }
