@@ -22,3 +22,8 @@ if type sudo >/dev/null 2>&1; then
 	alias ufw="sudo ufw"
 	alias umount="sudo umount"
 fi
+
+if systemctl --user status tmux >/dev/null 2>&1; then
+	alias reboot="systemctl --user stop tmux && sudo shutdown -r --no-wall now"
+	alias shut="systemctl --user stop tmux && sudo shutdown -h --no-wall now"
+fi
