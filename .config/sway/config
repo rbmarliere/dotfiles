@@ -20,16 +20,31 @@ set $term foot
 set $bemenu_opts -i --nb "$grey" --ab "$grey" --fb "$grey" --hb "$green" --hf "$black" --fn "TerminessNerdFont 16" -p "" -b -l 20 --fixed-height
 set $menu j4-dmenu-desktop --dmenu='bemenu $bemenu_opts' --term='$term' --no-generic --usage-log=$HOME/.bemenu
 
+default_border pixel 0
+smart_borders off
+smart_gaps on
+gaps inner 4
+focus_on_window_activation none
+
+for_window [app_id="org.kde.dolphin"] floating enable, resize set 1920 height 80 ppt, move container to scratchpad, scratchpad show
+for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
+
 output * bg $bg fill
 #output DP-1 mode --custom 3440x1440@60Hz
 #output DP-1 scale 1
 
-for_window [app_id="org.kde.dolphin"] floating enable; resize set height 80 ppt; resize set 1920
-for_window [title="^mutt|^weechat*|^news*" shell="xdg_shell" app_id="foot"] floating enable; border none; resize set height 100 ppt
-for_window [title="^mutt|^news*" shell="xdg_shell" app_id="foot"] resize set 1600; move right 300
-for_window [title="^weechat*" shell="xdg_shell" app_id="foot"] resize set 1920
+input type:keyboard {
+	xkb_layout us,us(dvorak),br
+	# man 7 xkeyboard-config
+}
+bar {
+	swaybar_command waybar
+	hidden_state hide
+	mode hide
+}
 
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec ~/.config/sway/inactive_windows_transparency.py
+#exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 exec swayidle -w \
@@ -37,113 +52,6 @@ exec swayidle -w \
 	timeout 900 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
 	before-sleep 'swaylock -f -c 000000 -i $bg'
 
-input type:keyboard {
-	xkb_layout us,br
-	# man 7 xkeyboard-config
-}
-
-bindsym Shift+Insert exec wlrctl keyboard type "$(wl-paste -p)"
-
-bindsym $mod+x exec cliphist list | bemenu $bemenu_opts | cliphist decode | wl-copy
-bindsym $mod+Shift+x exec cliphist list | bemenu $bemenu_opts | cliphist delete
-bindsym Shift+Print exec grim -t png -l 6 - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
-bindsym Print exec slurp | grim -t png -l 6 -g - - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
-bindsym $mod+Shift+Print exec ~/.local/bin/screencast -g start
-bindsym $mod+Print exec ~/.local/bin/screencast start
-bindsym $mod+Ctrl+Print exec ~/.local/bin/screencast stop
-bindsym $mod+Control+l exec swaylock -f -c 000000 -i $bg
-
-bindsym $mod+Return exec $term
-bindsym $mod+Shift+q exec ~/.config/sway/kill.sh
-bindsym $mod+d exec $menu
-bindsym $mod+Shift+c reload
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
-floating_modifier $mod normal
-bindsym $mod+$left focus left
-bindsym $mod+$down focus down
-bindsym $mod+$up focus up
-bindsym $mod+$right focus right
-bindsym $mod+Shift+$left move left
-bindsym $mod+Shift+$down move down
-bindsym $mod+Shift+$up move up
-bindsym $mod+Shift+$right move right
-bindsym $mod+1 workspace number 1
-bindsym $mod+2 workspace number 2
-bindsym $mod+3 workspace number 3
-bindsym $mod+4 workspace number 4
-bindsym $mod+5 workspace number 5
-bindsym $mod+6 workspace number 6
-bindsym $mod+7 workspace number 7
-bindsym $mod+8 workspace number 8
-bindsym $mod+9 workspace number 9
-bindsym $mod+0 workspace number 10
-bindsym $mod+minus workspace number 11
-bindsym $mod+Shift+1 move container to workspace number 1
-bindsym $mod+Shift+2 move container to workspace number 2
-bindsym $mod+Shift+3 move container to workspace number 3
-bindsym $mod+Shift+4 move container to workspace number 4
-bindsym $mod+Shift+5 move container to workspace number 5
-bindsym $mod+Shift+6 move container to workspace number 6
-bindsym $mod+Shift+7 move container to workspace number 7
-bindsym $mod+Shift+8 move container to workspace number 8
-bindsym $mod+Shift+9 move container to workspace number 9
-bindsym $mod+Shift+0 move container to workspace number 10
-bindsym $mod+Shift+minus move container to workspace number 11
-bindsym $mod+b splith
-bindsym $mod+v splitv
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-bindsym $mod+f fullscreen
-bindsym $mod+Shift+space floating toggle
-bindsym $mod+space focus mode_toggle
-bindsym $mod+a focus parent
-bindsym $mod+Shift+equal move scratchpad
-bindsym $mod+equal scratchpad show
-
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-bindsym XF86MonBrightnessUp exec light -A 5
-bindsym XF86MonBrightnessDown exec light -U 5
-
-mode "resize" {
-	bindsym $left resize shrink width $res
-	bindsym $down resize grow height $res
-	bindsym $up resize shrink height $res
-	bindsym $right resize grow width $res
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
-}
-bindsym $mod+r mode "resize"
-
-bar {
-	swaybar_command waybar
-	hidden_state hide
-	mode hide
-}
-
-# debian stuff
 include /etc/sway/config.d/*
-
-# Window borders
-default_border pixel 3
-# smart_borders on
-# smart_gaps on
-# gaps inner 8
-
-seat seat0 xcursor_theme "breeze_cursors"
-
-set $gnome-schema org.gnome.desktop.interface
-exec_always {
-    gsettings set $gnome-schema gtk-theme 'Breeze'
-    gsettings set $gnome-schema icon-theme 'breeze'
-    gsettings set $gnome-schema cursor-theme 'breeze_cursors'
-}
-
-# Sway theme
-# class                 border     backgr.    text    indic.     child_border
-client.focused          $green     $green     $white  $green     $green
-client.focused_inactive $grey      $green     $white  $grey      $grey
-client.unfocused        $grey      $grey      $white  $grey      $grey
-client.urgent           $red       $red       $white  $black     $black
+include binds
+include autostart
