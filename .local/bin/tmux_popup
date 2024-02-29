@@ -3,6 +3,6 @@
 
 set -e -u -o pipefail
 
-width=${2:-80%}
+width=${2:-50%}
 
 tmux popup -d '#{pane_current_path}' -xC -yC -w"$width" -h80% -E "${1}" || true
