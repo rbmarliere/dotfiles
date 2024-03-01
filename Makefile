@@ -43,7 +43,6 @@ DEPS += acpi \
 	waybar \
 	wf-recorder \
 	wireplumber \
-	wlrctl \
 	xdg-desktop-portal-gtk \
 	xdg-desktop-portal-kde \
 	xdg-desktop-portal-wlr
