@@ -27,7 +27,7 @@ def on_window_focus(inactive_opacity, ipc, event):
 
     if focused.id != prev_focused.id:  # https://github.com/swaywm/sway/issues/2859
         focused.command("opacity 1")
-        if workspace == prev_workspace:
+        if workspace == prev_workspace and prev_focused.type != "floating_con":
             prev_focused.command("opacity " + inactive_opacity)
         prev_focused = focused
         prev_workspace = workspace
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         if window.focused:
             prev_focused = window
             window.command("opacity 1")
-        else:
+        elif not window.type != "floating_con":
             window.command("opacity " + args.opacity)
     for sig in [signal.SIGINT, signal.SIGTERM]:
         signal.signal(sig, lambda signal, frame: remove_opacity(ipc))
