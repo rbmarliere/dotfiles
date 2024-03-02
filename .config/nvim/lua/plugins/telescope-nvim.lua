@@ -81,6 +81,7 @@ return {
 				border = true,
 				borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 				sorting_strategy = "ascending",
+				vimgrep_arguments = grepprg_tbl,
 			},
 			pickers = vim.tbl_extend("force", picker_config, {
 				find_files = {
@@ -89,13 +90,9 @@ return {
 				man_pages = {
 					sections = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
 				},
-				live_grep = {
-					vimgrep_arguments = grepprg_tbl,
-				},
 			}),
 			extensions = {
 				live_grep_args = {
-					vimgrep_arguments = grepprg_tbl,
 					mappings = {
 						i = {
 							["<C-k>"] = function(prompt_bufnr)

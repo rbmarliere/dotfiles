@@ -15,7 +15,7 @@ return {
 			stdin = false,
 			ignore_exitcode = true,
 			stream = "stderr",
-			parser = require("lint.parser").from_errorformat("%f:%l:%c: %m")
+			parser = require("lint.parser").from_errorformat("%f:%l:%c: %m"),
 		}
 		lint.linters.codespell.args = {
 			"--config",

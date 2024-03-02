@@ -4,7 +4,7 @@ return {
 	opts = {
 		indent = {
 			char = "║",
-			tab_char = "┋"
+			tab_char = "┋",
 		},
 		whitespace = {
 			remove_blankline_trail = false,
