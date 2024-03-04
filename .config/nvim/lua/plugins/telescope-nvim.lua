@@ -16,6 +16,7 @@ return {
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		"rbmarliere/telescope-cscope.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		{ "j-hui/fidget.nvim", opts = {} },
 	},
 	keys = {
 		{ "<C-Space>", ":Telescope find_pickers<CR>" },
