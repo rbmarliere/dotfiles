@@ -26,7 +26,7 @@ smart_gaps on
 gaps inner 4
 focus_on_window_activation none
 
-for_window [app_id="org.kde.dolphin"] floating enable, resize set 1920 height 80 ppt, move container to scratchpad, scratchpad show
+for_window [class="dolphin"] floating enable, resize set 1920 height 80 ppt, move container to scratchpad, scratchpad show
 for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
 
 output * bg $bg fill
@@ -39,12 +39,12 @@ input type:keyboard {
 }
 bar {
 	swaybar_command waybar
-	hidden_state hide
-	mode hide
+	# hidden_state hide
+	# mode hide
 }
 
-exec ~/.config/sway/inactive_windows_transparency.py
-#exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec systemctl --user start tmux.service
+exec ~/.local/bin/inactive_windows_transparency.py
 exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 exec swayidle -w \
@@ -55,3 +55,4 @@ exec swayidle -w \
 include /etc/sway/config.d/*
 include binds
 include autostart
+

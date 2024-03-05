@@ -1,0 +1,9 @@
+#!/bin/bash
+
+p=$(pgrep -f "inactive_windows_transparency.py" || true)
+
+if [ -n "$p" ]; then
+	echo "$p" | xargs kill
+else
+	nohup python3 ~/.local/bin/inactive_windows_transparency.py >/dev/null 2>&1 &
+fi
