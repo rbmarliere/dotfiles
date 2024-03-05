@@ -44,18 +44,21 @@ end
 vim.api.nvim_set_hl(0, "Transparent", {
 	bg = "none",
 })
-vim.api.nvim_set_hl(0, "Opaque", {
+vim.api.nvim_set_hl(0, "LighterWhite", {
 	bg = colors.lighterwhite,
 })
-vim.api.nvim_set_hl(0, "WhiteBG", {
+vim.api.nvim_set_hl(0, "LightWhite", {
 	bg = colors.lightwhite,
 })
+vim.api.nvim_set_hl(0, "White", {
+	bg = colors.white,
+})
 vim.api.nvim_create_augroup("MyHighlights", { clear = true })
-vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", "FocusGained" }, {
+vim.api.nvim_create_autocmd({ "WinNew", "WinEnter", "BufEnter", "FocusGained" }, {
 	group = "MyHighlights",
 	pattern = "*",
 	callback = function()
-		set_winhightlight("Normal:Opaque,ColorColumn:WhiteBG")
+		set_winhightlight("Normal:LighterWhite,ColorColumn:LightWhite,NormalNC:White")
 	end,
 })
 vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave", "FocusLost" }, {
