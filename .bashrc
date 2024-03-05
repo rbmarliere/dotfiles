@@ -1,5 +1,5 @@
-source "$HOME/.bash_env"
 source "$HOME/.bash_aliases"
+source "$HOME/.bash_env"
 
 [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
 
