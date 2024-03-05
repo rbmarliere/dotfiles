@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -euo pipefail
+
+GIF=0
+
 usage() {
 	CMD=$(basename "$0")
 	cat <<END >&2
@@ -18,21 +22,19 @@ start() {
 		exit 1
 	fi
 
+	out_dir="$HOME/Pictures/Screencasts"
+	mkdir -p "$out_dir"
 	date=$(date +%Y%m%d%H%M%S)
-	tmp=$(mktemp /tmp/screencast-XXXXXX.mp4)
-	out="$HOME/Pictures/Screencasts/$date"
+	out_file="$out_dir/$date"
 
 	notify-send "REC"
-	echo y | wf-recorder -g "$region" -x yuv420p -f "$tmp"
 
-	if [ -z "$GIF" ]; then
-		mv "$tmp" "$out".mp4
-		wl-copy < "$out".mp4
+	if [ "$GIF" -eq 0 ]; then
+		echo y | wf-recorder -r 10 -g "$region" -x yuv420p -f "$out_file".mp4
+		wl-copy < "$out_file".mp4
 	else
-		notify-send "Converting to GIF"
-		convert -set delay 10 -layers Optimize "$tmp" "$out".gif
-		wl-copy < "$out".gif
-		rm "$tmp"
+		echo y | wf-recorder -r 10 -c gif -g "$region" -f "$out_file".gif
+		wl-copy < "$out_file".gif
 	fi
 
 	exit 0
