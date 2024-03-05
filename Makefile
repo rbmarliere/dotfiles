@@ -20,17 +20,20 @@ DEPS += newsboat
 # neovim
 DEPS += codespell \
 	ripgrep \
-	fd-find
-	# neovim
+	fd-find \
+	neovim
 
 # sway
 DEPS += acpi \
 	bemenu \
-	dmenu \
+	breeze \
+	breeze-gtk-theme \
 	cliphist \
 	desktop-base \
+	dmenu \
 	dolphin \
 	grim \
+	i3ipc-python \
 	j4-dmenu-desktop \
 	light \
 	mako-notifier \
