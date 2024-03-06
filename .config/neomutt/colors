@@ -35,3 +35,12 @@ color header blue default "^message-id:"
 color body green default "[a-z]{3,255}://[[:graph:]]*" # URLs
 color body brightwhite default "[-a-z_0-9_\+.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+" # mail addr
 color body brightwhite default "mailto:[-a-z_0-9_\+.]+@[-a-z_0-9.]+" # mailto URLs
+
+# diff colors
+color body brightyellow default "^diff \-.*"
+color body brightyellow default "^index [a-f0-9].*"
+color body brightyellow default "^\-\-\- .*"
+color body brightyellow default "^[\+]{3} .*"
+color body brightgreen default "^[\+][^\+]+.*"
+color body brightred  default "^\-[^\-]+.*"
+color body brightmagenta default "^@@ .*"
