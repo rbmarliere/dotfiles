@@ -7,7 +7,7 @@ bindsym $mod+Shift+t exec ~/.local/bin/toggle_transparency
 bindsym $mod+x exec cliphist list | bemenu $bemenu_opts | cliphist decode | wl-copy
 bindsym $mod+Shift+x exec cliphist list | bemenu $bemenu_opts | cliphist delete
 bindsym Shift+Print exec grim -t png -l 6 - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
-bindsym Print exec slurp | grim -t png -l 6 -g - - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
+bindsym Print exec sh -c 'region=$(slurp); [ -n "$region" ] && grim -t png -l 6 -g "$region" - | wl-copy && [ -n "$region" ] && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png'
 bindsym $mod+Shift+Print exec ~/.local/bin/screencast start
 bindsym $mod+Print exec ~/.local/bin/screencast -g start
 bindsym $mod+Ctrl+Print exec ~/.local/bin/screencast stop
