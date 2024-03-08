@@ -39,8 +39,8 @@ input type:keyboard {
 }
 bar {
 	swaybar_command waybar
-	# hidden_state hide
-	# mode hide
+	hidden_state hide
+	mode hide
 }
 
 exec systemctl --user start tmux.service
