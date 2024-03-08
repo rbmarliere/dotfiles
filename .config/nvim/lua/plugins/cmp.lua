@@ -33,6 +33,12 @@ return {
 						winhighlight = "Normal:Pmenu",
 					},
 				},
+				formatting = {
+					format = function(entry, vim_item)
+						vim_item.abbr = string.sub(vim_item.abbr, 1, 60)
+						return vim_item
+					end,
+				},
 				mapping = cmp.mapping.preset.insert({
 					["<C-u>"] = cmp.mapping.scroll_docs(-4),
 					["<C-d>"] = cmp.mapping.scroll_docs(4),
@@ -66,7 +72,7 @@ return {
 					{ name = "luasnip" },
 					{ name = "nvim_lsp" },
 					{ name = "nvim_lsp_signature_help" },
-					{ name = "fuzzy_buffer" },
+					-- { name = "fuzzy_buffer" },
 					{ name = "path" },
 				}),
 				sorting = {
