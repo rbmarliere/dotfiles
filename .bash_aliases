@@ -16,6 +16,7 @@ if type sudo >/dev/null 2>&1; then
 	alias dpkg="sudo dpkg"
 	alias fdisk="sudo fdisk"
 	alias losetup="sudo losetup"
+	alias mount="sudo mount"
 	alias reboot="sudo shutdown -r --no-wall now"
 	alias shut="sudo shutdown -h --no-wall now"
 	alias ss="sudo su -"
