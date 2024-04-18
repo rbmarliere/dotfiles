@@ -35,8 +35,10 @@ DEPS += acpi \
 	grim \
 	i3ipc-python \
 	j4-dmenu-desktop \
+	kio-extras \
 	light \
 	mako-notifier \
+	ntp \
 	pavucontrol \
 	pinentry-qt \
 	slurp \
