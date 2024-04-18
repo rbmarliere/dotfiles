@@ -88,31 +88,35 @@ return {
 	lazy = false,
 	priority = 1000,
 	config = function()
-		vim.opt.background = "light"
-		require("gruvbox").setup({
-			terminal_colors = false, -- add neovim terminal colors
-			undercurl = true,
-			underline = true,
-			bold = true,
-			italic = {
-				strings = false,
-				emphasis = false,
-				comments = false,
-				operators = false,
-				folds = false,
-			},
-			strikethrough = false,
-			invert_selection = false,
-			invert_signs = false,
-			invert_tabline = false,
-			invert_intend_guides = false,
-			inverse = true, -- invert background for search, diffs, statuslines and errors
-			contrast = "hard", -- can be "hard", "soft" or empty string
-			dim_inactive = false,
-			transparent_mode = true,
-			palette_overrides = {},
-			overrides = my_theme,
-		})
-		vim.cmd.colorscheme("gruvbox")
+		if os.getenv("TERM") == "linux" then
+			vim.opt.background = "dark"
+		else
+			require("gruvbox").setup({
+				terminal_colors = false, -- add neovim terminal colors
+				undercurl = true,
+				underline = true,
+				bold = true,
+				italic = {
+					strings = false,
+					emphasis = false,
+					comments = false,
+					operators = false,
+					folds = false,
+				},
+				strikethrough = false,
+				invert_selection = false,
+				invert_signs = false,
+				invert_tabline = false,
+				invert_intend_guides = false,
+				inverse = true, -- invert background for search, diffs, statuslines and errors
+				contrast = "hard", -- can be "hard", "soft" or empty string
+				dim_inactive = false,
+				transparent_mode = true,
+				palette_overrides = {},
+				overrides = my_theme,
+			})
+			vim.cmd.colorscheme("gruvbox")
+			vim.opt.background = "light"
+		end
 	end,
 }
