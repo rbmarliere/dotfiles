@@ -105,7 +105,7 @@ return {
 				lualine_c = { "branch", "diff", "diagnostics" },
 				lualine_x = { "encoding", "fileformat" }, --"fileformat", "filetype" },
 				lualine_y = { "progress", "searchcount" },
-				lualine_z = { "location" },
+				lualine_z = { "location", "selectioncount" },
 			},
 			inactive_sections = {
 				lualine_a = {
