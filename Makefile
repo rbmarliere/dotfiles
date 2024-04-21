@@ -55,9 +55,7 @@ DEPS += acpi \
 .PHONY: all deps clean
 
 all:
-	mkdir -p ~/.cache/vim/bkp
-	mkdir -p ~/.cache/vim/swp
-	mkdir -p ~/.cache/vim/und
+	mkdir -p {~/.config,~/.local/bin,~/.cache/vim/{bkp,swp,und}}
 	sudo apt install $(BASE)
 	stow --verbose --restow --target=$$HOME .
 	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
