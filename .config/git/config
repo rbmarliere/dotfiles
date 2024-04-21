@@ -4,12 +4,7 @@
 	signingkey = C90B8A7C638658A6!
 
 [commit]
-	gpgsign = true
 	verbose = true
-	template = ~/.config/git/template
-
-[format]
-	signoff = true
 
 [alias]
 	aa = add --all
@@ -38,6 +33,10 @@
 	ri = rebase -i
 	st = status
 	w = worktree
+	staash = stash --all
+
+[rerere]
+	enabled = true
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
@@ -107,3 +106,6 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+
+[includeIf "gitdir:~/linux/"]
+	path = ~/linux/.gitconfig
