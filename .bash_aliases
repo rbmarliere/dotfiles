@@ -1,9 +1,11 @@
 alias ..="cd .."
+alias act="source venv/bin/activate || source .venv/bin/activate"
 alias g="git"
 alias grep="grep --color=auto"
 alias la="ls --color=auto -la"
 alias ll="ls --color=auto -l"
 alias ls="ls --color=auto"
+alias py="python3"
 alias rr="source ~/.bashrc"
 
 if type sudo >/dev/null 2>&1; then
