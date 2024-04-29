@@ -55,18 +55,19 @@ DEPS += acpi \
 .PHONY: all deps clean
 
 all:
-	mkdir -p {~/.config,~/.local/bin,~/.cache/vim/{bkp,swp,und}}
+	set -x
+	mkdir -p $$HOME/.config $$HOME/.local/bin $$HOME/.cache/vim/{bkp,swp,und}
 	sudo apt install $(BASE)
 	stow --verbose --restow --target=$$HOME .
 	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
 
 deps:
-	mkdir -p ~/.cache/neomutt
+	mkdir -p $$HOME/.cache/neomutt
 	sudo apt install $(DEPS)
 
 	# flatpak
-	mkdir -p ~/.icons/default
-	cp /usr/share/icons/default/index.theme ~/.icons/default
+	mkdir -p $$HOME/.icons/default
+	cp /usr/share/icons/default/index.theme $$HOME/.icons/default
 
 	fc-cache
 
