@@ -1,7 +1,5 @@
 # vim: ft=sh
 
-[ -f "$HOME/.bash_env.priv" ] && source "$HOME/.bash_env.priv"
-
 GPG_TTY=$(tty)
 export GPG_TTY
 export EDITOR="$HOME/.local/bin/vi"
@@ -23,3 +21,4 @@ PS1='\[\e[00;36m\]\t \[\e[00;91m\]${debian_chroot:+$debian_chroot }\[\e[00m\]\u@
 type nvim > /dev/null 2>&1 && export MANPAGER='nvim +Man!'
 
 [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ] && export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+[ -f "$HOME/.bash_env.priv" ] && source "$HOME/.bash_env.priv"
