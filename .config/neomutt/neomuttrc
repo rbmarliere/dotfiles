@@ -1,30 +1,39 @@
-set from="ricardo@marliere.net"
-set sendmail="msmtp -a marliere.net"
 set abort_nosubject=no
 set alias_file="~/.config/neomutt/aliases"
 set allow_ansi=yes
 set collapse_all=yes
 set crypt_use_gpgme=yes
 set date_format="%e %b %H:%M"
+set display_filter="sed -e '/\\[-- Autoview using .* --]$/d'"
 set editor="~/.local/bin/vi"
 set folder="~/mail"
+set folder_format="%3C %<n?%7n&       > %7m %i"
+set from="ricardo@marliere.net"
 set header_cache="~/.cache/neomutt"  # mkdir before using!
 set imap_check_subscribed = yes
 set include=yes
 set index_format="%4C %Z %[${date_format}] %-15.15L %s"
+set mailcap_path=~/.config/neomutt/mailcap:$mailcap_path
 set markers=no
-set message_cache_dir="~/.cache/neomutt"
+set mask=""
+#set message_cache_dir="~/.cache/neomutt"
 set mime_type_query_command="xdg-mime query filetype %s"
 set pager_stop=yes
 set postponed="=drafts"
 set realname="Ricardo B. Marliere"
 set send_charset="us-ascii:utf-8"
+set sendmail="msmtp -a marliere.net"
+#set sidebar_component_depth=1
+#set sidebar_delim_chars="-"
+#set sidebar_short_path
+#set sidebar_visible
+set sidebar_divider_char = '│'
+set sidebar_format = "%B%<F? [%F]>%* %<N?%N/>%S"
+set sidebar_width = 35
 set sleep_time=0
 set spoolfile="~/mail/inbox"
 set trash="=trash"
 set use_threads=yes sort=reverse-last-date sort_aux=date
-set mailcap_path=~/.config/neomutt/mailcap:$mailcap_path
-set display_filter="sed -e '/\\[-- Autoview using .* --]$/d'"
 
 attachments +I text/plain text/x-diff text/x-diff text/x-patch text/x-patch text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-perl text/x-python text/x-sh
 

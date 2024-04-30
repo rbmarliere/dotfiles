@@ -18,7 +18,7 @@ color status color232 green
 color tilde red default
 color tree green default
 color underline white default
-color index color232 default
+#color index color232 default
 color index color232 default ~N
 color index color232 default ~O
 color index yellow default ~P

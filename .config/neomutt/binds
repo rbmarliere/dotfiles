@@ -17,8 +17,14 @@ bind generic,pager \Cy previous-line
 bind index <Backtab> previous-new-then-unread
 bind index zA collapse-all
 bind index za collapse-thread
+bind index,pager <F1> sidebar-page-up
+bind index,pager <F2> sidebar-page-down
+bind index,pager B sidebar-toggle-visible
 bind index,pager N search-opposite
 bind index,pager R reply
+bind index,pager \CN sidebar-next
+bind index,pager \CO sidebar-open
+bind index,pager \CP sidebar-prev
 bind index,pager r group-reply
 bind index,pager,attach g noop
 bind pager - exit
@@ -29,7 +35,7 @@ bind pager gg top
 macro browser $ "<check-new><check-stats>"
 macro index - "<change-folder>?" "open mailbox..."
 macro index <esc>s ":set confirmappend=no delete=yes auto_tag=yes\n<clear-flag>Nk<save-message>=spam\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
+macro index \Ca ":set confirmappend=no delete=yes auto_tag=yes\n<clear-flag>Nk<save-message>=archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
+macro index \Cb ":set delete=yes\nD~=\n$" "delete duplicate messages"
 macro index,pager L '| git am -s'\n
 macro pager \Co "<pipe-message> urlscan --run-safe 'wl-copy {}' --single<Enter>" "call urlscan to extract URLs out of a message"
-macro index \Cb ":set delete=yes\nD~=\n$" "delete duplicate messages"
-macro index \Ca ":set confirmappend=no delete=yes auto_tag=yes\n<clear-flag>Nk<save-message>=archive\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
