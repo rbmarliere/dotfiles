@@ -34,7 +34,7 @@ output * bg $bg fill
 #output DP-1 scale 1
 
 input type:keyboard {
-	xkb_layout us,us(dvorak),br
+	xkb_layout us(altgr-intl)
 	# man 7 xkeyboard-config
 }
 bar {
