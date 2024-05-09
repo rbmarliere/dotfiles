@@ -4,11 +4,13 @@
 	signingkey = C90B8A7C638658A6!
 
 [commit]
+	gpgsign = true
 	verbose = true
 
 [alias]
 	aa = add --all
 	amend = commit --amend
+	amende = commit --amend --no-edit
 	br = branch
 	ch = cherry
 	ci = commit
