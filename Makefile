@@ -1,74 +1,71 @@
 BASE  = stow \
 	bash-completion \
 	fzf \
+	psmisc \
 	tmux \
 	vim
 
 # mail
-DEPS += isync \
-	lynx \
-	msmtp \
-	neomutt \
-	source-highlight \
-	urlscan
-	# oauth2.py
-	# libsasl2-modules-kdexoauth2
-
-# news
-DEPS += newsboat
-
-# neovim
-DEPS += codespell \
-	ripgrep \
-	fd-find \
-	neovim
+#DEPS += isync \
+#	lynx \
+#	msmtp \
+#	neomutt \
+#	source-highlight \
+#	urlscan
+#	# oauth2.py
+#	# libsasl2-modules-kdexoauth2
+#
+## news
+#DEPS += newsboat
+#
+## neovim
+#DEPS += codespell \
+#	ripgrep \
+#	fd-find \
+#	neovim
 
 # sway
-DEPS += acpi \
+DEPS += ark \
 	bemenu \
-	breeze \
-	breeze-gtk-theme \
-	cliphist \
+	breeze-icon-theme \
+	copyq \
 	desktop-base \
-	dmenu \
 	dolphin \
 	grim \
-	i3ipc-python \
-	j4-dmenu-desktop \
+	jq \
 	kio-extras \
-	light \
+	libnotify-bin \
 	mako-notifier \
 	ntp \
 	pavucontrol \
 	pinentry-qt \
+	python3-i3ipc \
 	slurp \
 	sway \
 	swayidle \
 	swaylock \
+	udisks2 \
+	vlc \
 	waybar \
 	wf-recorder \
 	wireplumber \
-	xdg-desktop-portal-gtk \
-	xdg-desktop-portal-kde \
+	wl-clipboard \
+	wtype \
 	xdg-desktop-portal-wlr
+	#light
 
 .PHONY: all deps clean
 
 all:
-	set -x
-	mkdir -p $$HOME/.config $$HOME/.local/bin $$HOME/.cache/vim/{bkp,swp,und}
+	mkdir -p $$HOME/.config/systemd/user $$HOME/.local/bin $$HOME/.cache/vim/bkp $$HOME/.cache/vim/swp $$HOME/.cache/vim/und $$HOME/.cache/nvim/bkp $$HOME/.cache/nvim/swp $$HOME/.cache/nvim/und
 	sudo apt install $(BASE)
 	stow --verbose --restow --target=$$HOME .
+	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
 
 deps:
 	mkdir -p $$HOME/.cache/neomutt
 	sudo apt install $(DEPS)
-
-	# flatpak
-	mkdir -p $$HOME/.icons/default
-	cp /usr/share/icons/default/index.theme $$HOME/.icons/default
-
 	fc-cache
 
 clean:
