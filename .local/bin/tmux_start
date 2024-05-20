@@ -5,4 +5,4 @@ source "$HOME/.bashrc"
 # for wl-copy:
 export WAYLAND_DISPLAY=wayland-1
 
-/usr/bin/tmux new-session -d
+$HOME/.local/bin/ch sid -- /usr/bin/tmux new-session -d

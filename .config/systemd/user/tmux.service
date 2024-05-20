@@ -2,6 +2,8 @@
 [Unit]
 Description=tmux default session (detached)
 Documentation=man:tmux(1)
+After=schroot.service
+Wants=schroot.service
 
 [Service]
 Type=forking
