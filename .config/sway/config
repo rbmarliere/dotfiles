@@ -17,8 +17,7 @@ set $down j
 set $up k
 set $right l
 set $term foot
-set $bemenu_opts -i --nb "$grey" --ab "$grey" --fb "$grey" --hb "$green" --hf "$black" --fn "TerminessNerdFont 16" -p "" -b -l 20 --fixed-height
-set $menu j4-dmenu-desktop --dmenu='bemenu $bemenu_opts' --term='$term' --no-generic --usage-log=$HOME/.bemenu
+set $menu bemenu-run
 
 default_border pixel 0
 smart_borders off
@@ -30,8 +29,9 @@ for_window [class="dolphin"] floating enable, resize set 1920 height 80 ppt, mov
 for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
 
 output * bg $bg fill
-#output DP-1 mode --custom 3440x1440@60Hz
-#output DP-1 scale 1
+output DP-1 mode --custom 3440x1440@60Hz pos 2560 0 scale 1
+output HDMI-A-1 mode --custom 2560x1440@60Hz scale 1 pos 0 0
+workspace 11 output HDMI-A-1
 
 input type:keyboard {
 	xkb_layout us(altgr-intl)
