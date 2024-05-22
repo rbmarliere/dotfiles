@@ -54,9 +54,9 @@ bindsym $mod+f fullscreen
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
-# bindsym $mod+Shift+equal move scratchpad
-# bindsym $mod+equal scratchpad show
-bindsym $mod+equal exec dolphin
+bindsym $mod+Shift+equal move scratchpad
+bindsym $mod+equal scratchpad show
+bindsym $mod+Alt+equal exec dolphin
 
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
