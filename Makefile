@@ -19,10 +19,14 @@ BASE  = stow \
 #DEPS += newsboat
 #
 ## neovim
-#DEPS += codespell \
-#	ripgrep \
+#DEPS += ripgrep \
 #	fd-find \
-#	neovim
+#	neovim \
+#	-- for mason.nvim:
+#	npm \
+#	python3-pip \
+#	python3-venv \
+#	rustup \
 
 # sway
 DEPS += ark \
@@ -31,6 +35,7 @@ DEPS += ark \
 	copyq \
 	desktop-base \
 	dolphin \
+	gnome-keyring \
 	grim \
 	jq \
 	kio-extras \
@@ -38,7 +43,6 @@ DEPS += ark \
 	mako-notifier \
 	ntp \
 	pavucontrol \
-	pinentry-qt \
 	python3-i3ipc \
 	slurp \
 	sway \
