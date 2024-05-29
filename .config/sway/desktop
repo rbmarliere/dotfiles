@@ -1,0 +1,53 @@
+# vim: ft=swayconfig
+
+set $res 286px
+set $term foot bash -lc 'ch sid'
+
+bindsym $mod+Shift+Return exec foot
+
+output DP-1 mode --custom 3440x1440@60Hz pos 2560 0 scale 1
+output HDMI-A-1 resolution 2560x1440 scale 1 pos 0 0
+#output HDMI-A-1 scale 1.2 pos 0 0
+workspace 11 output HDMI-A-1
+
+for_window [title="^news" app_id="foot"] {
+	move container to workspace number 7;
+	floating enable;
+	resize set width 1400 px height 1200 px;
+	move right 200 px;
+}
+
+for_window [title="^neomutt" app_id="foot"] {
+	move container to workspace number 8;
+	floating enable;
+	resize set width 1400 px height 1200 px;
+	move right 200 px;
+}
+
+for_window [title="^weechat" app_id="foot"] {
+	move container to workspace number 9;
+	floating enable;
+	resize set width 2000 px height 1200 px;
+}
+
+for_window [app_id="org.telegram.desktop"] {
+	move container to workspace number 10;
+	floating enable;
+	resize set width 1500 px height 1200 px;
+	move left 750px;
+}
+
+for_window [app_id="nheko"] {
+	move container to workspace number 10;
+	floating enable;
+	resize set width 1500 px height 1200 px;
+	move right 750px;
+}
+
+exec swaymsg 'workspace 1' && firefox
+exec sleep .3 && swaymsg 'workspace 7' && foot -T newsboat bash -l -c "sleep 15 && ssh b -t 'tmux -L newsboat a'"
+exec sleep .6 && swaymsg 'workspace 8' && foot -T neomutt bash -l -c "sleep 15 && ssh b -t 'tmux -L neomutt a'"
+exec sleep .9 && swaymsg 'workspace 9' && foot -T weechat bash -l -c "sleep 15 && ssh b -t 'tmux -L weechat a'"
+exec sleep 1.2 && swaymsg 'workspace 10' && telegram-desktop
+exec sleep 1.2 && swaymsg 'workspace 10' && nheko
+# exec sleep 2 && swaymsg 'workspace 1'

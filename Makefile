@@ -62,6 +62,7 @@ all:
 	stow --verbose --restow --target=$$HOME .
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
+	# ln -s ~/.config/sway/desktop ~/.config/sway/autostart
 
 deps:
 	mkdir -p $$HOME/.cache/neomutt
