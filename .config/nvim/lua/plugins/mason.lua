@@ -4,6 +4,7 @@ return {
 		ui = {
 			border = "none",
 		},
+		-- log_level = vim.log.levels.DEBUG,
 	},
 	dependencies = {
 		{
@@ -60,8 +61,19 @@ return {
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			opts = {
 				ensure_installed = {
+					"bash-language-server",
+					"black",
+					"clangd",
+					"codespell",
+					"goimports",
+					"gopls",
+					"lua-language-server",
+					"prettier",
+					"ruff-lsp",
+					"rust-analyzer",
 					"shfmt",
-					-- TODO: add essentials
+					"stylua",
+					"typescript-language-server",
 				},
 			},
 		},
