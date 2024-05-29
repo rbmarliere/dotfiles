@@ -1,0 +1,1 @@
+/home/rbmarliere/linux/torvalds/scripts/get_maintainer.pl

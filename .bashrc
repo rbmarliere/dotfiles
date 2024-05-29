@@ -10,5 +10,6 @@ if [ -f /usr/share/bash-completion/bash_completion ]; then
 		source /usr/share/bash-completion/completions/git
 		__git_complete g __git_main
 	fi
+	source $HOME/.local/bin/ktest.completion
 fi
 

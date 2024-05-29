@@ -1,0 +1,30 @@
+#!/bin/bash
+
+TESTS_DIR="$HOME/linux/ktest/tests"
+
+_ktest_completion() {
+	# https://stackoverflow.com/questions/62979947/how-to-autocomplete-files-under-specific-directory
+	local cmd=$1 cur=$2 pre=$3
+	local arr i file
+
+	arr=( $( cd "$TESTS_DIR" && compgen -f -- "$cur" ) )
+	COMPREPLY=()
+	for ((i = 0; i < ${#arr[@]}; ++i)); do
+		file=${arr[i]}
+		if [[ -d $TESTS_DIR/$file ]]; then
+			file=$file/
+		fi
+		COMPREPLY[i]=$file
+	done
+}
+
+# wrapper to complete to the correct test file path
+ktest() {
+	local file_path="$1"
+	if [[ ! "$file_path" = /* ]]; then
+		file_path="$TESTS_DIR/$file_path"
+	fi
+	command ktest "$file_path"
+}
+
+complete -F _ktest_completion ktest
