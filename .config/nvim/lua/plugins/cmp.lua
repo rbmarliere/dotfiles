@@ -11,6 +11,7 @@ return {
 			"L3MON4D3/LuaSnip",
 			-- sources
 			"davidsierradz/cmp-conventionalcommits",
+			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-cmdline",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lsp-signature-help",
@@ -72,7 +73,7 @@ return {
 					{ name = "luasnip" },
 					{ name = "nvim_lsp" },
 					{ name = "nvim_lsp_signature_help" },
-					-- { name = "fuzzy_buffer" },
+					{ name = "buffer" },
 					{ name = "path" },
 				}),
 				sorting = {
@@ -84,7 +85,7 @@ return {
 			cmp.setup.cmdline({ "/", "?" }, {
 				mapping = cmp.mapping.preset.cmdline(),
 				sources = {
-					{ name = "fuzzy_buffer" },
+					{ name = "buffer" },
 				},
 			})
 			cmp.setup.cmdline(":", {
