@@ -58,10 +58,21 @@ DEPS += ark \
 	xdg-desktop-portal-wlr
 	#light
 
+DIR = $$HOME/.config/systemd/user \
+      $$HOME/.local/bin \
+      $$HOME/.cache/vim/bkp \
+      $$HOME/.cache/vim/swp \
+      $$HOME/.cache/vim/und \
+      $$HOME/.cache/nvim/bkp \
+      $$HOME/.cache/nvim/swp \
+      $$HOME/.cache/nvim/und \
+      $$HOME/.cache/neomutt/gmail.com \
+      $$HOME/.cache/neomutt/marliere.net
+
 .PHONY: all deps clean
 
 all:
-	mkdir -p $$HOME/.config/systemd/user $$HOME/.local/bin $$HOME/.cache/vim/bkp $$HOME/.cache/vim/swp $$HOME/.cache/vim/und $$HOME/.cache/nvim/bkp $$HOME/.cache/nvim/swp $$HOME/.cache/nvim/und
+	mkdir -p $(DIR)
 	sudo apt install $(BASE)
 	stow --verbose --restow --target=$$HOME .
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
@@ -69,7 +80,6 @@ all:
 	# ln -s ~/.config/sway/desktop ~/.config/sway/autostart
 
 deps:
-	mkdir -p $$HOME/.cache/neomutt
 	sudo apt install $(DEPS)
 	fc-cache
 
