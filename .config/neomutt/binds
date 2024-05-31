@@ -31,6 +31,8 @@ bind pager - exit
 bind pager <down> next-line
 bind pager <up> previous-line
 bind pager G bottom
+bind pager J next-thread
+bind pager K previous-thread
 bind pager gg top
 macro browser $ "<check-new><check-stats>"
 macro index - "<change-folder>?" "open mailbox..."

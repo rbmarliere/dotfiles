@@ -1,7 +1,9 @@
 source "$HOME/.bash_aliases"
 source "$HOME/.bash_env"
 
-[ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
+if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
+	source /usr/share/doc/fzf/examples/key-bindings.bash
+fi
 
 if [ -f /usr/share/bash-completion/bash_completion ]; then
 	source /usr/share/bash-completion/bash_completion
@@ -10,6 +12,8 @@ if [ -f /usr/share/bash-completion/bash_completion ]; then
 		source /usr/share/bash-completion/completions/git
 		__git_complete g __git_main
 	fi
-	source $HOME/.local/bin/ktest.completion
+	for f in $HOME/.local/bin/*.completion; do
+		source $f
+	done
 fi
 

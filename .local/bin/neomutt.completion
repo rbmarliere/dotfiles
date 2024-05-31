@@ -1,0 +1,32 @@
+#!/bin/bash
+
+ACCOUNTS_DIR="$HOME/.config/neomutt/accounts"
+
+_neomutt_completion() {
+	# https://stackoverflow.com/questions/62979947/how-to-autocomplete-files-under-specific-directory
+	local cmd=$1 cur=$2 pre=$3
+	local arr i file
+
+	arr=( $( cd "$ACCOUNTS_DIR" && compgen -f -- "$cur" ) )
+	COMPREPLY=()
+	for ((i = 0; i < ${#arr[@]}; ++i)); do
+		file=${arr[i]}
+		if [[ -d $ACCOUNTS_DIR/$file ]]; then
+			file=$file/
+		fi
+		COMPREPLY[i]=$file
+	done
+}
+
+# wrapper to complete to the correct account file path
+neomutt() {
+	local file_path="$1"
+	if [[ ! "$file_path" = /* ]]; then
+		file_path="$ACCOUNTS_DIR/$file_path"
+	fi
+	command neomutt -e 'unmailboxes *' -e 'source '"$file_path"
+
+}
+
+complete -F _neomutt_completion neomutt
+

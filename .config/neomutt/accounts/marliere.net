@@ -1,0 +1,22 @@
+# vim: ft=neomuttrc
+
+set check_new=no
+
+source "~/.local/bin/mailboxes ~/mail/|"
+
+set realname="Ricardo B. Marliere"
+set from="ricardo@marliere.net"
+set sendmail="msmtp -a marliere.net"
+
+set folder="~/mail"
+set postponed="=drafts"
+set record="=sent"
+set spoolfile="~/mail/inbox"
+set trash="=trash"
+set check_new=no  # https://github.com/neomutt/neomutt/issues/2223
+
+folder-hook archive "set record=^; push <collapse-all>; set check_new=yes"
+folder-hook inbox "set record=^; push <collapse-all>; set check_new=yes"
+
+# https://people.kernel.org/monsieuricon/fix-your-mutt
+send-hook . "source ~/.local/bin/neomutt.hook"
