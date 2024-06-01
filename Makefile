@@ -1,35 +1,24 @@
-BASE  = stow \
+BASE_DEPS = \
+	stow \
 	bash-completion \
 	fzf \
 	psmisc \
 	tmux \
 	vim
 
-# mail
-#DEPS += isync \
-#	lynx \
-#	msmtp \
-#	neomutt \
-#	source-highlight \
-#	urlscan
-#	# oauth2.py
-#	# libsasl2-modules-kdexoauth2
-#
-## news
-#DEPS += newsboat
-#
-## neovim
-#DEPS += ripgrep \
-#	fd-find \
-#	neovim \
-#	-- for mason.nvim:
-#	npm \
-#	python3-pip \
-#	python3-venv \
-#	rustup \
+DEV_DEPS = \
+	fd-find \
+	golang-go \
+	locate \
+	neovim \
+	npm \
+	python3-pip \
+	python3-venv \
+	ripgrep \
+	rustup
 
-# sway
-DEPS += ark \
+DESKTOP_DEPS = \
+	ark \
 	bemenu \
 	breeze-icon-theme \
 	copyq \
@@ -40,6 +29,7 @@ DEPS += ark \
 	jq \
 	kio-extras \
 	libnotify-bin \
+	light \
 	mako-notifier \
 	ntp \
 	pavucontrol \
@@ -56,9 +46,9 @@ DEPS += ark \
 	wl-clipboard \
 	wtype \
 	xdg-desktop-portal-wlr
-	#light
 
-DIR =	$$HOME/.cache/neomutt/ \
+DIR = \
+	$$HOME/.cache/neomutt/ \
 	$$HOME/.cache/nvim/bkp \
 	$$HOME/.cache/nvim/swp \
 	$$HOME/.cache/nvim/und \
@@ -68,20 +58,32 @@ DIR =	$$HOME/.cache/neomutt/ \
 	$$HOME/.config/systemd/user \
 	$$HOME/.local/bin
 
-.PHONY: all deps clean
+.PHONY: all dev desktop clean
 
 all:
 	mkdir -p $(DIR)
 	sudo apt install $(BASE)
 	stow --verbose --restow --target=$$HOME .
-	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
-	# *************** ADJUST '@continuum-save-interval' IN tmux.conf !
-	# ln -s ~/.config/sway/desktop ~/.config/sway/autostart
 
-deps:
-	sudo apt install $(DEPS)
+dev:
+	sudo apt install $(DEV_DEPS)
+	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
+	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
+
+desktop:
+	sudo apt install $(DESKTOP_DEPS)
 	fc-cache
+	systemctl --user enable tmux
+	sudo systemctl enable systemd-networkd-wait-online.service
+	ln -sf $$HOME/.config/sway/desktop $$HOME/.config/sway/autostart
+	git update-index --assume-unchanged .bash_profile
+	@for patch in .patches/*; do \
+		target=$$(grep -m 1 '^+++ ' "$$patch" | cut -d ' ' -f 2 | cut -f1); \
+		if [ -f "$$target" ]; then \
+			echo patching $$target; \
+			sudo patch -s -N -r - $$target < $$patch; \
+		fi \
+	done
 
 clean:
 	stow --verbose --delete --target=$$HOME .
-	fc-cache

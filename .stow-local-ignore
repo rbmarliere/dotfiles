@@ -1,6 +1,7 @@
 .deps
 .git
 .gitmodules
+.patches
 LICENSE.txt
 Makefile
 README.md
