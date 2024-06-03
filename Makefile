@@ -74,7 +74,7 @@ dev:
 desktop:
 	sudo apt install $(DESKTOP_DEPS)
 	fc-cache
-	systemctl --user enable tmux
+	ln -sf $$HOME/.config/tmux/tmux.service $$HOME/.config/systemd/user/tmux.service
 	sudo systemctl enable systemd-networkd-wait-online.service
 	ln -sf $$HOME/.config/sway/desktop $$HOME/.config/sway/autostart
 	git update-index --assume-unchanged .bash_profile
