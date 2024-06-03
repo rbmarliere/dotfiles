@@ -49,6 +49,7 @@ DESKTOP_DEPS = \
 
 DIR = \
 	$$HOME/.cache/neomutt/ \
+	$$HOME/.cache/neomutt/bodies \
 	$$HOME/.cache/nvim/bkp \
 	$$HOME/.cache/nvim/swp \
 	$$HOME/.cache/nvim/und \
