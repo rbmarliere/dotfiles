@@ -73,13 +73,19 @@ vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave", "FocusLost" }, {
 vim.api.nvim_create_autocmd("VimEnter", {
 	group = "MyHighlights",
 	callback = function()
-		vim.fn.system("[ -z $TMUX_PANE ] || tmux rename-window nvim")
+		local tmux = vim.fn.getenv("TMUX")
+		if tmux ~= vim.NIL and not string.match(tmux, "neomutt") then
+			vim.fn.system("tmux rename-window nvim")
+		end
 	end,
 })
 vim.api.nvim_create_autocmd("VimLeave", {
 	group = "MyHighlights",
 	callback = function()
-		vim.fn.system("[ -z $TMUX_PANE ] || tmux rename-window bash")
+		local tmux = vim.fn.getenv("TMUX")
+		if tmux ~= vim.NIL and not string.match(tmux, "neomutt") then
+			vim.fn.system("tmux rename-window bash")
+		end
 	end,
 })
 

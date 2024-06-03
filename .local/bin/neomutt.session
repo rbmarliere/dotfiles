@@ -1,7 +1,9 @@
 #!/bin/bash
 
-ACCOUNTS_DIR=$HOME/.config/neomutt/accounts/ 
+ACCOUNTS_DIR=$HOME/.config/neomutt/accounts/
 tmux -L neomutt new-session -d -s neomutt
+tmux -L neomutt set-option -g allow-rename off
+tmux -L neomutt set-option -g automatic-rename off
 
 i=1
 for acc in $(find $ACCOUNTS_DIR -type f ! -name ".*" -printf "%P\n"); do
