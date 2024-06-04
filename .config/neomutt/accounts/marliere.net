@@ -1,8 +1,9 @@
 # vim: ft=neomuttrc
 
-set check_new=no
-
 source "~/.local/bin/mailboxes ~/mail/|"
+
+set my_archive="=archive"
+set my_spam="=spam"
 
 set realname="Ricardo B. Marliere"
 set from="ricardo@marliere.net"

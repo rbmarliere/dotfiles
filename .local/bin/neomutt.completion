@@ -24,8 +24,7 @@ neomutt() {
 	if [[ ! "$file_path" = /* ]]; then
 		file_path="$ACCOUNTS_DIR/$file_path"
 	fi
-	command neomutt -e 'unmailboxes *' -e 'source '"$file_path"
-
+	command neomutt -e 'source '"$file_path" -e 'source ~/.config/neomutt/macros'
 }
 
 complete -F _neomutt_completion neomutt
