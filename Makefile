@@ -64,10 +64,12 @@ DIR = \
 all:
 	mkdir -p $(DIR)
 	sudo apt install $(BASE)
+	sudo update-alternatives --config editor
 	stow --verbose --restow --target=$$HOME .
 
 dev:
 	sudo apt install $(DEV_DEPS)
+	sudo update-alternatives --config editor
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
