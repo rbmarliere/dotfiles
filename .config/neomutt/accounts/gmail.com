@@ -1,6 +1,6 @@
 # vim: ft=neomuttrc
 
-set my_archive="+[Gmail]/All Mail"
+set my_archive="+[Gmail]/All%20Mail"
 set my_spam="+[Gmail]/Spam"
 
 set realname="Ricardo B. Marliere"
