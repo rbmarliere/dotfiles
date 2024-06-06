@@ -9,7 +9,7 @@ set sendmail="msmtp -a gmail.com"
 
 set folder="imaps://$from@imap.gmail.com:993"
 set postponed="+[Gmail]/Drafts"
-set record="+[Gmail]/Sent Mail"
+unset record
 set spoolfile="+INBOX"
 set trash="+[Gmail]/Trash"
 
