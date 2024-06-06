@@ -5,4 +5,4 @@ macro index <esc>s ":set confirmappend=no delete=yes auto_tag=yes\n<clear-flag>N
 macro index \Ca ":set confirmappend=no delete=yes auto_tag=yes\n<clear-flag>Nk<save-message>${my_archive}\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n"
 macro index \Cb ":set delete=yes\nD~=\n$" "delete duplicate messages"
 macro index,pager L '| git am -s'\n
-macro pager \Co "<pipe-message> urlscan --run-safe 'wl-copy {}' --single<Enter>" "call urlscan to extract URLs out of a message"
+macro pager \Co "<pipe-message> urlscan --run '~/.local/bin/neomutt.urlwrapper {}' --single<Enter>" "call urlscan to extract URLs out of a message"
