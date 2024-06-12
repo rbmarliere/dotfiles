@@ -1,0 +1,8 @@
+# vim: ft=neomuttrc
+
+#set debug_level = 2
+#set debug_file = ~/neolog
+
+source "~/.config/neomutt/accounts/marliere.net"
+unmailboxes *
+source "~/.local/bin/mailboxes ~/mail_important/|"
