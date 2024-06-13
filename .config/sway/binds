@@ -7,7 +7,7 @@ bindsym Print exec sh -c 'region=$(slurp); [ -n "$region" ] && grim -t png -l 6 
 bindsym $mod+Shift+Print exec ~/.local/bin/screencast start
 bindsym $mod+Print exec ~/.local/bin/screencast -g start
 bindsym $mod+Ctrl+Print exec ~/.local/bin/screencast stop
-bindsym $mod+Control+l exec swaylock -f -c 000000 -i $bg
+bindsym $mod+Ctrl+l exec swaylock -f -c 000000 -i $bg
 
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
@@ -56,7 +56,7 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 bindsym $mod+Shift+equal move scratchpad
 bindsym $mod+equal scratchpad show
-bindsym $mod+Alt+equal exec dolphin
+bindsym $mod+Ctrl+equal exec dolphin
 
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -74,3 +74,9 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+bindsym $mod+n exec foot -a notes bash -lc 'vi ~/notes/imm'
+for_window [app_id="notes"] {
+	floating enable;
+	resize set width 1400 px height 1200 px;
+	move right 200 px;
+}
