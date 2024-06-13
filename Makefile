@@ -1,10 +1,11 @@
 BASE_DEPS = \
-	stow \
 	bash-completion \
 	fzf \
 	psmisc \
+	stow \
 	tmux \
-	vim
+	vim \
+	wget
 
 DEV_DEPS = \
 	fd-find \
@@ -60,6 +61,17 @@ DIR = \
 	$$HOME/.config/systemd/user \
 	$$HOME/.local/bin
 
+MAIL_DEPS = \
+	isync \
+	lynx \
+	msmtp \
+	neomutt \
+	pandoc \
+	source-highlight \
+	urlscan \
+	uuid-runtime
+	# libsasl2-modules-kdexoauth2 \
+
 .PHONY: all dev desktop clean
 
 all:
@@ -81,7 +93,6 @@ desktop:
 	ln -sf $$HOME/.config/tmux/tmux.service $$HOME/.config/systemd/user/tmux.service
 	sudo systemctl enable systemd-networkd-wait-online.service
 	ln -sf $$HOME/.config/sway/desktop $$HOME/.config/sway/autostart
-	git update-index --assume-unchanged .bash_profile
 	@for patch in .patches/*; do \
 		target=$$(grep -m 1 '^+++ ' "$$patch" | cut -d ' ' -f 2 | cut -f1); \
 		if [ -f "$$target" ]; then \
@@ -89,6 +100,11 @@ desktop:
 			sudo patch -s -N -r - $$target < $$patch; \
 		fi \
 	done
+	git update-index --assume-unchanged .bash_profile
+
+mail:
+	sudo apt install $(MAIL_DEPS)
+	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O ~/.local/bin/oauth2.py
 
 clean:
 	stow --verbose --delete --target=$$HOME .
