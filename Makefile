@@ -71,6 +71,7 @@ dev:
 	sudo apt install $(DEV_DEPS)
 	sudo update-alternatives --config editor
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
+	tmux source-file ~/.config/tmux/tmux.conf
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
 desktop:
