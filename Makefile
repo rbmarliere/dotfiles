@@ -39,6 +39,7 @@ DESKTOP_DEPS = \
 	swayidle \
 	swaylock \
 	udisks2 \
+	viewnior \
 	vlc \
 	waybar \
 	wf-recorder \
