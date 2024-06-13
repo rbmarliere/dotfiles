@@ -27,9 +27,10 @@
 	},
 
 	"bluetooth": {
-		"format": "  {status}",
-		"format-connected": "  {device_alias}",
-		"format-connected-battery": "  {device_alias} {device_battery_percentage}%",
+		"format": "  ",
+		// "format": "  {status}",
+		// "format-connected": "  {device_alias}",
+		// "format-connected-battery": "  {device_alias} {device_battery_percentage}%",
 		// "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
 		"tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
 		"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
@@ -97,11 +98,11 @@
 			"weeks-pos": "right",
 			"on-scroll": 1,
 			"format": {
-			"months": "<span color='#6c782e'><b>{}</b></span>",
-			"days": "<span color='#FFFFFF'><b>{}</b></span>",
-			"weeks": "<span color='#458588'><b>W{}</b></span>",
-			"weekdays": "<span color='#b57614'><b>{}</b></span>",
-			"today": "<span color='#ff5f1f'><b><u>{}</u></b></span>"
+				"months": "<span color='#6c782e'><b>{}</b></span>",
+				"days": "<span color='#FFFFFF'><b>{}</b></span>",
+				"weeks": "<span color='#458588'><b>W{}</b></span>",
+				"weekdays": "<span color='#b57614'><b>{}</b></span>",
+				"today": "<span color='#ff5f1f'><b><u>{}</u></b></span>"
 			}
 		},
 		"actions": {
