@@ -14,8 +14,8 @@ set postponed="=drafts"
 set record="=sent"
 set spoolfile="~/mail/inbox"
 set trash="=trash"
-set check_new=no  # https://github.com/neomutt/neomutt/issues/2223
 
+folder-hook . "set check_new=no"  # https://github.com/neomutt/neomutt/issues/2223
 folder-hook archive "set record=^; push <collapse-all>; set check_new=yes"
 folder-hook inbox "set record=^; push <collapse-all>; set check_new=yes"
 
