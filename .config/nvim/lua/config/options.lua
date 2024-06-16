@@ -3,3 +3,4 @@ vim.opt.guicursor="n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-b
 vim.opt.backupdir = os.getenv("HOME") .. "/.cache/nvim/bkp/"
 vim.opt.directory = os.getenv("HOME") .. "/.cache/nvim/swp/"
 vim.opt.undodir = os.getenv("HOME") .. "/.cache/nvim/und/"
+vim.opt.undofile = true
