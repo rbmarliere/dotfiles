@@ -30,5 +30,8 @@ return {
 				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
 			end,
 		})
+		vim.diagnostic.config({
+			virtual_text = false,
+		})
 	end,
 }
