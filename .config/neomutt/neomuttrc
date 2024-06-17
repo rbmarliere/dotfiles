@@ -1,6 +1,8 @@
 set abort_nosubject=no
 set alias_file="~/.config/neomutt/aliases"
 set allow_ansi=yes
+set beep=yes
+set beep_new=yes
 set certificate_file=~/.cache/neomutt/certificates
 set check_new=yes
 set collapse_all=yes
