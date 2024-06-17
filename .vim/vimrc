@@ -19,7 +19,7 @@ set hlsearch
 set incsearch
 set laststatus=2
 set list
-set listchars=tab:\ \ ,trail:·
+set listchars=tab:\ \ ,trail:\ 
 "set list listchars=tab:▸\ ,trail:·,precedes:←,extends:→,eol:↲,nbsp:␣
 set mouse=a
 set number
