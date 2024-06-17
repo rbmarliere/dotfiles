@@ -24,6 +24,7 @@ workspace 11 output HDMI-A-1
 
 input type:keyboard {
 	xkb_layout rbm
+	xkb_options caps:shiftlock
 	# inspired by https://github.com/ThePrimeagen/keyboards
 }
 

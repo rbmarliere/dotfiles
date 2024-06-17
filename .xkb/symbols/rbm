@@ -14,6 +14,6 @@ xkb_symbols "basic" {
 	key <AE10> { [ plus, 0 ] };
 	key <AE11> { [ minus, underscore ] };
 	key <AE12> { [ equal, asciitilde ] };
-	key <AD11> { [ at, numbersign ] };
-	key <AD12> { [ dollar,  percent ] };
+	key <AD11> { [ at, percent ] };
+	key <AD12> { [ dollar,  numbersign ] };
 };
