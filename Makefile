@@ -1,6 +1,7 @@
 BASE_DEPS = \
 	bash-completion \
 	fzf \
+	libnotify-bin \
 	psmisc \
 	stow \
 	tmux \
