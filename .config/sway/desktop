@@ -4,14 +4,14 @@ set $res 286px
 set $term foot bash -lc 'ch sid'
 
 set $first exclam
-set $second braceleft
+set $second parenleft
 set $third bracketleft
-set $fourth parenleft
+set $fourth braceleft
 set $fifth ampersand
 set $sixth asterisk
-set $seventh parenright
+set $seventh braceright
 set $eighth bracketright
-set $ninth braceright
+set $ninth parenright
 set $tenth plus
 set $eleventh minus
 
