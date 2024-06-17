@@ -40,6 +40,8 @@ focus_on_window_activation none
 
 for_window [app_id="org.kde.dolphin"] floating enable, resize set 1920 height 80 ppt, move container to scratchpad, scratchpad show
 for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
+for_window [app_id="blueman-manager"] floating enable, resize set 1000 height 60 ppt
+for_window [app_id="com.github.hluk.copyq"] floating enable, resize set 1000 height 60 ppt
 
 output * bg $bg fill
 
