@@ -33,7 +33,7 @@ local my_config = {
     -- Configuration for various handlers:
     -- 1. Sign column.
     sign = {
-        enabled = true,
+        enabled = false,
         -- Text to show in the sign column.
         -- Must be between 1-2 characters.
         text = "💡",
@@ -43,7 +43,7 @@ local my_config = {
 
     -- 2. Virtual text.
     virtual_text = {
-        enabled = false,
+        enabled = true,
         -- Text to show in the virt_text.
         text = "💡",
         -- Position of virtual text given to |nvim_buf_set_extmark|.
@@ -51,7 +51,8 @@ local my_config = {
         -- Can be a string representing a position (see `virt_text_win_col`).
         pos = "eol",
         -- Highlight group to highlight the virtual text.
-        hl = "LightBulbVirtualText",
+        hl = "LightBulbSign",
+        -- hl = "LightBulbVirtualText",
         -- How to combine other highlights with text highlight.
         -- See `hl_mode` of |nvim_buf_set_extmark|.
         hl_mode = "combine",
