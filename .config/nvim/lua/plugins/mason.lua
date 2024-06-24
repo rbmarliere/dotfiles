@@ -54,6 +54,41 @@ return {
 							},
 						})
 					end,
+					["rust_analyzer"] = function()
+						lspconfig["rust_analyzer"].setup({
+							on_attach = function(client, bufnr)
+								vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+							end,
+							settings = {
+								assist = {
+									importEnforceGranularity = true,
+									importPrefix = "by_self",
+								},
+								cargo = {
+									allFeatures = true,
+								},
+								checkOnSave = {
+									command = "clippy",
+								},
+								inlayHints = {
+									enable = true,
+									typeHints = true,
+									parameterHints = true,
+									chainingHints = true,
+								},
+								experimental = {
+									procAttrMacros = true,
+								},
+							},
+						})
+					end,
+				})
+				vim.api.nvim_create_autocmd("LspAttach", {
+					-- https://github.com/mrcjkb/rustaceanvim/discussions/135
+					callback = function(args)
+						local client = vim.lsp.get_client_by_id(args.data.client_id)
+						client.server_capabilities.semanticTokensProvider = nil
+					end,
 				})
 			end,
 		},
