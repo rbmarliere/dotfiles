@@ -2,6 +2,9 @@ partial alphanumeric_keys
 xkb_symbols "basic" {
 	include "us(altgr-intl)"
 	key <TLDE> { [ grave, asciicircum, dead_grave, dead_circumflex ] };
+	// key <AC11> { [ quotedbl, apostrophe, dead_diaeresis, dead_acute ] };
+	key <AD11> { [ numbersign, percent ] };
+	key <AD12> { [ dollar,  at ] };
 	key <AE01> { [ exclam, 1 ] };
 	key <AE02> { [ parenleft, 2 ] };
 	key <AE03> { [ bracketleft, 3 ] };
@@ -14,6 +17,4 @@ xkb_symbols "basic" {
 	key <AE10> { [ plus, 0 ] };
 	key <AE11> { [ minus, underscore ] };
 	key <AE12> { [ equal, asciitilde ] };
-	key <AD11> { [ at, percent ] };
-	key <AD12> { [ dollar,  numbersign ] };
 };
