@@ -76,7 +76,7 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-bindsym $mod+n exec foot -a notes bash -lc 'vi ~/notes/imm'
+bindsym $mod+n exec foot -a notes -o "colors.alpha=1.0" bash -lc 'vi ~/notes/imm'
 for_window [app_id="notes"] {
 	floating enable;
 	resize set width 1400 px height 1200 px;
