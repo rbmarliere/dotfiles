@@ -71,8 +71,8 @@ return {
 				}),
 				sources = cmp.config.sources({
 					{ name = "luasnip" },
-					{ name = "nvim_lsp" },
 					{ name = "nvim_lsp_signature_help" },
+					{ name = "nvim_lsp" },
 					{ name = "buffer" },
 					{ name = "path" },
 				}),
@@ -103,6 +103,8 @@ return {
 					{ name = "fuzzy_buffer" },
 				}),
 			})
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 		end,
 	},
 }
