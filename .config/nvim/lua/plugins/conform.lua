@@ -15,6 +15,7 @@ return {
 	},
 	-- Everything in opts will be passed to setup()
 	opts = {
+		-- log_level = vim.log.levels.DEBUG,
 		-- Define your formatters
 		formatters_by_ft = {
 			lua = { "stylua" },
@@ -39,10 +40,10 @@ return {
 			scss = { "prettier" },
 			json = { "prettier" },
 			-- Use the "*" filetype to run formatters on all filetypes.
-			["*"] = { "codespell" },
+			-- ["*"] = { "codespell" },
 			-- Use the "_" filetype to run formatters on filetypes that don't
 			-- have other formatters configured.
-			["_"] = { "trim_whitespace" },
+			-- ["_"] = { "trim_whitespace" },
 		},
 		-- Set up format-on-save
 		-- format_on_save = { timeout_ms = 500, lsp_fallback = true },
