@@ -25,11 +25,6 @@ local my_theme = {
 	TelescopeResultsNormal = { bg = colors.white },
 	TelescopeResultsBorder = { fg = colors.green, bg = colors.white },
 	TelescopePromptCounter = { fg = colors.green },
-	-- DiagnosticVirtualTextError = { fg = colors.red, bg = colors.white },
-	-- DiagnosticVirtualTextWarn = { fg = colors.yellow, bg = colors.white },
-	-- DiagnosticVirtualTextInfo = { fg = colors.blue, bg = colors.white },
-	-- DiagnosticVirtualTextHint = { fg = colors.cyan, bg = colors.white },
-	-- DiagnosticVirtualTextOk = { bg = colors.white },
 }
 
 local create_groups = function()
