@@ -36,6 +36,7 @@ DESKTOP_DEPS = \
 	ntp \
 	pavucontrol \
 	python3-i3ipc \
+	seahorse \
 	slurp \
 	sway \
 	swayidle \
