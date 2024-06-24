@@ -1,6 +1,8 @@
 # text/plain; cat %s | diff-so-fancy --patch; copiousoutput;
 # text/x-diff; cat %s | diff-so-fancy --patch; copiousoutput;
 # text/x-patch; cat %s | diff-so-fancy --patch; copiousoutput;
+text/x-diff; cat %s; copiousoutput;
+text/x-patch; cat %s; copiousoutput;
 text/html; lynx -assume_charset=%{charset} -dump -width=1024 %s; nametemplate=%s.html; copiousoutput;
 text/markdown; pandoc -f markdown -t plain %s | less; copiousoutput
 text/x-c++hdr; /usr/share/source-highlight/src-hilite-lesspipe.sh %s; copiousoutput;

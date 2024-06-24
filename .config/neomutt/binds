@@ -14,7 +14,8 @@ bind generic,index,pager \Ce next-line
 bind generic,index,pager \Cf next-page
 bind generic,index,pager \Cu half-up
 bind generic,pager \Cy previous-line
-bind index <Backtab> previous-new-then-unread
+bind index <Backtab> previous-unread
+bind index <Tab> next-unread
 bind index zA collapse-all
 bind index za collapse-thread
 bind index,pager <F1> sidebar-page-up
