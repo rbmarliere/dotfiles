@@ -1,1 +1,1 @@
-/home/rbmarliere/linux/torvalds/scripts/checkpatch.pl
+/home/rbmarliere/src/linux/torvalds/scripts/checkpatch.pl
