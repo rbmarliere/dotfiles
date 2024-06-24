@@ -5,4 +5,4 @@
 
 source "~/.config/neomutt/accounts/_marliere.net"
 unmailboxes *
-source "~/.local/bin/mailboxes ~/mail_important/|"
+mailboxes `find -L ~/mail_important/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | tr '\n' ' '`
