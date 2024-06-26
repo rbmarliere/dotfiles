@@ -56,28 +56,30 @@ return {
 					end,
 					["rust_analyzer"] = function()
 						lspconfig["rust_analyzer"].setup({
-							on_attach = function(client, bufnr)
+							on_attach = function(_, bufnr)
 								vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 							end,
 							settings = {
-								assist = {
-									importEnforceGranularity = true,
-									importPrefix = "by_self",
-								},
-								cargo = {
-									allFeatures = true,
-								},
-								checkOnSave = {
-									command = "clippy",
-								},
-								inlayHints = {
-									enable = true,
-									typeHints = true,
-									parameterHints = true,
-									chainingHints = true,
-								},
-								experimental = {
-									procAttrMacros = true,
+								["rust-analyzer"] = {
+									imports = {
+										granularity = {
+											group = "module",
+										},
+										prefix = "self",
+									},
+									cargo = {
+										buildScripts = {
+											enable = true,
+										},
+									},
+									procMacro = {
+										enable = true,
+									},
+									inlayHints = {
+										typeHints = {
+											enable = false
+										}
+									}
 								},
 							},
 						})
@@ -87,7 +89,9 @@ return {
 					-- https://github.com/mrcjkb/rustaceanvim/discussions/135
 					callback = function(args)
 						local client = vim.lsp.get_client_by_id(args.data.client_id)
-						client.server_capabilities.semanticTokensProvider = nil
+						if client then
+							client.server_capabilities.semanticTokensProvider = nil
+						end
 					end,
 				})
 			end,
@@ -110,6 +114,7 @@ return {
 					"rust-analyzer",
 					"shfmt",
 					"stylua",
+					"taplo",
 					"typescript-language-server",
 				},
 			},

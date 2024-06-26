@@ -35,6 +35,7 @@ local my_theme = {
 
 return {
 	"nvim-lualine/lualine.nvim",
+	lazy = false,
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	opts = {},
 	config = function()

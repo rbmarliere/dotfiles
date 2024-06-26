@@ -15,7 +15,7 @@ from typing import Optional
 
 import i3ipc
 
-TRANSPARENCY_VALUE: str = "0.9"
+TRANSPARENCY_VALUE: str = "0.95"
 ipc = i3ipc.Connection()
 g_prev_focused: Optional[i3ipc.con.Con] = None
 g_prev_workspace: int = ipc.get_tree().find_focused().workspace().num

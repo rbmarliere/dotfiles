@@ -13,7 +13,7 @@ return {
 	end,
 	keys = {
 		{
-			"<Leader>a",
+			"<Leader>A",
 			function()
 				harpoon:list():add()
 			end,

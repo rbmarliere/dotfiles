@@ -11,7 +11,7 @@ return {
 	orange = "#fb4934",
 	purple = "#6c2f9c",
 	red = "#cc241d",
-	white = "#d5c4a1",
+	white = "#e7e7e7",
 	lightwhite = "#f5f2ed",
 	lighterwhite = "#f8f7f5",
 	yellow = "#b57614",

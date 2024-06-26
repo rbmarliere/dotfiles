@@ -43,10 +43,11 @@ for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="blueman-manager"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="com.github.hluk.copyq"] floating enable, resize set 1000 height 60 ppt
 
-output * bg $bg fill
+exec_always bash -c 'if [ -f ~/Pictures/bg ]; then swaymsg output "*" bg ~/Pictures/bg fill; else swaymsg output "*" bg "#000000" solid_color; fi'
 
 input type:keyboard {
 	xkb_layout us(altgr-intl)
+	xkb_options caps:swapescape
 	# man 7 xkeyboard-config
 	repeat_delay 250
 	repeat_rate 45

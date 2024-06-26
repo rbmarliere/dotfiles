@@ -5,7 +5,7 @@ local my_theme = {
 	SignColumn = { bg = "none" },
 	Normal = { bg = "none" },
 	NormalNC = { bg = "none" },
-	NormalFloat = { bg = colors.white },
+	-- NormalFloat = { bg = colors.white },
 	FloatBorder = { fg = colors.green, bg = "none" },
 	StatusLine = { fg = colors.green, bg = colors.black },
 	StatusLineNC = { fg = colors.lightgreen, bg = colors.lightgray },
@@ -34,7 +34,7 @@ local create_groups = function()
 		local config = vim.api.nvim_win_get_config(win)
 		if config.relative == "" then
 			-- this is a not floating window
-			vim.api.nvim_win_set_option(win, "winhighlight", hl)
+			vim.api.nvim_set_option_value("winhighlight", hl, { win = win })
 		end
 	end
 
@@ -87,44 +87,6 @@ local create_groups = function()
 		end,
 	})
 end
-
--- return {
--- 	"ellisonleao/gruvbox.nvim",
--- 	lazy = false,
--- 	priority = 1000,
--- 	config = function()
--- 		if os.getenv("TERM") == "linux" then
--- 			vim.opt.background = "dark"
--- 		else
--- 			require("gruvbox").setup({
--- 				terminal_colors = false, -- add neovim terminal colors
--- 				undercurl = true,
--- 				underline = true,
--- 				bold = true,
--- 				italic = {
--- 					strings = false,
--- 					emphasis = false,
--- 					comments = false,
--- 					operators = false,
--- 					folds = false,
--- 				},
--- 				strikethrough = false,
--- 				invert_selection = false,
--- 				invert_signs = false,
--- 				invert_tabline = false,
--- 				invert_intend_guides = false,
--- 				inverse = true, -- invert background for search, diffs, statuslines and errors
--- 				contrast = "hard", -- can be "hard", "soft" or empty string
--- 				dim_inactive = false,
--- 				transparent_mode = true,
--- 				palette_overrides = {},
--- 				overrides = my_theme,
--- 			})
--- 			vim.cmd.colorscheme("gruvbox")
--- 			vim.opt.background = "light"
--- 		end
--- 	end,
--- }
 
 return {
 	"p00f/alabaster.nvim",
