@@ -1,3 +1,4 @@
+set quote_regex="^([ \t]*[|>:}])+"
 set abort_nosubject=no
 set alias_file="~/.config/neomutt/aliases"
 set allow_ansi=yes
