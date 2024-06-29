@@ -69,7 +69,6 @@ MAIL_DEPS = \
 	msmtp \
 	neomutt \
 	pandoc \
-	source-highlight \
 	urlscan \
 	uuid-runtime
 	# libsasl2-modules-kdexoauth2 \
