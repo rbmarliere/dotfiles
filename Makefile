@@ -112,3 +112,4 @@ mail:
 
 clean:
 	stow --verbose --delete --target=$$HOME .
+	sudo systemctl disable systemd-networkd-wait-online.service

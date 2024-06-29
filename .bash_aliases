@@ -19,14 +19,7 @@ if type sudo >/dev/null 2>&1; then
 	alias fdisk="sudo fdisk"
 	alias losetup="sudo losetup"
 	alias mount="sudo mount"
-	alias reboot="sudo shutdown -r --no-wall now"
-	alias shut="sudo shutdown -h --no-wall now"
 	alias ss="sudo su -"
 	alias ufw="sudo ufw"
 	alias umount="sudo umount"
-fi
-
-if systemctl --user status tmux >/dev/null 2>&1; then
-	alias reboot="systemctl --user stop tmux && sudo shutdown -r --no-wall now"
-	alias shut="systemctl --user stop tmux && sudo shutdown -h --no-wall now"
 fi
