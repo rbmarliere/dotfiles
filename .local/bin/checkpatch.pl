@@ -1,1 +1,0 @@
-/home/rbmarliere/src/linux/torvalds/scripts/checkpatch.pl
