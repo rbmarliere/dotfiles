@@ -23,7 +23,7 @@ root_runner() {
 	fi
 	if [[ $(cat /etc/debian_chroot 2>/dev/null) != "" ]]; then
 		# inside chroot, must execute outside
-		chroot /proc/1/cwd /bin/sudo -u $(whoami) /bin/bash -c "XDG_RUNTIME_DIR=/run/user/$(id -u) $1"
+		sudo chroot /proc/1/cwd /bin/sudo -u $(whoami) /bin/bash -c "XDG_RUNTIME_DIR=/run/user/$(id -u) $1"
 		return $?
 	else
 		eval "$1"
