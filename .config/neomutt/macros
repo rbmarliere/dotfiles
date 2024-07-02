@@ -5,4 +5,5 @@ macro index <esc>s ":set confirmappend=no delete=yes auto_tag=yes\n<save-message
 macro index A "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>. <enter>" "mark all messages as read"
 macro index \Ca ":set confirmappend=no delete=yes auto_tag=yes\n<save-message>${my_archive}\n<sync-mailbox>:set confirmappend=yes delete=ask-yes\n" "Archive"
 macro index,pager L '| git am -s'\n
-macro pager \Co "<pipe-message> urlscan --run '~/.local/bin/neomutt.urlwrapper {}' --single<Enter>" "call urlscan to extract URLs out of a message"
+macro pager \Co "<pipe-message> urlscan --run '~/.local/bin/neomutt.urlwrapper \"{}\"' --single<Enter>" "call urlscan to extract URLs out of a message"
+# macro pager \Co "<pipe-message> less<Enter>"
