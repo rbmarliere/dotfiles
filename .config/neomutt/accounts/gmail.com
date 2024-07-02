@@ -15,4 +15,7 @@ set trash="+[Gmail]/Trash"
 
 set imap_user="$from"
 set imap_authenticators="oauthbearer"
-set imap_oauth_refresh_command="~/.local/bin/oauth2.py --quiet --user=rbmarliere@gmail.com --client_id=`pass neomutt/client_id` --client_secret=`pass neomutt/client_secret` --refresh_token=`pass neomutt/refresh_token`"
+set imap_oauth_refresh_command="~/.local/bin/oauth2.py --quiet --user=rbmarliere@gmail.com --client_id=`pass neomutt/gmail.com/client_id` --client_secret=`pass neomutt/gmail.com/client_secret` --refresh_token=`pass neomutt/gmail.com/refresh_token`"
+
+folder-hook INBOX "set record=^; push <collapse-all>; set check_new=yes"
+
