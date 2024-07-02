@@ -1,8 +1,12 @@
+// Defaults in /usr/share/X11/xkb/symbols/us (Debian)
+// To get the keycode:
+//	$ xev -event keyboard (from x11-utils Debian pkg)
+// Then compare to /usr/share/X11/xkb/keycodes/evdev
+
 partial alphanumeric_keys
 xkb_symbols "basic" {
 	include "us(altgr-intl)"
 	key <TLDE> { [ grave, asciicircum, dead_grave, dead_circumflex ] };
-	// key <AC11> { [ quotedbl, apostrophe, dead_diaeresis, dead_acute ] };
 	key <AD11> { [ numbersign, percent ] };
 	key <AD12> { [ dollar,  at ] };
 	key <AE01> { [ exclam, 1 ] };
@@ -16,5 +20,5 @@ xkb_symbols "basic" {
 	key <AE09> { [ parenright, 9 ] };
 	key <AE10> { [ plus, 0 ] };
 	key <AE11> { [ minus, underscore ] };
-	key <AE12> { [ equal, asciitilde ] };
+	key <AE12> { [ equal, asciitilde, dead_tilde, dead_tilde ] };
 };
