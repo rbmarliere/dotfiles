@@ -6,7 +6,7 @@ tmux -L neomutt set-option -g allow-rename off
 tmux -L neomutt set-option -g automatic-rename off
 
 i=1
-for acc in $(find $ACCOUNTS_DIR -type f ! -name ".*" -printf "%P\n"); do
+for acc in $(find $ACCOUNTS_DIR -type f ! -name ".*" -printf "%P\n" | sort -V); do
 	acc_file=$(echo $acc | sed 's#private/##')
 	tmux -L neomutt new-window -t "neomutt:$i" -n "$acc_file"
 	tmux -L neomutt send-keys "neomutt $acc" C-m
