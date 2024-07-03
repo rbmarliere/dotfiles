@@ -28,15 +28,16 @@ else
   $(error "Distribution not supported")
 endif
 
-all:
+all: base
+
+base:
 	mkdir -p $(DIR)
 	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/base
-	$(MAKE) set_editor
 	stow --verbose --restow --target=$$HOME .
+	$(MAKE) post_install
 
 dev:
 	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/dev
-	$(MAKE) set_editor
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
 	tmux source-file ~/.config/tmux/tmux.conf
@@ -62,8 +63,12 @@ mail:
 	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/mail
 	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O ~/.local/bin/oauth2.py
 
-set_editor:
-ifeq ($(DISTRO),debian)
+post_install:
+ifeq ($(DISTRO),suse)
+	wget https://github.com/hluk/CopyQ/releases/download/v9.0.0/copyq_9.0.0_openSUSE_Leap_15.4.x86_64.rpm -O /tmp/copyq.rpm
+	$(INSTALL_CMD) /tmp/copyq.rpm
+	rm /tmp/copyq.rpm
+else ifeq ($(DISTRO),debian)
 	sudo update-alternatives --config editor
 endif
 

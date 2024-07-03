@@ -9,7 +9,7 @@ grim
 jq
 kio-extras
 libnotify-bin
-light
+brightnessctl
 mako-notifier
 ntp
 pavucontrol

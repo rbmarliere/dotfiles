@@ -1,5 +1,6 @@
 bash-completion
 fzf
+fzf-bash-completion
 libnotify-tools
 psmisc
 stow

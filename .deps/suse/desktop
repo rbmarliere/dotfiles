@@ -1,7 +1,6 @@
 ark
 bemenu
 breeze5-icons
-copyq
 plasma5-desktop
 dolphin
 gnome-keyring
@@ -9,7 +8,7 @@ grim
 jq
 kio-extras5
 libnotify-tools
-light
+brightnessctl
 mako
 ntp
 pavucontrol

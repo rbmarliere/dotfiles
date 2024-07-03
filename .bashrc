@@ -4,6 +4,9 @@ source "$HOME/.bash_env"
 if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
 	source /usr/share/doc/fzf/examples/key-bindings.bash
 fi
+if [ -f /usr/share/bash-completion/completions/fzf-key-bindings ]; then
+	source /usr/share/bash-completion/completions/fzf-key-bindings
+fi
 
 if [ -f /usr/share/bash-completion/bash_completion ]; then
 	source /usr/share/bash-completion/bash_completion
