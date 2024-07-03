@@ -1,55 +1,4 @@
-BASE_DEPS = \
-	bash-completion \
-	fzf \
-	libnotify-bin \
-	psmisc \
-	stow \
-	tmux \
-	vim \
-	wget
-
-DEV_DEPS = \
-	fd-find \
-	golang-go \
-	locate \
-	neovim \
-	npm \
-	python3-pip \
-	python3-venv \
-	ripgrep \
-	rustup
-
-DESKTOP_DEPS = \
-	ark \
-	bemenu \
-	breeze-icon-theme \
-	copyq \
-	desktop-base \
-	dolphin \
-	gnome-keyring \
-	grim \
-	jq \
-	kio-extras \
-	libnotify-bin \
-	light \
-	mako-notifier \
-	ntp \
-	pavucontrol \
-	python3-i3ipc \
-	seahorse \
-	slurp \
-	sway \
-	swayidle \
-	swaylock \
-	udisks2 \
-	viewnior \
-	vlc \
-	waybar \
-	wf-recorder \
-	wireplumber \
-	wl-clipboard \
-	wtype \
-	xdg-desktop-portal-wlr
+.PHONY: all dev desktop clean
 
 DIR = \
 	$$HOME/.cache/neomutt/ \
@@ -63,26 +12,28 @@ DIR = \
 	$$HOME/.config/systemd/user \
 	$$HOME/.local/bin
 
-MAIL_DEPS = \
-	isync \
-	lynx \
-	msmtp \
-	neomutt \
-	pandoc \
-	urlscan \
-	uuid-runtime
-	# libsasl2-modules-kdexoauth2 \
+ifeq (, $(shell which systemctl 2>/dev/null))
+  $(error "Systemd is required")
+endif
 
-.PHONY: all dev desktop clean
+ifneq (, $(shell which zypper 2>/dev/null))
+  INSTALL_CMD := sudo zypper install -y
+  DEPS_DIR := .deps/suse
+else ifneq (, $(shell which apt 2>/dev/null))
+  INSTALL_CMD := sudo apt install -y
+  DEPS_DIR := .deps/debian
+else
+  $(error "Distribution not supported")
+endif
 
 all:
 	mkdir -p $(DIR)
-	sudo apt install $(BASE)
+	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/base
 	sudo update-alternatives --config editor
 	stow --verbose --restow --target=$$HOME .
 
 dev:
-	sudo apt install $(DEV_DEPS)
+	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/dev
 	sudo update-alternatives --config editor
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
@@ -94,7 +45,7 @@ dev:
 	sudo systemctl enable systemd-networkd-wait-online.service
 
 desktop:
-	sudo apt install $(DESKTOP_DEPS)
+	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/desktop
 	fc-cache
 	@for patch in .patches/*; do \
 		target=$$(grep -m 1 '^+++ ' "$$patch" | cut -d ' ' -f 2 | cut -f1); \
@@ -106,7 +57,7 @@ desktop:
 	git update-index --assume-unchanged .bash_profile
 
 mail:
-	sudo apt install $(MAIL_DEPS)
+	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/mail
 	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O ~/.local/bin/oauth2.py
 
 clean:
