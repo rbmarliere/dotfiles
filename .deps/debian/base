@@ -1,6 +1,7 @@
 bash-completion
 fzf
 libnotify-bin
+patch
 psmisc
 stow
 tmux
