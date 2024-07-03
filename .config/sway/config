@@ -17,8 +17,7 @@ set $down j
 set $up k
 set $right l
 set $term foot
-set $bemenu_opts -i --nb "$grey" --ab "$grey" --fb "$grey" --hb "$green" --hf "$black" --fn "TerminessNerdFont 16" -p ""
-set $menu j4-dmenu-desktop --dmenu='bemenu $bemenu_opts' --term='$term' --no-generic --usage-log=$HOME/.bemenu
+set $menu wofi --show drun
 
 set $first 1
 set $second 2
@@ -38,11 +37,12 @@ smart_gaps on
 gaps inner 4
 focus_on_window_activation none
 
-for_window [app_id="org.kde.dolphin"] floating enable, resize set 1920 height 80 ppt, move container to scratchpad, scratchpad show
+for_window [app_id="org.gnome.Nautilus"] floating enable, resize set 1500 height 80 ppt, move container to scratchpad, scratchpad show
 for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="blueman-manager"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="com.github.hluk.copyq"] floating enable, resize set 1000 height 60 ppt
 
+exec_always nm-applet --indicator
 exec_always bash -c 'if [ -f ~/Pictures/bg ]; then swaymsg output "*" bg ~/Pictures/bg fill; else swaymsg output "*" bg "#000000" solid_color; fi'
 
 input type:keyboard {
@@ -55,11 +55,8 @@ input type:keyboard {
 
 bar {
 	swaybar_command waybar
-	hidden_state hide
-	mode hide
 }
 
-exec systemctl --user start tmux.service
 exec ~/.local/bin/inactive_windows_transparency.py
 exec swayidle -w \
 	timeout 600 'swaylock -f -c 000000 -i $bg' \
@@ -67,7 +64,11 @@ exec swayidle -w \
 	before-sleep 'swaylock -f -c 000000 -i $bg'
 exec copyq --start-server
 
-include /etc/sway/config.d/*
-include autostart
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && \
+        dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
+include autoload
+include private
 include binds
 

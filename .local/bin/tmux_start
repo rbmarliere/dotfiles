@@ -5,4 +5,8 @@ source "$HOME/.bashrc"
 # for wl-copy:
 export WAYLAND_DISPLAY=wayland-1
 
-$HOME/.local/bin/ch sid -- /usr/bin/tmux new-session -d
+if grep -e Debian /etc/issue > /dev/null 2>&1; then
+	$HOME/.local/bin/ch sid -- /usr/bin/tmux new-session -d
+else
+	/usr/bin/tmux new-session -d
+fi

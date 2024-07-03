@@ -2,22 +2,22 @@
 	"layer": "bottom",
 	"position": "top",
 	"height": 30,
-	"ipc": true,
 
 	"modules-left": [
 		"sway/workspaces"
 	],
 
 	"modules-right": [
-		//"sway/language",
 		"bluetooth",
+		"sway/language",
 		"backlight",
 		"battery",
 		"network",
 		"memory",
 		"cpu",
 		"pulseaudio",
-		"clock"
+		"clock",
+		"tray"
 	],
 
 	"sway/language": {
@@ -52,7 +52,7 @@
 			"critical": 15
 		},
 		"format": "{icon} {capacity}%",
-		"format-icons": ["", "", "", "", ""],
+		"format-icons": ["", "", "", "", ""]
 	},
 
 	"network": {
@@ -60,7 +60,9 @@
 		"format-wifi": "  {essid} ({signalStrength}%)",
 		"format-ethernet": "  {ifname}: {ipaddr}/{cidr}",
 		"format-disconnected": "⚠  Disconnected",
-		"tooltip-format": "{ifname}: {ipaddr}"
+		"tooltip-format": "{ifname}: {ipaddr}",
+		"on-click": "nm-connection-editor",
+		"on-click-right": "swaymsg exec \"foot bash -i -c 'root_runner nmtui'\""
 	},
 
 	"memory": {
@@ -120,5 +122,10 @@
 			"Europe/Berlin",
 			"UTC"
 		]
+	},
+
+	"tray": {
+		"icon-size": 21,
+		"spacing": 15
 	}
 }

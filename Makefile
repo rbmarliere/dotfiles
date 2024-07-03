@@ -1,4 +1,4 @@
-.PHONY: all dev desktop clean
+.PHONY: clean all dev desktop laptop mail
 
 DIR = \
 	$$HOME/.cache/neomutt/ \
@@ -18,60 +18,71 @@ endif
 
 ifneq (, $(shell which zypper 2>/dev/null))
   DISTRO := suse
-  INSTALL_CMD := sudo zypper install -y
-  DEPS_DIR := .deps/suse
+  INSTALL_CMD := sudo zypper install
 else ifneq (, $(shell which apt 2>/dev/null))
   DISTRO := debian
-  INSTALL_CMD := sudo apt install -y
-  DEPS_DIR := .deps/debian
+  INSTALL_CMD := sudo apt install
 else
   $(error "Distribution not supported")
 endif
 
-all: base
+DEPS_DIR := .deps/$(DISTRO)
 
-base:
+all:
 	mkdir -p $(DIR)
-	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/base
+	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/base)
 	stow --verbose --restow --target=$$HOME .
-	$(MAKE) post_install
+
+ifeq ($(DISTRO),suse)
+	wget https://github.com/hluk/CopyQ/releases/download/v9.0.0/copyq_9.0.0_openSUSE_Leap_15.4.x86_64.rpm -O /tmp/copyq.rpm
+	$(INSTALL_CMD) /tmp/copyq.rpm
+	rm /tmp/copyq.rpm
+	sudo ln -sf /usr/share/terminfo/f/foot-extra /usr/share/terminfo/f/foot
+else ifeq ($(DISTRO),debian)
+	sudo update-alternatives --config editor
+	sudo update-alternatives --config vi
+	sudo systemctl enable systemd-networkd-wait-online.service
+endif
 
 dev:
-	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/dev
+	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/dev)
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
 	tmux source-file ~/.config/tmux/tmux.conf
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
 	ln -sf $$HOME/.config/tmux/tmux.service $$HOME/.config/systemd/user/tmux.service
-	ln -sf $$HOME/.config/sway/dev $$HOME/.config/sway/autostart
-	sudo systemctl enable systemd-networkd-wait-online.service
+	systemctl --user enable tmux
 
-desktop:
-	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/desktop
+wm:
+	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/wm)
 	fc-cache
-	@for patch in .patches/*; do \
+	for patch in .patches/*; do \
 		target=$$(grep -m 1 '^+++ ' "$$patch" | cut -d ' ' -f 2 | cut -f1); \
 		if [ -f "$$target" ]; then \
 			echo patching $$target; \
-			sudo patch -s -N -r - $$target < $$patch; \
+			sudo patch -s -N -r - $$target < $$patch || true; \
 		fi \
 	done
 	git update-index --assume-unchanged .bash_profile
 
-mail:
-	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/mail
-	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O ~/.local/bin/oauth2.py
+autologin:
+	sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
+	echo "[Service]" | sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf
+	echo "ExecStart=" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
+	echo "ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $$(whoami) %I \$$TERM" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
+	echo "Environment=XDG_SESSION_TYPE=wayland" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 
-post_install:
-ifeq ($(DISTRO),suse)
-	wget https://github.com/hluk/CopyQ/releases/download/v9.0.0/copyq_9.0.0_openSUSE_Leap_15.4.x86_64.rpm -O /tmp/copyq.rpm
-	$(INSTALL_CMD) /tmp/copyq.rpm
-	rm /tmp/copyq.rpm
-else ifeq ($(DISTRO),debian)
-	sudo update-alternatives --config editor
-endif
+
+desktop: wm autologin
+	echo "include config.d/$(DISTRO)/desktop" > $$HOME/.config/sway/autoload
+
+laptop: wm autologin
+	echo "include config.d/$(DISTRO)/laptop" > $$HOME/.config/sway/autoload
+
+mail:
+	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/mail)
+	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O ~/.local/bin/oauth2.py
 
 clean:
 	stow --verbose --delete --target=$$HOME .
-	sudo systemctl disable systemd-networkd-wait-online.service
