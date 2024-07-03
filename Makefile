@@ -17,9 +17,11 @@ ifeq (, $(shell which systemctl 2>/dev/null))
 endif
 
 ifneq (, $(shell which zypper 2>/dev/null))
+  DISTRO := suse
   INSTALL_CMD := sudo zypper install -y
   DEPS_DIR := .deps/suse
 else ifneq (, $(shell which apt 2>/dev/null))
+  DISTRO := debian
   INSTALL_CMD := sudo apt install -y
   DEPS_DIR := .deps/debian
 else
@@ -29,12 +31,12 @@ endif
 all:
 	mkdir -p $(DIR)
 	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/base
-	sudo update-alternatives --config editor
+	$(MAKE) set_editor
 	stow --verbose --restow --target=$$HOME .
 
 dev:
 	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/dev
-	sudo update-alternatives --config editor
+	$(MAKE) set_editor
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
 	tmux source-file ~/.config/tmux/tmux.conf
@@ -59,6 +61,11 @@ desktop:
 mail:
 	@xargs $(INSTALL_CMD) < $(DEPS_DIR)/mail
 	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O ~/.local/bin/oauth2.py
+
+set_editor:
+ifeq ($(DISTRO),debian)
+	sudo update-alternatives --config editor
+endif
 
 clean:
 	stow --verbose --delete --target=$$HOME .
