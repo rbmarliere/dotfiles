@@ -1,6 +1,7 @@
 # vim: ft=neomuttrc
 
-mailboxes `find ~/mail/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | tr '\n' ' '`
+# mailboxes `find ~/mail/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | tr '\n' ' '`
+mailboxes `find -L ~/mail_important/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | tr '\n' ' '`
 
 set my_archive="=archive"
 set my_spam="=spam"

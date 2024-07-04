@@ -1,8 +1,0 @@
-# vim: ft=neomuttrc
-
-#set debug_level = 2
-#set debug_file = ~/neolog
-
-source "~/.config/neomutt/accounts/marliere.net"
-unmailboxes *
-mailboxes `find -L ~/mail_important/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | tr '\n' ' '`
