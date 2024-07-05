@@ -6,3 +6,5 @@ stow
 tmux
 vim
 wget
+net-tools
+dnsutils

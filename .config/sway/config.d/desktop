@@ -45,24 +45,17 @@ for_window [title="^weechat" app_id="foot"] {
 	resize set width 2000 px height 1200 px;
 }
 
-for_window [app_id="org.telegram.desktop"] {
-	move container to workspace number 10;
-	floating enable;
-	resize set width 1500 px height 1200 px;
-	move left 750px;
-}
-
-for_window [app_id="nheko"] {
-	move container to workspace number 10;
-	floating enable;
-	resize set width 1500 px height 1200 px;
-	move right 750px;
-}
+for_window [class="discord"] move container to workspace number 10
+for_window [app_id="org.gnome.Fractal"] move container to workspace number 10
+for_window [app_id="org.telegram.desktop"] move container to workspace number 10
+for_window [class="Slack"] move container to workspace number 11
 
 exec swaymsg 'workspace 1' && firefox
 exec sleep .3 && swaymsg 'workspace 7' && foot -T newsboat bash -l -c "sleep 15 && ssh b -t 'tmux -L newsboat a'"
 exec sleep .6 && swaymsg 'workspace 8' && foot -T neomutt bash -l -c "sleep 15 && ssh b -t 'tmux -L neomutt a'"
 exec sleep .9 && swaymsg 'workspace 9' && foot -T weechat bash -l -c "sleep 15 && ssh b -t 'tmux -L weechat a'"
-exec sleep 1.2 && swaymsg 'workspace 10' && telegram-desktop
-exec sleep 1.2 && swaymsg 'workspace 10' && nheko
+exec sleep 1.2 && swaymsg 'workspace 10' && flatpak run com.discordapp.Discord
+exec sleep 1.2 && swaymsg 'workspace 10' && flatpak run org.gnome.Fractal
+exec sleep 1.2 && swaymsg 'workspace 10' && flatpak run org.telegram.desktop
+exec sleep 1.4 && swaymsg 'workspace 11' && flatpak run com.slack.Slack
 # exec sleep 2 && swaymsg 'workspace 1'

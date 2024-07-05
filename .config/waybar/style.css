@@ -77,7 +77,7 @@
 }
 
 #mode {
-	background: #64727D;
+	background: #323232;
 	border-top: 2px solid white;
 	padding-bottom: 2px;
 }
@@ -91,7 +91,7 @@
 	padding-bottom: 2px;
 	padding-left: 10px;
 	padding-right: 10px;
-	color: #888888;
+	color: #323232;
 }
 
 #workspaces button.focused {
@@ -107,4 +107,9 @@
 
 tooltip {
 	background: #323232;
+}
+
+#tray menu {
+  background-color: #323232;
+  color: #ffffff;
 }

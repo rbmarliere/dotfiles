@@ -4,6 +4,7 @@ NetworkManager-applet-openvpn
 adwaita-icon-theme
 brightnessctl
 firefox
+flatpak
 foot
 foot-extra-terminfo
 gnome-keyring

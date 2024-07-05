@@ -3,8 +3,9 @@
 export EDITOR="vi"
 export GPG_TTY=$(tty)
 export LESS="-R --mouse"
-export PATH="/usr/lib/ccache:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/node_modules/.bin:$PATH"
+export PATH="/usr/lib/ccache:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/node_modules/.bin:/var/lib/flatpak/exports/bin:$PATH"
 export PROJECTS="$HOME/src"
+export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:/home/$(whoami)/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
 
 # https://stackoverflow.com/questions/9457233/unlimited-bash-history
 export HISTFILE="$HOME/.bash_eternal_history"
@@ -20,4 +21,6 @@ PS1='\[\e[00;36m\]\t \[\e[00;91m\]${debian_chroot:+$debian_chroot }\[\e[00m\]\u@
 type vim > /dev/null 2>&1 && export MANPAGER="/bin/sh -c \"col -b | vim -M +MANPAGER -c 'colorscheme default | set laststatus=0 showtabline=0 notermguicolors ft=man ts=8 nomod nolist nonu noma' -\""
 type nvim > /dev/null 2>&1 && export MANPAGER="nvim +Man! -c 'colorscheme vim | set laststatus=0 showtabline=0 notermguicolors'"
 
-[ -f "$HOME/.bash_env.priv" ] && source "$HOME/.bash_env.priv"
+if [ -f "$HOME/.bash_env.priv" ]; then
+	source "$HOME/.bash_env.priv"
+fi

@@ -41,7 +41,6 @@ ifeq ($(DISTRO),suse)
 else ifeq ($(DISTRO),debian)
 	sudo update-alternatives --config editor
 	sudo update-alternatives --config vi
-	sudo systemctl enable systemd-networkd-wait-online.service
 endif
 
 dev:
@@ -56,6 +55,7 @@ dev:
 
 wm:
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/wm)
+	flatpak install flathub $$(tr "\n" " " < $(DEPS_DIR)/flatpak)
 	fc-cache
 	for patch in .patches/*; do \
 		target=$$(grep -m 1 '^+++ ' "$$patch" | cut -d ' ' -f 2 | cut -f1); \
