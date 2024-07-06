@@ -1,7 +1,9 @@
+Mesa-dri-nouveau
 NetworkManager
 NetworkManager-applet
 NetworkManager-applet-openvpn
 adwaita-icon-theme
+blueman
 brightnessctl
 firefox
 flatpak
@@ -12,15 +14,17 @@ grim
 jq
 libnotify-tools
 mako
-nautiilus
+nautilus
 ntp
 pavucontrol
+pinentry-gnome3
 python3-i3ipc
 seahorse
 slurp
 sway
 swayidle
 swaylock
+systemd-network
 udisks2
 viewnior
 vlc
@@ -30,3 +34,4 @@ wireplumber
 wl-clipboard
 wofi
 xdg-desktop-portal-wlr
+xf86-video-nouveau

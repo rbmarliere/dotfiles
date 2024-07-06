@@ -28,7 +28,9 @@ endif
 
 DEPS_DIR := .deps/$(DISTRO)
 
-all:
+all: base
+
+base:
 	mkdir -p $(DIR)
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/base)
 	stow --verbose --restow --target=$$HOME .
@@ -53,7 +55,7 @@ dev:
 	ln -sf $$HOME/.config/tmux/tmux.service $$HOME/.config/systemd/user/tmux.service
 	systemctl --user enable tmux
 
-wm:
+wm: base
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/wm)
 	flatpak install flathub $$(tr "\n" " " < $(DEPS_DIR)/flatpak)
 	fc-cache
@@ -65,6 +67,11 @@ wm:
 		fi \
 	done
 	git update-index --assume-unchanged .bash_profile
+ifeq ($(DISTRO),suse)
+	sudo echo "blacklist nvidia" > /etc/modprobe.d/60-blacklist.conf
+	sudo dracut --force
+	sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+endif
 
 autologin:
 	sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
