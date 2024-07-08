@@ -1,0 +1,16 @@
+# vim: ft=neomuttrc
+
+set my_archive="+[Gmail]/All%20Mail"
+set my_spam="+[Gmail]/Spam"
+
+set folder="imaps://$from@imap.gmail.com:993"
+set postponed="+[Gmail]/Drafts"
+unset record
+set spoolfile="+INBOX"
+set trash="+[Gmail]/Trash"
+
+set imap_user="$from"
+set imap_authenticators="oauthbearer"
+set imap_oauth_refresh_command="~/.local/bin/oauth2.py --quiet --user=$from --client_id=`pass neomutt/$my_domain/client_id` --client_secret=`pass neomutt/$my_domain/client_secret` --refresh_token=`pass neomutt/$my_domain/refresh_token`"
+
+folder-hook INBOX "push <collapse-all>; set check_new=yes"
