@@ -10,7 +10,7 @@ i=1
 for acc in $(cat ~/.config/neomutt/accounts/enabled); do
 	acc_file=$(echo $acc | sed 's#private/##')
 	tmux -L neomutt new-window -t "neomutt:$i" -n "$acc_file"
-	tmux -L neomutt send-keys "neomutt $acc" C-m
+	tmux -L neomutt send-keys "neomutt -P $acc" C-m
 	((i++))
 done
 
