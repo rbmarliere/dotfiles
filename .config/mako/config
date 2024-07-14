@@ -1,6 +1,7 @@
 #sort=-time
 #layer=overlay
-#background-color=#2e3440
+# background-color=#2e3440
+border-color=#FF0000
 #width=300
 #height=110
 #border-size=2
@@ -19,7 +20,7 @@ ignore-timeout=0
 #border-color=#d08770
 
 [urgency=high]
-border-color=#FF0000
+# border-color=#FF0000
 #default-timeout=0
 
 [category=mpd]
