@@ -109,5 +109,8 @@
 	new = green bold
 	whitespace = red reverse
 
-[includeIf "gitdir:~/linux/"]
-	path = ~/linux/.gitconfig
+[includeIf "gitdir:~/src/linux/"]
+	path = ~/src/linux/.gitconfig
+
+[includeIf "gitdir:~/src/suse/"]
+	path = ~/src/suse/.gitconfig
