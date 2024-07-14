@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Weechat
+Exec=foot -T weechat -e sh -c "ssh server -t 'tmux -L weechat a'"
+Type=Application
