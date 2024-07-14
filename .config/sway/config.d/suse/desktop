@@ -1,1 +1,5 @@
-../desktop
+# vim: ft=swayconfig
+
+exec_always /usr/libexec/polkit-gnome-authentication-agent-1 &
+
+include ../desktop

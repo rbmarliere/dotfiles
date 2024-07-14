@@ -22,4 +22,5 @@ if type sudo >/dev/null 2>&1; then
 	alias ss="sudo su -"
 	alias ufw="sudo ufw"
 	alias umount="sudo umount"
+	alias zyp="sudo zypper"
 fi

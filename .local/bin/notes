@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if swaymsg -t get_tree | grep -q '"app_id": "notes"'; then
+    swaymsg "[app_id=notes] focus"
+else
+    foot -a notes -o "colors.alpha=1.0" bash -lc "cd ~/notes; vi"
+fi

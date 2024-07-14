@@ -2,7 +2,6 @@
 
 DIR = \
 	$$HOME/.cache/neomutt/ \
-	$$HOME/.cache/neomutt/bodies \
 	$$HOME/.cache/nvim/bkp \
 	$$HOME/.cache/nvim/swp \
 	$$HOME/.cache/nvim/und \
@@ -10,7 +9,8 @@ DIR = \
 	$$HOME/.cache/vim/swp \
 	$$HOME/.cache/vim/und \
 	$$HOME/.config/systemd/user \
-	$$HOME/.local/bin
+	$$HOME/.local/bin \
+	$$HOME/.local/share
 
 ifeq (, $(shell which systemctl 2>/dev/null))
   $(error "Systemd is required")
@@ -28,37 +28,41 @@ endif
 
 DEPS_DIR := .deps/$(DISTRO)
 
-all: base
+all: links base
 
-base:
+links:
 	mkdir -p $(DIR)
-	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/base)
 	stow --verbose --restow --target=$$HOME .
 
+base:
+	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/base)
+
 ifeq ($(DISTRO),suse)
-	wget https://github.com/hluk/CopyQ/releases/download/v9.0.0/copyq_9.0.0_openSUSE_Leap_15.4.x86_64.rpm -O /tmp/copyq.rpm
-	$(INSTALL_CMD) /tmp/copyq.rpm
-	rm /tmp/copyq.rpm
-	sudo ln -sf /usr/share/terminfo/f/foot-extra /usr/share/terminfo/f/foot
+	sudo update-alternatives --install /usr/bin/vi vi /usr/bin/vim 50
 else ifeq ($(DISTRO),debian)
 	sudo update-alternatives --config editor
-	sudo update-alternatives --config vi
 endif
+
+	sudo update-alternatives --config vi
 
 dev:
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/dev)
+
+	sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 40
+	sudo update-alternatives --config vi
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
 	tmux source-file ~/.config/tmux/tmux.conf
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
-	ln -sf $$HOME/.config/tmux/tmux.service $$HOME/.config/systemd/user/tmux.service
 	systemctl --user enable tmux
 
 wm: base
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/wm)
-	flatpak install flathub $$(tr "\n" " " < $(DEPS_DIR)/flatpak)
 	fc-cache
+
+	flatpak install flathub $$(tr "\n" " " < $(DEPS_DIR)/flatpak)
+
 	for patch in .patches/*; do \
 		target=$$(grep -m 1 '^+++ ' "$$patch" | cut -d ' ' -f 2 | cut -f1); \
 		if [ -f "$$target" ]; then \
@@ -67,10 +71,25 @@ wm: base
 		fi \
 	done
 	git update-index --assume-unchanged .bash_profile
+
 ifeq ($(DISTRO),suse)
+	wget https://github.com/hluk/CopyQ/releases/download/v9.0.0/copyq_9.0.0_openSUSE_Leap_15.4.x86_64.rpm -O /tmp/copyq.rpm
+	$(INSTALL_CMD) /tmp/copyq.rpm
+	rm /tmp/copyq.rpm
+
+	sudo ln -sf /usr/share/terminfo/f/foot-extra /usr/share/terminfo/f/foot
+
 	sudo echo "blacklist nvidia" > /etc/modprobe.d/60-blacklist.conf
 	sudo dracut --force
 	sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+	# printer
+	systemctl enable cups
+	systemctl enable avahi-daemon
+	systemctl disable firewalld
+
+	# zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/ openSUSE_Tumbleweed/ packman
+	# zypper dup --from packman --allow-vendor-change
 endif
 
 autologin:
@@ -90,6 +109,7 @@ laptop: wm autologin
 mail:
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/mail)
 	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O ~/.local/bin/oauth2.py
+	chmod +x ~/.local/bin/oauth2.py
 
 clean:
 	stow --verbose --delete --target=$$HOME .

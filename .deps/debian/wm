@@ -2,6 +2,7 @@ adwaita-icon-theme
 blueman
 brightnessctl
 copyq
+cups
 desktop-base
 firefox-esr
 flatpak
@@ -32,4 +33,5 @@ wf-recorder
 wireplumber
 wl-clipboard
 wofi
+xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr

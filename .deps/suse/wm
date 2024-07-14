@@ -3,8 +3,10 @@ NetworkManager
 NetworkManager-applet
 NetworkManager-applet-openvpn
 adwaita-icon-theme
+avahi
 blueman
 brightnessctl
+cups
 firefox
 flatpak
 foot
@@ -18,6 +20,7 @@ nautilus
 ntp
 pavucontrol
 pinentry-gnome3
+polkit-gnome
 python3-i3ipc
 seahorse
 slurp
@@ -33,5 +36,6 @@ wf-recorder
 wireplumber
 wl-clipboard
 wofi
+xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr
 xf86-video-nouveau

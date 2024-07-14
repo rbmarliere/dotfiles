@@ -3,5 +3,6 @@ lynx
 msmtp
 neomutt
 pandoc
+pass
 urlscan
 uuid-runtime

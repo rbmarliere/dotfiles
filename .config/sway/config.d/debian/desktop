@@ -2,4 +2,5 @@
 
 set $term foot bash -lc 'ch sid'
 bindsym $mod+Shift+Return exec foot
+
 include ../desktop

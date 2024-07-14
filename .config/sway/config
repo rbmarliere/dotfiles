@@ -41,16 +41,9 @@ for_window [app_id="org.gnome.Nautilus"] floating enable, resize set 1500 height
 for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="blueman-manager"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="com.github.hluk.copyq"] floating enable, resize set 1000 height 60 ppt
-
-exec_always nm-applet --indicator
-exec_always blueman-applet
-exec copyq --start-server
-exec_always bash -c 'if [ -f ~/Pictures/bg ]; then swaymsg output "*" bg ~/Pictures/bg fill; else swaymsg output "*" bg "#000000" solid_color; fi'
-exec ~/.local/bin/inactive_windows_transparency.py
-exec swayidle -w \
-	timeout 600 'swaylock -f -c 000000 -i $bg' \
-	timeout 900 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-	before-sleep 'swaylock -f -c 000000 -i $bg'
+for_window [app_id="nm-connection-editor"] floating enable, resize set 1000 height 60 ppt
+for_window [class="copyq"] floating enable, resize set 1000 height 60 ppt
+for_window [title="Bitwarden Password Manager"] floating enable
 
 input type:keyboard {
 	xkb_layout us(altgr-intl)
@@ -64,11 +57,20 @@ bar {
 	swaybar_command waybar
 }
 
-exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
-exec hash dbus-update-activation-environment 2>/dev/null && \
-        dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec_always nm-applet --indicator
+exec_always blueman-applet
+exec_always copyq --start-server
+exec_always bash -c 'if [ -f ~/Pictures/bg ]; then swaymsg output "*" bg ~/Pictures/bg fill; else swaymsg output "*" bg "#000000" solid_color; fi'
+exec_always ~/.local/bin/inactive_windows_transparency.py
+exec_always gpg-connect-agent reloadagent /bye
+exec_always swayidle -w \
+	timeout 600 'swaylock -f -c 000000 -i $bg' \
+	timeout 900 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -f -c 000000 -i $bg'
+exec_always systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec_always hash dbus-update-activation-environment 2>/dev/null && \
+		 dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 
 include autoload
 include private
 include binds
-

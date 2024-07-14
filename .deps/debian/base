@@ -1,10 +1,11 @@
 bash-completion
+dnsutils
 fzf
+htop
+net-tools
 patch
 psmisc
 stow
 tmux
 vim
 wget
-net-tools
-dnsutils

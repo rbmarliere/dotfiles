@@ -65,7 +65,7 @@ reboot() {
 		root_runner "systemctl --user stop tmux"
 	fi
 	if [ -n "$1" ]; then
-		root_runner "sudo grub-reboot $1"
+		root_runner "sudo grub-reboot $1 || sudo grub2-reboot $1"
 	fi
 	root_runner "sudo shutdown -r --no-wall now"
 }
