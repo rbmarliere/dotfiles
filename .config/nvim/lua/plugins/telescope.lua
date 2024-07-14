@@ -8,7 +8,7 @@ vim.opt.grepprg = grepprg
 
 return {
 	"nvim-telescope/telescope.nvim",
-	tag = "0.1.5",
+	branch = '0.1.x',
 	dependencies = {
 		"keyvchan/telescope-find-pickers.nvim",
 		"nvim-lua/plenary.nvim",
