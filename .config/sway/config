@@ -61,14 +61,16 @@ exec_always nm-applet --indicator
 exec_always blueman-applet
 exec_always copyq --start-server
 exec_always bash -c 'if [ -f ~/Pictures/bg ]; then swaymsg output "*" bg ~/Pictures/bg fill; else swaymsg output "*" bg "#000000" solid_color; fi'
-exec_always ~/.local/bin/inactive_windows_transparency.py
-exec_always gpg-connect-agent reloadagent /bye
 exec_always swayidle -w \
 	timeout 600 'swaylock -f -c 000000 -i $bg' \
 	timeout 900 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
 	before-sleep 'swaylock -f -c 000000 -i $bg'
-exec_always systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
-exec_always hash dbus-update-activation-environment 2>/dev/null && \
+
+exec ~/.local/bin/inactive_windows_transparency.py
+exec gpg-connect-agent reloadagent /bye
+exec systemctl --user start tmux
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && \
 		 dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 
 include autoload

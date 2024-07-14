@@ -51,11 +51,10 @@ dev:
 	sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 40
 	sudo update-alternatives --config vi
 
+	ln -sf $$HOME/.config/tmux/tmux.service $$HOME/.config/systemd/user/tmux.service
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
 	tmux source-file ~/.config/tmux/tmux.conf
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
-
-	systemctl --user enable tmux
 
 wm: base
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/wm)
