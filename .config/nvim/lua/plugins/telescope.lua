@@ -1,4 +1,4 @@
-local grepprg = "rg --pcre2 --vimgrep --no-heading --smart-case --hidden --glob !.git --line-number --column"
+local grepprg = "rg --pcre2 --vimgrep --no-heading --smart-case --hidden --glob !.git --line-number --column --follow"
 local grepprg_tbl = {}
 for word in grepprg:gmatch("%S+") do
 	table.insert(grepprg_tbl, word)
@@ -108,8 +108,10 @@ return {
 				},
 				file_browser = {
 					git_status = false,
+					respect_gitignore = false,
 					hidden = { file_browser = true, folder_browser = true },
 					hide_parent_dir = true,
+					follow_symlinks = true,
 					hijack_netrw = true,
 					mappings = {
 						i = {
