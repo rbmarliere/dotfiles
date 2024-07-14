@@ -77,9 +77,9 @@ return {
 									},
 									inlayHints = {
 										typeHints = {
-											enable = false
-										}
-									}
+											enable = false,
+										},
+									},
 								},
 							},
 						})
@@ -116,8 +116,24 @@ return {
 					"stylua",
 					"taplo",
 					"typescript-language-server",
+					"vale",
 				},
+				run_on_start = false,
 			},
+			config = function(_, opts)
+				local mason_tool_installer = require("mason-tool-installer")
+				mason_tool_installer.setup(opts)
+				vim.api.nvim_create_autocmd("User", {
+					pattern = "MasonToolsUpdateCompleted",
+					callback = function(e)
+						vim.schedule(function()
+							local cmd =
+								"~/.local/share/nvim/mason/packages/vale/vale --config=$HOME/.config/vale/.vale.ini sync"
+							vim.fn.system(cmd)
+						end)
+					end,
+				})
+			end,
 		},
 	},
 }
