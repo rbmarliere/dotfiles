@@ -9,8 +9,17 @@ unset record
 set spoolfile="+INBOX"
 set trash="+[Gmail]/Trash"
 
+set imap_qresync=yes
+set imap_condstore=yes
+set imap_check_subscribed=yes
+set imap_keepalive=30
 set imap_user="$from"
 set imap_authenticators="oauthbearer"
 set imap_oauth_refresh_command="~/.local/bin/oauth2.py --quiet --user=$from --client_id=`pass neomutt/$my_domain/client_id` --client_secret=`pass neomutt/$my_domain/client_secret` --refresh_token=`pass neomutt/$my_domain/refresh_token`"
 
-folder-hook INBOX "push <collapse-all>; set check_new=yes"
+folder-hook INBOX "push <collapse-all>"
+
+set mail_check=90
+set timeout=15
+# set mail_check_stats=no
+# set mail_check_stats_interval=60

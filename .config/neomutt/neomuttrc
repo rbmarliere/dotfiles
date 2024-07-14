@@ -5,15 +5,12 @@ set allow_ansi=yes
 set beep=yes
 set beep_new=yes
 set certificate_file=~/.cache/neomutt/certificates
-set check_new=yes
 set collapse_all=yes
 set crypt_use_gpgme=yes
 set date_format="%e %b %y %H:%M"
 set display_filter="sed -e '/\\[-- Autoview using .* --]$/d'"
 set folder_format="%3C %<n?%7n&       > %7m %i"
 set header_cache=~/.cache/neomutt/
-set imap_check_subscribed=yes
-set imap_keepalive=30
 set include=yes
 set index_format="%6C %Z %[${date_format}] %-15.15L %s"
 set mailcap_path=~/.config/neomutt/mailcap:$mailcap_path
@@ -26,13 +23,13 @@ set send_charset="us-ascii:utf-8"
 set sleep_time=0
 set use_threads=yes sort=reverse-last-date sort_aux=date
 
-set sidebar_divider_char='│'
-set sidebar_format="%B%<F? [%F]>%* %<N?%N/>%S"
-set sidebar_width=35
-#set sidebar_component_depth=1
-#set sidebar_delim_chars="-"
-#set sidebar_short_path
-#set sidebar_visible
+# set sidebar_divider_char='│'
+# set sidebar_format="%B%<F? [%F]>%* %<N?%N/>%S"
+# set sidebar_width=35
+# set sidebar_component_depth=1
+# set sidebar_delim_chars="-"
+# set sidebar_short_path
+# set sidebar_visible
 
 attachments +I text/plain text/x-diff text/x-diff text/x-patch text/x-patch text/x-c++hdr text/x-c++src text/x-chdr text/x-csrc text/x-perl text/x-python text/x-sh
 
