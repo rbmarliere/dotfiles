@@ -26,7 +26,7 @@ endif
 DEPS_DIR := .deps/$(DISTRO)
 
 .PHONY: all
-all: links base
+all: base links
 
 .PHONY: links
 links:
