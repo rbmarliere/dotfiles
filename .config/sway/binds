@@ -1,7 +1,6 @@
 # vim: ft=swayconfig
 
 bindsym $mod+Shift+t exec ~/.local/bin/toggle_transparency
-bindsym $mod+x exec copyq toggle
 bindsym Shift+Print exec grim -t png -l 6 - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
 bindsym Print exec sh -c 'region=$(slurp); [ -n "$region" ] && grim -t png -l 6 -g "$region" - | wl-copy && [ -n "$region" ] && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png'
 bindsym $mod+Shift+Print exec ~/.local/bin/screencast start
@@ -67,10 +66,10 @@ bindsym XF86MonBrightnessUp exec brightnessctl set +5%
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 
 mode "resize" {
-	bindsym $left resize shrink width $res
-	bindsym $down resize grow height $res
-	bindsym $up resize shrink height $res
-	bindsym $right resize grow width $res
+	bindsym $up resize shrink height $resV
+	bindsym $down resize grow height $resV
+	bindsym $left resize shrink width $resH
+	bindsym $right resize grow width $resH
 	bindsym Return mode "default"
 	bindsym Escape mode "default"
 }
