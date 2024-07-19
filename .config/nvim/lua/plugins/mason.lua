@@ -16,20 +16,20 @@ return {
 					function(server_name)
 						lspconfig[server_name].setup({})
 					end,
-					["clangd"] = function()
-						lspconfig["clangd"].setup({
+					clangd = function()
+						lspconfig.clangd.setup({
 							cmd = { "clangd", "--offset-encoding=utf-16" },
 						})
 					end,
-					-- ["ruff_lsp"] = function()
-					-- 	lspconfig["ruff_lsp"].setup({
+					-- ruff_lsp = function()
+					-- 	lspconfig.ruff_lsp.setup({
 					-- 		settings = {
 					-- 			interpreter = vim.fn.getcwd() .. "/.venv/bin/python",
 					-- 		},
 					-- 	})
 					-- end,
-					-- ["pyright"] = function()
-					-- 	lspconfig["pyright"].setup({
+					-- pyright = function()
+					-- 	lspconfig.pyright.setup({
 					-- 		settings = {
 					-- 			pyright = {
 					-- 				disableOrganizeImports = true,
@@ -43,8 +43,8 @@ return {
 					-- 		},
 					-- 	})
 					-- end,
-					["lua_ls"] = function()
-						lspconfig["lua_ls"].setup({
+					lua_ls = function()
+						lspconfig.lua_ls.setup({
 							settings = {
 								Lua = {
 									workspace = {
@@ -54,13 +54,13 @@ return {
 							},
 						})
 					end,
-					["rust_analyzer"] = function()
-						lspconfig["rust_analyzer"].setup({
+					rust_analyzer = function()
+						lspconfig.rust_analyzer.setup({
 							on_attach = function(_, bufnr)
 								vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 							end,
 							settings = {
-								["rust-analyzer"] = {
+								rust_analyzer = {
 									imports = {
 										granularity = {
 											group = "module",
@@ -80,6 +80,20 @@ return {
 											enable = false,
 										},
 									},
+								},
+							},
+						})
+					end,
+					perlnavigator = function()
+						lspconfig.perlnavigator.setup({
+							settings = {
+								perlnavigator = {
+									-- perlPath = "~/perl5",
+									enableWarnings = true,
+									includePaths = { "$workspaceFolder/../main" },
+									perltidyProfile = ".perltidyrc",
+									perlcriticProfile = ".perlcriticrc",
+									perlcriticEnabled = true,
 								},
 							},
 						})
@@ -109,6 +123,7 @@ return {
 					"goimports",
 					"gopls",
 					"lua-language-server",
+					"perlnavigator",
 					"prettier",
 					"ruff-lsp",
 					"rust-analyzer",
@@ -117,6 +132,8 @@ return {
 					"taplo",
 					"typescript-language-server",
 					"vale",
+					-- "yaml-language-server",
+					"yamllint",
 				},
 				run_on_start = false,
 			},
@@ -125,7 +142,7 @@ return {
 				mason_tool_installer.setup(opts)
 				vim.api.nvim_create_autocmd("User", {
 					pattern = "MasonToolsUpdateCompleted",
-					callback = function(e)
+					callback = function(_)
 						vim.schedule(function()
 							local cmd =
 								"~/.local/share/nvim/mason/packages/vale/vale --config=$HOME/.config/vale/.vale.ini sync"

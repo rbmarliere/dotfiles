@@ -35,5 +35,6 @@ return {
 		vim.diagnostic.config({
 			virtual_text = false,
 		})
+		-- vim.lsp.set_log_level("DEBUG")
 	end,
 }
