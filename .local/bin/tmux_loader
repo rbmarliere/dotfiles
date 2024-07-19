@@ -1,6 +1,8 @@
 #!/bin/bash
 # from https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer
 
+source "$HOME/.bashrc"
+
 if [ -z "$PROJECTS" ]; then
 	echo 'PROJECTS var not set'
 	exit 1

@@ -48,9 +48,6 @@ shut() {
 	fi
 	echo shut?
 	read
-	if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
-		root_runner "systemctl --user stop tmux"
-	fi
 	root_runner "sudo shutdown -h --no-wall now"
 }
 
@@ -61,9 +58,6 @@ reboot() {
 	fi
 	echo reboot $1?
 	read
-	if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
-		root_runner "systemctl --user stop tmux"
-	fi
 	if [ -n "$1" ]; then
 		root_runner "sudo grub-reboot $1 || sudo grub2-reboot $1"
 	fi
