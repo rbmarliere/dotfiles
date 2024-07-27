@@ -38,11 +38,12 @@ smart_gaps on
 gaps inner 4
 focus_on_window_activation none
 
-for_window [app_id="org.gnome.Nautilus"] floating enable, resize set 1500 height 80 ppt, move container to scratchpad, scratchpad show
-for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="blueman-manager"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="com.github.hluk.copyq"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="nm-connection-editor"] floating enable, resize set 1000 height 60 ppt
+for_window [app_id="org.gnome.Nautilus"] floating enable, resize set 1500 height 80 ppt, move container to scratchpad, scratchpad show
+for_window [app_id="org.gnome.Settings"] floating enable
+for_window [app_id="pavucontrol"] floating enable, resize set 1000 height 60 ppt
 for_window [class="copyq"] floating enable, resize set 1000 height 60 ppt
 for_window [title="Bitwarden Password Manager"] floating enable
 
@@ -71,6 +72,7 @@ exec ~/.local/bin/notification-mon
 exec ~/.local/bin/inactive_windows_transparency.py
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec gnome-keyring-daemon --start --components=secrets
 
 include autoload
 include private
