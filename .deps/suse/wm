@@ -11,7 +11,11 @@ firefox
 flatpak
 foot
 foot-extra-terminfo
+gnome-calendar
+gnome-control-center
 gnome-keyring
+gnome-settings-daemon
+gnome-shell
 grim
 jq
 libnotify-tools
