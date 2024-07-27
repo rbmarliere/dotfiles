@@ -1,6 +1,7 @@
 # vim: ft=swayconfig
 
 bindsym $mod+Shift+t exec ~/.local/bin/toggle_transparency
+bindsym Ctrl+Print exec swaymsg -t get_tree | jq -r '.. | (.nodes? // empty)[] | if (.focused) then select(.focused) | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" else (.floating_nodes? // empty)[] | select(.visible) | select(.focused) | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" end' | grim -g - - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
 bindsym Shift+Print exec grim -t png -l 6 - | wl-copy && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png
 bindsym Print exec sh -c 'region=$(slurp); [ -n "$region" ] && grim -t png -l 6 -g "$region" - | wl-copy && [ -n "$region" ] && wl-paste > ~/Pictures/Screenshots/$(date +%Y%m%d%H%M%S).png'
 bindsym $mod+Shift+Print exec ~/.local/bin/screencast start
@@ -74,9 +75,6 @@ mode "resize" {
 	bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
-
-bindsym $mod+n exec ~/.local/bin/notes
-for_window [app_id="notes"] floating enable, resize set width 1400 px height 1200 px, move right 200 px, sticky enable
 
 bindsym $mod+shift+n exec makoctl restore
 bindsym $mod+shift+alt+n exec makoctl dismiss -a
