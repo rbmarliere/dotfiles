@@ -1,4 +1,5 @@
 return {
+	s("Obrigado", t({ "Obrigado,", "-\tRicardo.", "", "" })),
 	s("Thanks", t({ "Thanks,", "-\tRicardo.", "", "" })),
 	s("Thanks for reviewing", t({ "Thanks for reviewing,", "-\tRicardo.", "", "" })),
 	s("Thank you", t({ "Thank you,", "-\tRicardo.", "", "" })),
