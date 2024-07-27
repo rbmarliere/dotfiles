@@ -84,6 +84,18 @@ return {
 
 		local opts = {
 			defaults = {
+				layout_strategy = "flex",
+				layout_config = {
+					flex = {
+						flip_columns = 140,
+					},
+					vertical = {
+						height = 0.98,
+						mirror = true,
+						prompt_position = "top",
+						preview_height = 30,
+					},
+				},
 				border = true,
 				borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 				sorting_strategy = "ascending",
@@ -113,6 +125,14 @@ return {
 					},
 				},
 				file_browser = {
+					layout_strategy = "flex",
+					layout_config = {
+						vertical = {
+							preview_height = 0,
+						},
+					},
+					grouped = true,
+					prompt_path = true,
 					git_status = false,
 					respect_gitignore = false,
 					hidden = { file_browser = true, folder_browser = true },
