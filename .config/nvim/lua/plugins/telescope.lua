@@ -108,6 +108,39 @@ return {
 				man_pages = {
 					sections = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
 				},
+				-- https://github.com/nvim-telescope/telescope.nvim/issues/2933
+				git_branches = {
+					mappings = {
+						i = {
+							["<C-d>"] = "preview_scrolling_down",
+						},
+					},
+					previewer = require("telescope.previewers").new_termopen_previewer({
+						get_command = function(entry)
+							return {
+								"git",
+								"--no-pager",
+								"log",
+								"--max-count",
+								"150",
+								"--pretty=format:%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset",
+								"--abbrev-commit",
+								"--date=relative",
+								entry.value,
+							}
+						end,
+						scroll_fn = function(self, direction)
+							if not self.state then
+								return
+							end
+							local input = vim.api.nvim_replace_termcodes(direction > 0 and "<C-e>" or "<C-y>", true, false, true)
+							local count = math.abs(direction)
+							vim.api.nvim_buf_call(self.state.termopen_bufnr, function()
+								vim.cmd([[normal! ]] .. count .. input)
+							end)
+						end,
+					}),
+				},
 			}),
 			extensions = {
 				live_grep_args = {
