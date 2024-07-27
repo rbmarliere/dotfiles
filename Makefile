@@ -75,10 +75,6 @@ wm: base flatpak
 	git update-index --assume-unchanged .bash_profile
 
 ifeq ($(DISTRO),suse)
-	# wget https://github.com/hluk/CopyQ/releases/download/v9.0.0/copyq_9.0.0_openSUSE_Leap_15.4.x86_64.rpm -O /tmp/copyq.rpm
-	# $(INSTALL_CMD) /tmp/copyq.rpm
-	# rm /tmp/copyq.rpm
-
 	sudo ln -sf /usr/share/terminfo/f/foot-extra /usr/share/terminfo/f/foot
 
 	# printer
@@ -97,6 +93,10 @@ autologin:
 	echo "ExecStart=" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	echo "ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $$(whoami) %I \$$TERM" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	echo "Environment=XDG_SESSION_TYPE=wayland" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
+ifeq ($(DISTRO),suse)
+	# enable getty@tty1
+	sudo ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+endif
 
 .PHONY: desktop
 desktop: wm autologin
@@ -111,7 +111,7 @@ ifeq ($(DISTRO),suse)
 	# sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 endif
 
-.PHONY: laptoy
+.PHONY: laptop
 laptop: wm autologin
 	echo "include config.d/$(DISTRO)/laptop" > $$HOME/.config/sway/autoload
 
