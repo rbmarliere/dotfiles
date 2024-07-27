@@ -9,7 +9,18 @@ return {
 	dependencies = {
 		{
 			"williamboman/mason-lspconfig.nvim",
+			dependencies = {
+				"folke/neodev.nvim",
+				"hrsh7th/nvim-cmp",
+				"neovim/nvim-lspconfig",
+			},
 			config = function()
+				require("lspconfig.ui.windows").default_options.border = "none"
+				vim.diagnostic.config({
+					virtual_text = false,
+				})
+				-- vim.lsp.set_log_level("DEBUG")
+
 				require("neodev").setup()
 				local lspconfig = require("lspconfig")
 				require("mason-lspconfig").setup_handlers({
@@ -90,7 +101,7 @@ return {
 								perlnavigator = {
 									-- perlPath = "~/perl5",
 									enableWarnings = true,
-									includePaths = { "$workspaceFolder/../main" },
+									-- includePaths = { "$workspaceFolder/../main" },
 									perltidyProfile = ".perltidyrc",
 									perlcriticProfile = ".perlcriticrc",
 									perlcriticEnabled = true,
@@ -99,13 +110,37 @@ return {
 						})
 					end,
 				})
+
+				-- https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero
+				vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>")
+				vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
+				vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>")
+
 				vim.api.nvim_create_autocmd("LspAttach", {
-					-- https://github.com/mrcjkb/rustaceanvim/discussions/135
 					callback = function(args)
 						local client = vim.lsp.get_client_by_id(args.data.client_id)
 						if client then
+							-- https://github.com/mrcjkb/rustaceanvim/discussions/135
 							client.server_capabilities.semanticTokensProvider = nil
 						end
+						local opts = { noremap = true, silent = true, buffer = args.buf }
+						vim.keymap.set("n", "<M-q>", vim.diagnostic.setqflist, opts)
+						vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+						vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+						vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+						vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+						vim.keymap.set("n", "<Leader>k", vim.lsp.buf.signature_help, opts)
+						vim.keymap.set("n", "<Leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+						vim.keymap.set("n", "<Leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+						vim.keymap.set("n", "<Leader>wl", function()
+							print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+						end, opts)
+						vim.keymap.set("n", "<Leader>D", vim.lsp.buf.type_definition, opts)
+						vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename, opts)
+						vim.keymap.set("n", "<Leader>a", vim.lsp.buf.code_action, opts)
+						vim.keymap.set("n", "<Leader>#", vim.lsp.buf.document_highlight, opts)
+						vim.keymap.set("n", "<Leader><Leader>#", vim.lsp.buf.clear_references, opts)
+						vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
 					end,
 				})
 			end,
