@@ -125,7 +125,7 @@ return {
 				lualine_a = {
 					{
 						"tabs",
-						tab_max_length = 50, -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
+						tab_max_length = 15, -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
 						max_length = vim.o.columns, -- Maximum width of tabs component.
 						-- Note:
 						-- It can also be a function that returns
