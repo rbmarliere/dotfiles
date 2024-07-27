@@ -18,6 +18,7 @@ return {
 		"nvim-telescope/telescope-file-browser.nvim",
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		"rbmarliere/telescope-cscope.nvim",
+		"tsakirist/telescope-lazy.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 	keys = {
@@ -142,5 +143,6 @@ return {
 		telescope.load_extension("find_pickers")
 		telescope.load_extension("fzf")
 		telescope.load_extension("live_grep_args")
+		telescope.load_extension("lazy")
 	end,
 }
