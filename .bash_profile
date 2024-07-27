@@ -1,5 +1,5 @@
-# if [ "$(tty)" = "/dev/tty1" ]; then
-# 	dbus-run-session sway
-# fi
+if [ "$(tty)" = "/dev/tty1" ]; then
+	exec sway
+fi
 
 source "$HOME/.bashrc"

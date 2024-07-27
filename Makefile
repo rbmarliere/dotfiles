@@ -53,7 +53,7 @@ dev:
 	sudo update-alternatives --config vi
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
-	tmux source-file ~/.config/tmux/tmux.conf
+	tmux source-file $$HOME/.config/tmux/tmux.conf
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
 .PHONY: flatpak
@@ -65,22 +65,14 @@ wm: base flatpak
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/wm)
 	fc-cache
 
-	for patch in .patches/*; do \
-		target=$$(grep -m 1 '^+++ ' "$$patch" | cut -d ' ' -f 2 | cut -f1); \
-		if [ -f "$$target" ]; then \
-			echo patching $$target; \
-			sudo patch -s -N -r - $$target < $$patch || true; \
-		fi \
-	done
-	git update-index --assume-unchanged .bash_profile
 
 ifeq ($(DISTRO),suse)
 	sudo ln -sf /usr/share/terminfo/f/foot-extra /usr/share/terminfo/f/foot
 
 	# printer
-	systemctl enable cups
-	systemctl enable avahi-daemon
-	# systemctl disable firewalld
+	sudo systemctl enable cups
+	sudo systemctl enable avahi-daemon
+	# sudo systemctl disable firewalld
 
 	# zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/ openSUSE_Tumbleweed/ packman
 	# zypper dup --from packman --allow-vendor-change
@@ -103,10 +95,10 @@ desktop: wm autologin
 	echo "include config.d/$(DISTRO)/desktop" > $$HOME/.config/sway/autoload
 
 ifeq ($(DISTRO),suse)
-	sudo zypper remove --clean-deps nvidia*
-	sudo echo "blacklist nvidia" > /etc/modprobe.d/60-blacklist.conf
-	sudo echo "blacklist amdgpu" >> /etc/modprobe.d/60-blacklist.conf
-	# sudo echo 'add_dracutmodules+=" bluetooth "' > /etc/dracut.conf.d/90-bluetooth.conf
+	sudo zypper remove --clean-deps nvidia* || true
+	echo "blacklist nvidia" | sudo tee /etc/modprobe.d/60-blacklist.conf
+	echo "blacklist amdgpu" | sudo tee -a /etc/modprobe.d/60-blacklist.conf
+	# echo 'add_dracutmodules+=" bluetooth "' | sudo tee /etc/dracut.conf.d/90-bluetooth.conf
 	sudo dracut --force
 	# sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 endif
@@ -118,8 +110,8 @@ laptop: wm autologin
 .PHONY: mail
 mail:
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/mail)
-	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O ~/.local/bin/oauth2.py
-	chmod +x ~/.local/bin/oauth2.py
+	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O $$HOME/.local/bin/oauth2.py
+	chmod +x $$HOME/.local/bin/oauth2.py
 
 .PHONY: clean
 clean:

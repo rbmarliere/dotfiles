@@ -6,7 +6,11 @@ cups
 desktop-base
 firefox-esr
 flatpak
+gnome-calendar
+gnome-control-center
 gnome-keyring
+gnome-settings-daemon
+gnome-shell
 grim
 jq
 libnotify-bin
@@ -20,7 +24,6 @@ pavucontrol
 pinentry-gnome3
 python3-i3ipc
 seahorse
-secrets
 slurp
 sway
 swayidle

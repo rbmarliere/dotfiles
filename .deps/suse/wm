@@ -27,7 +27,6 @@ pinentry-gnome3
 polkit-gnome
 python3-i3ipc
 seahorse
-secrets
 slurp
 sway
 swayidle
