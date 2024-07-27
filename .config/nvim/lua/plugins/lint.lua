@@ -1,6 +1,7 @@
 return {
 	"mfussenegger/nvim-lint",
-	config = function()
+	lazy = false,
+	init = function()
 		local lint = require("lint")
 		lint.linters.klint = {
 			name = "klint",
@@ -29,6 +30,7 @@ return {
 			c = { "checkpatch" },
 			markdown = { "vale" },
 			-- rust = { "klint" },
+			yaml = { "yamllint" },
 		}
 		vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave", "TextChanged" }, {
 			callback = function()
