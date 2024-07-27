@@ -7,6 +7,7 @@ alias ll="ls --color=auto -l"
 alias ls="ls --color=auto"
 alias py="python3"
 alias rr="source ~/.bashrc"
+alias gnome-control-center="XDG_CURRENT_DESKTOP=GNOME /usr/bin/gnome-control-center"
 
 if type sudo >/dev/null 2>&1; then
 	alias apt="sudo apt"
