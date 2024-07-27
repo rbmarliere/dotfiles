@@ -1,7 +1,6 @@
 # vim: ft=neomuttrc
 
-# mailboxes `find ~/mail/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | tr '\n' ' '`
-mailboxes `find -L ~/mail_important/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | tr '\n' ' '`
+mailboxes `find -L ~/mail/all/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | tr '\n' ' '`
 
 set my_archive="=archive"
 set my_spam="=spam"
@@ -10,10 +9,10 @@ set realname="Ricardo B. Marliere"
 set from="ricardo@marliere.net"
 set sendmail="msmtp -a marliere.net"
 
-set folder="~/mail"
+set folder="~/mail/all"
 set postponed="=drafts"
 set record="=sent"
-set spoolfile="~/mail/inbox"
+set spoolfile="~/mail/all/inbox"
 set trash="=trash"
 
 folder-hook . "set check_new=no"  # https://github.com/neomutt/neomutt/issues/2223
