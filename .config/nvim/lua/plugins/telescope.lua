@@ -8,7 +8,10 @@ vim.opt.grepprg = grepprg
 
 return {
 	"nvim-telescope/telescope.nvim",
-	branch = '0.1.x',
+	branch = "0.1.x",
+	-- name = "telescope.nvim",
+	-- dir = "~/src/extra/telescope.nvim/0.1.x",
+	-- dev = true,
 	dependencies = {
 		"keyvchan/telescope-find-pickers.nvim",
 		"nvim-lua/plenary.nvim",
@@ -19,10 +22,12 @@ return {
 	},
 	keys = {
 		{ "<C-Space>", ":Telescope find_pickers<CR>" },
+		{ "<C-(>", ":Telescope lsp_document_symbols<CR>" },
 		{ "<M-p>", ":Telescope find_files<CR>" },
 		{ "<C-p>", ":Telescope git_files<CR>" },
 		{ "-", ":Telescope file_browser path=%:p:h<CR>" },
 		{ "<M-g>", ":Telescope live_grep_args<CR>" },
+		{ "<Leader>gw", ":Telescope git_worktree<CR>" },
 	},
 	config = function()
 		local telescope = require("telescope")
