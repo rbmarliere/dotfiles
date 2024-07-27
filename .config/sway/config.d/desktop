@@ -14,6 +14,9 @@ set $ninth parenright
 set $tenth plus
 set $eleventh minus
 
+bindsym $mod+Shift+r exec swaymsg resize set width 1400 px height 1400 px, move right 200 px
+bindsym $mod+n exec ~/.local/bin/notes
+
 set $out1 "Samsung Electric Company LC34G55T H4ZT500316"
 output $out1 mode --custom 3440x1440@60Hz
 
@@ -30,12 +33,15 @@ input type:keyboard {
 }
 
 for_window [app_id="firefox"] floating enable, resize set width 1650 px height 1400 px, move container to workspace number 1
+for_window [app_id="foot"] floating enable, resize set width 1400 px height 1400 px, move right 200 px
+for_window [app_id="notes"] floating enable, resize set width 1400 px height 1400 px, move right 200 px, sticky enable
+for_window [app_id="org.gnome.Calendar"] move container to workspace number 11, floating enable, resize set width 1650 px height 1400 px
 for_window [app_id="org.gnome.Fractal"] move container to workspace number 10
 for_window [app_id="org.telegram.desktop"] move container to workspace number 10
 for_window [class="Slack"] move container to workspace number 5, floating enable, resize set width 1650 px height 1400 px
 for_window [class="discord"] move container to workspace number 10
-for_window [title="^neomutt$" app_id="foot"] move container to workspace number 8, floating enable, resize set width 1400 px height 1400 px, move right 200 px
-for_window [title="^newsboat$" app_id="foot"] move container to workspace number 7, floating enable, resize set width 1400 px height 1400 px, move right 200 px
+for_window [title="^neomutt$" app_id="foot"] move container to workspace number 8, floating enable, resize set width 1400 px height 1400 px
+for_window [title="^newsboat$" app_id="foot"] move container to workspace number 7, floating enable, resize set width 1400 px height 1400 px
 for_window [title="^weechat$" app_id="foot"] move container to workspace number 9, floating enable, resize set width 1650 px height 1400 px
 
 exec swaymsg 'workspace 1' && firefox && nautilus
@@ -46,4 +52,6 @@ exec sleep 1.2 && swaymsg 'workspace 10' && flatpak run com.discordapp.Discord
 exec sleep 1.2 && swaymsg 'workspace 10' && flatpak run org.gnome.Fractal
 exec sleep 1.2 && swaymsg 'workspace 10' && flatpak run org.telegram.desktop
 exec sleep 1.4 && swaymsg 'workspace 10' && flatpak run com.slack.Slack
+exec sleep 1.6 && swaymsg 'workspace 10' && gnome-calendar
 # exec sleep 2 && swaymsg 'workspace 1'
+
