@@ -1,0 +1,19 @@
+#!/bin/bash
+
+url=$1
+remote=$2
+
+if [ -z "$url" ]; then
+	echo "no url specified"
+	exit 1
+fi
+
+repo=$(basename -s .git "$url")
+
+if [ -z "$remote" ]; then
+	remote=$(echo "$url" | awk -F'[:/]' '{print $(NF-1)}')
+fi
+
+cmd="git clone --recursive --bare $url -o $remote $repo"
+echo "$cmd"
+$cmd

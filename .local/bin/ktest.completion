@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TESTS_DIR="$HOME/src/linux/ktest/tests"
+TESTS_DIR="$HOME/src/rbmarliere/ktest/main/tests"
 
 _ktest_completion() {
 	# https://stackoverflow.com/questions/62979947/how-to-autocomplete-files-under-specific-directory
@@ -21,10 +21,12 @@ _ktest_completion() {
 # wrapper to complete to the correct test file path
 ktest() {
 	local file_path="$1"
+	echo $file_path
 	if [[ ! "$file_path" = /* ]]; then
 		file_path="$TESTS_DIR/$file_path"
 	fi
-	command ktest "$file_path"
+	echo $file_path
+	command ktest.pl "$file_path"
 }
 
-complete -F _ktest_completion ktest
+complete -o nospace -F _ktest_completion ktest

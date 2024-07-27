@@ -6,6 +6,6 @@ set -euo pipefail
 dbus-monitor "interface='org.freedesktop.Notifications'" | \
 while read -r line; do
     if echo "$line" | grep -q "member=Notify"; then
-        paplay /usr/share/sounds/freedesktop/stereo/bell.oga
+        paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
     fi
 done
