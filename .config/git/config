@@ -12,6 +12,7 @@
 	amend = commit --amend
 	amende = commit --amend --no-edit
 	br = branch
+	cl = clone --bare
 	ch = cherry
 	ci = commit
 	co = checkout
@@ -26,13 +27,12 @@
 	la = !git l --name-status
 	noff = merge --no-ff
 	pa = !git --no-pager diff --no-color
-	po = push origin
-	pom = push --set-upstream origin main
 	pullff = pull --ff-only
 	r = !git l --graph
 	ra = !git r --all
 	re = remote
-	ri = rebase -i
+	rb = rebase
+	ri = rebase --interactive
 	st = status
 	w = worktree
 	staash = stash --all
@@ -109,8 +109,5 @@
 	new = green bold
 	whitespace = red reverse
 
-[includeIf "gitdir:~/src/linux/"]
-	path = ~/src/linux/.gitconfig
-
-[includeIf "gitdir:~/src/suse/"]
-	path = ~/src/suse/.gitconfig
+[includeIf "gitdir:~/src/"]
+	path = ~/src/.git/config
