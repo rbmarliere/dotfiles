@@ -1,6 +1,6 @@
 # vim: ft=swayconfig
 
-exec_always /usr/libexec/polkit-gnome-authentication-agent-1 &
+# exec_always /usr/libexec/polkit-gnome-authentication-agent-1 &
 
 exec QT_QPA_PLATFORM=xcb flatpak run com.github.hluk.copyq --start-server
 bindsym $mod+x exec flatpak run com.github.hluk.copyq toggle
