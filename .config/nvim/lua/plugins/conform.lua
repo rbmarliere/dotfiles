@@ -31,16 +31,6 @@ return {
 			-- ["*"] = { "codespell" }, -- apply to all filetypes
 			-- ["_"] = { "trim_whitespace" },
 		},
-		formatters = {
-			yamltidy = {
-				command = "yamltidy",
-				args = "-c ../.yamltidy $FILENAME",
-				range_args = function(self, ctx)
-					return { "--partial" }
-				end,
-				stdin = true,
-			},
-		},
 	},
 	init = function()
 		vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
