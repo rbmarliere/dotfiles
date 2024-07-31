@@ -42,6 +42,8 @@ return {
 		local picker_config = {}
 		for b, _ in pairs(builtin) do
 			picker_config[b] = {
+				-- https://github.com/nvim-telescope/telescope.nvim/issues/2779
+				temp__scrolling_limit = 1000,
 				fname_width = 60,
 				symbol_width = 50,
 				symbol_type_width = 15,
@@ -158,6 +160,8 @@ return {
 					},
 				},
 				file_browser = {
+					-- https://github.com/nvim-telescope/telescope.nvim/issues/2779
+					temp__scrolling_limit = 1000,
 					layout_strategy = "flex",
 					layout_config = {
 						vertical = {
