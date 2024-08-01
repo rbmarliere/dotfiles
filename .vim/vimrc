@@ -39,9 +39,11 @@ set tabstop=8
 
 set backup
 set bdir=$HOME/.cache/vim/bkp/
-set dir=$HOME/.cache/vim/swp/
 set undodir=$HOME/.cache/vim/und/
 set undofile
+
+set noswapfile
+" set dir=$HOME/.cache/vim/swp/
 
 nnoremap - :Ex<CR>
 nnoremap <C-d> <C-d>zz
