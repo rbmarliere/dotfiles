@@ -32,6 +32,7 @@ all: base links
 links:
 	mkdir -p $(DIR)
 	stow --verbose --restow --target=$$HOME .
+	touch ~/.config/neomutt/aliases
 
 .PHONY: base
 base:
