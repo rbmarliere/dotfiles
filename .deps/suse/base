@@ -2,7 +2,6 @@ bash-completion
 fzf
 fzf-bash-completion
 htop
-patch
 psmisc
 stow
 tmux
