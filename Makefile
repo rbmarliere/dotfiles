@@ -95,7 +95,9 @@ desktop: wm autologin
 	echo "include config.d/$(DISTRO)/desktop" > $$HOME/.config/sway/autoload
 
 ifeq ($(DISTRO),suse)
-	sudo zypper remove --clean-deps nvidia* || true
+	sudo rm /etc/zypp/services.d/NVIDIA.service
+	sudo zypper rm $$(zypper se -i | grep nvidia | awk '{print $$3}') || true
+	sudo zypper mr -d $$(zypper lr | awk -F '|' '{IGNORECASE=1} /nvidia/ {print $$2}') || true
 	echo "blacklist nvidia" | sudo tee /etc/modprobe.d/60-blacklist.conf
 	echo "blacklist amdgpu" | sudo tee -a /etc/modprobe.d/60-blacklist.conf
 	# echo 'add_dracutmodules+=" bluetooth "' | sudo tee /etc/dracut.conf.d/90-bluetooth.conf
