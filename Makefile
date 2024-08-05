@@ -37,29 +37,32 @@ links:
 .PHONY: base
 base:
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/base)
+	gpg --recv-key 030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
-ifeq ($(DISTRO),suse)
-	sudo update-alternatives --install /usr/bin/vi vi /usr/bin/vim 50
-else ifeq ($(DISTRO),debian)
+ifeq ($(DISTRO),debian)
 	sudo update-alternatives --config editor
-endif
-
 	sudo update-alternatives --config vi
+endif
 
 .PHONY: dev
 dev:
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/dev)
 
+ifeq ($(DISTRO),debian)
 	sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 40
 	sudo update-alternatives --config vi
+else ifeq ($(DISTRO),suse)
+	sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 40 || true
+endif
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
-	tmux source-file $$HOME/.config/tmux/tmux.conf
+	tmux source-file $$HOME/.config/tmux/tmux.conf || true
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
 .PHONY: flatpak
 flatpak:
-	flatpak install flathub $$(tr "\n" " " < $(DEPS_DIR)/flatpak)
+	- $(INSTALL_CMD) flatpak
+	- flatpak install flathub $$(tr "\n" " " < $(DEPS_DIR)/flatpak)
 
 .PHONY: wm
 wm: base flatpak
@@ -86,10 +89,7 @@ autologin:
 	echo "ExecStart=" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	echo "ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $$(whoami) %I \$$TERM" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	echo "Environment=XDG_SESSION_TYPE=wayland" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
-ifeq ($(DISTRO),suse)
-	# enable getty@tty1
-	sudo ln -sf /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
-endif
+	sudo systemctl set-default multi-user.target
 
 .PHONY: desktop
 desktop: wm autologin
