@@ -3,6 +3,8 @@ local harpoon
 return {
 	"ThePrimeagen/harpoon",
 	branch = "harpoon2",
+	-- https://github.com/ThePrimeagen/harpoon/issues/577 https://github.com/ThePrimeagen/harpoon/pull/557
+	commit = "e76cb03c420bb74a5900a5b3e1dde776156af45f",
 	dependencies = {
 		-- "nvim-telescope/telescope.nvim",
 		"nvim-lua/plenary.nvim",
