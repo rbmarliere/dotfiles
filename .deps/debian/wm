@@ -21,6 +21,7 @@ network-manager-openvpn
 ntp
 pavucontrol
 pinentry-gnome3
+policykit-1-gnome
 python3-i3ipc
 seahorse
 slurp
