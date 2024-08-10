@@ -4,6 +4,7 @@ brightnessctl
 copyq
 cups
 desktop-base
+ffmpegthumbnailer
 firefox-esr
 gnome-calendar
 gnome-control-center
@@ -11,9 +12,15 @@ gnome-keyring
 gnome-settings-daemon
 gnome-shell
 grim
+gstreamer1.0-plugins-bad
+gstreamer1.0-plugins-libav
+gstreamer1.0-plugins-ugly
 heif-gdk-pixbuf
+heif-thumbnailer
 jq
+libheif-plugin-ffmpegdec
 libnotify-bin
+loupe
 mako-notifier
 nautilus
 network-manager
@@ -31,7 +38,6 @@ swayidle
 swaylock
 systemd-resolved
 udisks2
-viewnior
 vlc
 waybar
 wf-recorder

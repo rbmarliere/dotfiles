@@ -7,6 +7,7 @@ avahi
 blueman
 brightnessctl
 cups
+ffmpegthumbnailer
 firefox
 foot
 foot-extra-terminfo
@@ -17,8 +18,15 @@ gnome-keyring
 gnome-settings-daemon
 gnome-shell
 grim
+gstreamer-plugins-bad
+gstreamer-plugins-libav
+gstreamer-plugins-ugly
+heif-thumbnailer
 jq
+libheif-HEIF
+libheif-ffmpeg
 libnotify-tools
+loupe
 mako
 nautilus
 ntp
@@ -33,7 +41,6 @@ swayidle
 swaylock
 systemd-network
 udisks2
-viewnior
 vlc
 waybar
 wf-recorder
