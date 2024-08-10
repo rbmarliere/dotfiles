@@ -11,6 +11,7 @@ gnome-keyring
 gnome-settings-daemon
 gnome-shell
 grim
+heif-gdk-pixbuf
 jq
 libnotify-bin
 mako-notifier
