@@ -16,11 +16,14 @@ return {
 
 		require("telescope").load_extension("git_worktree")
 
-		-- local Hooks = require("git-worktree.hooks")
-		-- Hooks.register(Hooks.type.SWITCH, function()
-		-- 	local cwd = vim.loop.cwd()
-		-- 	require("auto-session").RestoreSession(cwd)
-		-- end)
+		local Hooks = require("git-worktree.hooks")
+		Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)
+			require("plenary.job"):new({
+				command = "git",
+				args= { "submodule", "update", "--recursive", "--init" },
+				cwd = path
+			}):start()
+		end)
 
 		-- if cwd is a bare repo and there's zero arguments to the cmd,
 		-- open telescope extension upon entering nvim
