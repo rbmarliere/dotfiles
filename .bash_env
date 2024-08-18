@@ -5,7 +5,7 @@ export EDITOR="vi"
 export GPG_TTY=$(tty)
 export LESS="-R --mouse"
 export PATH="/usr/lib/ccache:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/node_modules/.bin:/var/lib/flatpak/exports/bin:$PATH"
-export PROJECTS="$HOME/src"
+export PROJECTS="$HOME/src/**"
 export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:/home/$(whoami)/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
 
 # https://stackoverflow.com/questions/9457233/unlimited-bash-history
