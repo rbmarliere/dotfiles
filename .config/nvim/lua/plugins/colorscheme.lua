@@ -93,16 +93,16 @@ return {
 	lazy = false,
 	priority = 1000,
 	config = function()
-		vim.opt.termguicolors = true
-		vim.cmd.colorscheme("alabaster")
-		for group, settings in pairs(my_theme) do
-			vim.api.nvim_set_hl(0, group, settings)
-		end
 		if os.getenv("TERM") == "linux" then
 			vim.opt.background = "dark"
 		else
 			vim.opt.background = "light"
+			vim.opt.termguicolors = true
+			vim.cmd.colorscheme("alabaster")
+			for group, settings in pairs(my_theme) do
+				vim.api.nvim_set_hl(0, group, settings)
+			end
+			create_groups()
 		end
-		create_groups()
 	end,
 }
