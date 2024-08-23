@@ -70,9 +70,12 @@ exec swayidle -w \
 exec gpg-connect-agent reloadagent /bye
 exec ~/.local/bin/notification-mon
 exec ~/.local/bin/inactive_windows_transparency.py
-exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
-exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec gnome-keyring-daemon --start --components=secrets
+
+# https://github.com/swaywm/sway/issues/5732#issuecomment-1583336383
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+exec hash dbus-update-activation-environment 2>/dev/null && \
+     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
 
 include autoload
 include private
