@@ -7,8 +7,8 @@ if [ -f /usr/share/bash-completion/bash_completion ]; then
 		source /usr/share/bash-completion/completions/git
 		__git_complete g __git_main
 	fi
-	for f in $HOME/.local/bin/*.completion; do
-		source $f
+	for f in "$HOME"/.local/bin/*.completion; do
+		source "$f"
 	done
 fi
 
@@ -33,7 +33,7 @@ root_runner() {
 	fi
 	if [[ $(cat /etc/debian_chroot 2>/dev/null) != "" ]]; then
 		# inside chroot, must execute outside
-		sudo chroot /proc/1/cwd /bin/sudo -u $(whoami) /bin/bash -c "XDG_RUNTIME_DIR=/run/user/$(id -u) $1"
+		sudo chroot /proc/1/cwd /bin/sudo -u "$(whoami)" /bin/bash -c "XDG_RUNTIME_DIR=/run/user/$(id -u) $1"
 		return $?
 	else
 		eval "$1"
@@ -43,11 +43,14 @@ root_runner() {
 
 shut() {
 	if [ -n "$TMUX" ]; then
-		tmux detach-client -E "/bin/bash -lc 'shut $@'"
+		tmux detach-client -E "/bin/bash -lc 'shut $*'"
 		return
 	fi
-	echo shut?
-	read
+	read -p "Shutdown? [y|N] " ans
+	ans=${ans:-N}
+	if [[ ! "$ans" =~ ^[Yy]$ ]]; then
+		return
+	fi
 	if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
 		root_runner "systemctl --user stop tmux"
 	fi
@@ -56,11 +59,14 @@ shut() {
 
 reboot() {
 	if [ -n "$TMUX" ]; then
-		tmux detach-client -E "/bin/bash -lc 'reboot $@'"
+		tmux detach-client -E "/bin/bash -lc 'reboot $*'"
 		return
 	fi
-	echo reboot $1?
-	read
+	read -p "Reboot? [y|N] " ans
+	ans=${ans:-N}
+	if [[ ! "$ans" =~ ^[Yy]$ ]]; then
+		return
+	fi
 	if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
 		root_runner "systemctl --user stop tmux"
 	fi
