@@ -1,4 +1,3 @@
-Mesa-dri-nouveau
 NetworkManager
 NetworkManager-applet
 NetworkManager-applet-openvpn
@@ -21,13 +20,12 @@ grim
 gstreamer-plugins-bad
 gstreamer-plugins-libav
 gstreamer-plugins-ugly
-heif-thumbnailer
 jq
-libheif-HEIF
 libheif-ffmpeg
 libnotify-tools
 loupe
 mako
+mozilla-openh264
 nautilus
 ntp
 pavucontrol
@@ -36,6 +34,7 @@ polkit-gnome
 python3-i3ipc
 seahorse
 slurp
+sshfs
 sway
 swayidle
 swaylock
@@ -47,6 +46,6 @@ wf-recorder
 wireplumber
 wl-clipboard
 wofi
+xdg-desktop-portal-gnome
 xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr
-xf86-video-nouveau

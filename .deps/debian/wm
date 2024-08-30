@@ -33,6 +33,7 @@ policykit-1-gnome
 python3-i3ipc
 seahorse
 slurp
+sshfs
 sway
 swayidle
 swaylock
@@ -44,5 +45,6 @@ wf-recorder
 wireplumber
 wl-clipboard
 wofi
+xdg-desktop-portal-gnome
 xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr

@@ -14,6 +14,6 @@ if [ -z "$remote" ]; then
 	remote=$(echo "$url" | awk -F'[:/]' '{print $(NF-1)}')
 fi
 
-cmd="git clone --recursive --bare $url -o $remote $repo"
+cmd="git clone --bare $url -o $remote $repo"
 echo "$cmd"
 $cmd

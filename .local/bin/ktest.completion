@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TESTS_DIR="$HOME/src/rbmarliere/ktest/main/tests"
+TESTS_DIR="$HOME/src/linux/ktest/main/tests"
 
 _ktest_completion() {
 	# https://stackoverflow.com/questions/62979947/how-to-autocomplete-files-under-specific-directory

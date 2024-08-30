@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Newsboat
-Exec=foot -T newsboat -e sh -c "ssh server -t 'tmux -L newsboat a'"
+Exec=foot -a newsboat -e sh -c "ssh server -t 'tmux -L newsboat a'"
 Type=Application

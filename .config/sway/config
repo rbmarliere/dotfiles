@@ -70,7 +70,7 @@ exec swayidle -w \
 exec gpg-connect-agent reloadagent /bye
 exec ~/.local/bin/notification-mon
 exec ~/.local/bin/inactive_windows_transparency.py
-exec gnome-keyring-daemon --start --components=secrets
+# exec gnome-keyring-daemon --start --components=secrets
 
 # https://github.com/swaywm/sway/issues/5732#issuecomment-1583336383
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP

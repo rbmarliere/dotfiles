@@ -95,20 +95,6 @@ return {
 							},
 						})
 					end,
-					perlnavigator = function()
-						lspconfig.perlnavigator.setup({
-							settings = {
-								perlnavigator = {
-									-- perlPath = "~/perl5",
-									enableWarnings = true,
-									-- includePaths = { "$workspaceFolder/../main" },
-									perltidyProfile = ".perltidyrc",
-									perlcriticProfile = ".perlcriticrc",
-									perlcriticEnabled = true,
-								},
-							},
-						})
-					end,
 				})
 
 				-- https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero

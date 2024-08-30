@@ -10,6 +10,7 @@ return {
 			local cmd = "git rev-parse --is-inside-work-tree"
 			return vim.fn.system(cmd) == "true\n"
 		end,
+		silent_restore = false,
 		-- auto_restore_enabled = nil,
 		-- auto_session_suppress_dirs = nil,
 		-- auto_session_use_git_branch = false,

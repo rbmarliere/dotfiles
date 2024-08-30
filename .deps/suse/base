@@ -1,4 +1,5 @@
 bash-completion
+git-core
 fzf
 fzf-bash-completion
 htop

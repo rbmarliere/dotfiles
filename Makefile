@@ -29,7 +29,7 @@ DEPS_DIR := .deps/$(DISTRO)
 all: base links
 
 .PHONY: links
-links:
+links: base
 	mkdir -p $(DIR)
 	stow --verbose --restow --target=$$HOME .
 	touch ~/.config/neomutt/aliases
@@ -48,11 +48,10 @@ endif
 dev:
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/dev)
 
-ifeq ($(DISTRO),debian)
 	sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 40
+	sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 40
+ifeq ($(DISTRO),debian)
 	sudo update-alternatives --config vi
-else ifeq ($(DISTRO),suse)
-	sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 40 || true
 endif
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
@@ -65,21 +64,24 @@ flatpak:
 	- flatpak install flathub $$(tr "\n" " " < $(DEPS_DIR)/flatpak)
 
 .PHONY: wm
-wm: base flatpak
+wm: flatpak
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/wm)
 	fc-cache
 
 
 ifeq ($(DISTRO),suse)
 	sudo ln -sf /usr/share/terminfo/f/foot-extra /usr/share/terminfo/f/foot
-
 	# printer
 	sudo systemctl enable cups
 	sudo systemctl enable avahi-daemon
 	# sudo systemctl disable firewalld
-
-	# zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/ openSUSE_Tumbleweed/ packman
-	# zypper dup --from packman --allow-vendor-change
+	# multimedia
+	sudo zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/ openSUSE_Tumbleweed/ packman
+	sudo zypper refresh
+	sudo zypper dup --from packman --allow-vendor-change
+	sudo zypper install --from packman ffmpeg gstreamer-plugins-{good,bad,ugly,libav} libavcodec vlc-codecs
+	# nvidia
+	sudo zypper install nvidia-drivers-G06
 endif
 
 .PHONY: autologin
@@ -88,7 +90,6 @@ autologin:
 	echo "[Service]" | sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	echo "ExecStart=" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	echo "ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $$(whoami) %I \$$TERM" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
-	echo "Environment=XDG_SESSION_TYPE=wayland" | sudo tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	sudo systemctl set-default multi-user.target
 
 .PHONY: desktop
@@ -103,9 +104,9 @@ ifeq ($(DISTRO),suse)
 	sudo zypper mr -d $$(zypper lr | awk -F '|' '{IGNORECASE=1} /nvidia/ {print $$2}') || true
 	echo "blacklist nvidia" | sudo tee /etc/modprobe.d/60-blacklist.conf
 	echo "blacklist amdgpu" | sudo tee -a /etc/modprobe.d/60-blacklist.conf
-	# echo 'add_dracutmodules+=" bluetooth "' | sudo tee /etc/dracut.conf.d/90-bluetooth.conf
 	sudo dracut --force
-	# sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+	echo GRUB_CMDLINE_LINUX="nvidia-drm.modeset=0" | sudo tee -a /etc/default/grub
+	sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 endif
 
 .PHONY: laptop
