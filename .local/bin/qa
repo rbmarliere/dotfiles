@@ -1,0 +1,200 @@
+#!/bin/bash
+
+# https://openqa-bites.github.io/openqa/openqa-cli-cheat-sheet/
+HOST=http://rmarliere-openqa.qe.prg2.suse.org/
+#HOST=http://10.146.4.56/
+
+_set_host() {
+	case "$HOST" in
+	ooo | o3) HOST="https://openqa.opensuse.org" ;;
+	osd) HOST="http://openqa.suse.de" ;;
+	esac
+}
+
+_qa() {
+	local CMD=$*
+	shift
+
+	echo
+	echo "$CMD"
+
+	echo
+	read -rp "Confirm? [y|N] " ans
+	ans=${ans:-N}
+	if [[ ! "$ans" =~ ^[Yy]$ ]]; then
+		return 1
+	fi
+
+	$CMD
+}
+
+qa() {
+	_set_host
+	_qa openqa-cli api -v --host $HOST "$@"
+}
+
+qa-load() {
+	_set_host
+	_qa openqa-load-templates --host $HOST --update templates.json
+}
+
+qa-load-schedule() {
+	TEMPLATE=$1
+	shift
+	[[ -z $TEMPLATE ]] && return 1
+
+	qa -X POST job_templates_scheduling/1 schema=JobTemplates-01.yaml --param-file template=$TEMPLATE
+}
+
+qa-dump() {
+	_set_host
+
+	local GROUP=$1
+	shift
+
+	if [ -z $GROUP ]; then
+		echo "usage: qa-dump GROUP"
+		return 1
+	fi
+	if [ -f templates.json ]; then
+		echo "error: templates.json exists, refusing to overwrite"
+		return 1
+	fi
+
+	_qa openqa-dump-templates --host "$HOST" --group "$GROUP" --json >templates.json
+}
+
+qa-clone() {
+	_set_host
+
+	local NS='_OBSOLETE=1 _GROUP=0 BUILD="rbmarliere" TEST="rbmarliere"'
+	local SKIP_DOWNLOAD=
+	local WITHIN_INSTANCE=
+	local _HOST="--host $HOST"
+
+	usage() {
+		echo "usage: qa-clone [options] JOB_NUMBER"
+		echo "  -s  --skip-download             Same openqa-clone-job option"
+		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
+		echo "  -w  --within-instance           Same as openqa-clone-job option"
+	}
+
+	if [[ $# -lt 1 ]]; then
+		usage
+		return 1
+	fi
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		-h | --help)
+			usage
+			return 0
+			;;
+		-s | --skip-download) SKIP_DOWNLOAD=--skip-download ;;
+		-u | --unnamed) NS= ;;
+		-w | --within-instance)
+			_HOST=
+			WITHIN_INSTANCE="--within-instance $HOST"
+			;;
+		*) break ;;
+		esac
+		shift
+	done
+
+	local JOB=$1
+	shift
+
+	if [[ $_HOST == "" && ! "$JOB" =~ ^-?[0-9]+$ ]]; then
+		echo "error: JOB should be a number"
+		return 1
+	fi
+
+	_qa openqa-clone-job -v $_HOST $WITHIN_INSTANCE $SKIP_DOWNLOAD $JOB "$@" $NS
+}
+
+qa-get() {
+	local ID=$1
+	shift
+	[[ -z $ID ]] && return 1
+	qa jobs/$ID
+}
+
+qa-restart() {
+	local ID=$1
+	shift
+	[[ -z $ID ]] && return 1
+	local SKIP_PARENTS=
+	if [[ $1 == -s ]]; then
+		SKIP_PARENTS=skip_parents=1
+	fi
+	qa -X POST jobs/$ID/restart $SKIP_PARENTS
+}
+
+qa-start() {
+	qa -X POST isos BUILD="$(date +"%Y%m%d")" "$@"
+	# ARCH="x86_64" DISTRI="microos" FLAVOR="MicroOS-Image" VERSION="Tumbleweed" HDD_1="openSUSE-MicroOS.x86_64-kvm-and-xen_nohealthchecker.qcow2"
+}
+
+qa-stop() {
+	local ID=$1
+	shift
+	[[ -z $ID ]] && return 1
+	qa -X POST jobs/$ID/cancel
+}
+
+qa-delete() {
+	local ID=$1
+	shift
+	[[ -z $ID ]] && return 1
+	qa -X DELETE jobs/$ID
+}
+
+qa-sync-allow() {
+	echo fixing openqa:/var/lib/openqa/tests permissions...
+	ssh openqa "chown opensuse:geekotest -R /var/lib/openqa/tests/"
+	ssh openqa "chmod g+w /var/lib/openqa/tests/*"
+}
+
+qa-sync-casedir() {
+	local CASEDIR=$1
+	shift
+	[[ -z $CASEDIR ]] && return 1
+	_qa rsync -raP --delete $CASEDIR/ openqa:/var/lib/openqa/tests/$(basename $(dirname $(realpath $CASEDIR))) || return
+
+	echo linking suse needles...
+	for product in alp sle sle-micro; do
+		local link=/var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
+		ssh openqa "rm -f $link; ln -s /var/lib/openqa/tests/os-autoinst-needles-sles $link"
+	done
+
+	echo linking opensuse needles...
+	for product in microos opensuse; do
+		local link=/var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
+		ssh openqa "rm -f $link; ln -s /var/lib/openqa/tests/os-autoinst-needles-opensuse $link"
+	done
+
+	qa-sync-allow
+}
+
+qa-sync-needles() {
+	local NEEDLES=$1
+	shift
+	[[ -z $NEEDLES ]] && return 1
+
+	_qa rsync -raP --delete $NEEDLES/ openqa:/var/lib/openqa/tests/$(basename $(dirname $(realpath $NEEDLES))) || return
+
+	qa-sync-allow
+}
+
+qa-sync() {
+	local CASEDIR=$1
+	shift
+	local NEEDLES=$1
+	shift
+	if [[ -z $CASEDIR || -z $NEEDLES ]]; then
+		echo "usage: qa-sync CASEDIR NEEDLES"
+		return 1
+	fi
+	qa-sync-casedir $CASEDIR
+	qa-sync-needles $NEEDLES
+}
