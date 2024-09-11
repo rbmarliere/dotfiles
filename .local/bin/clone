@@ -1,19 +1,39 @@
 #!/bin/bash
 
-url=$1
-remote=$2
+if [ $# -lt 1 ]; then
+	echo "usage: clone <url> [remote name] [target dir]"
+	exit
+fi
 
-if [ -z "$url" ]; then
+URL="$1"
+if [ -z "$URL" ]; then
 	echo "no url specified"
 	exit 1
 fi
 
-repo=$(basename -s .git "$url")
-
-if [ -z "$remote" ]; then
-	remote=$(echo "$url" | awk -F'[:/]' '{print $(NF-1)}')
+REMOTE="$2"
+if [ -z "$REMOTE" ]; then
+	REMOTE=$(echo "$URL" | awk -F'[:/]' '{print $(NF-1)}')
 fi
 
-cmd="git clone --bare $url -o $remote $repo"
-echo "$cmd"
-$cmd
+TARGET="$3"
+if [ -z "$TARGET" ]; then
+	TARGET=$(basename -s .git "$URL")
+fi
+
+CMD="git clone --bare $URL -o $REMOTE $TARGET"
+
+set -x
+if ! $CMD; then
+	echo "error cloning $URL"
+	exit 1
+fi
+cd $TARGET
+DEFAULT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if ! git worktree add $DEFAULT_BRANCH; then
+	echo "error creating worktreer $DEFAULT_BRANCH"
+	exit 1
+fi
+cd $DEFAULT_BRANCH
+git submodule update --init --recursive
+set +x
