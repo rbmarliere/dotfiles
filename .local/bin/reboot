@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ -n "$TMUX" ]; then
+	tmux detach-client -E "/bin/bash -lc 'reboot $*'"
+	exit
+fi
+
+read -p "Reboot? [y|N] " ans
+ans=${ans:-N}
+if [[ ! "$ans" =~ ^[Yy]$ ]]; then
+	exit
+fi
+
+if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
+	root_runner "systemctl --user stop tmux"
+fi
+
+if [ -n "$1" ]; then
+	root_runner "sudo grub-reboot $1 || sudo grub2-reboot $1"
+fi
+
+root_runner "sudo shutdown -r --no-wall now"

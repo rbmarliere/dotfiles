@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	exit
+fi
+
+if [[ $(cat /etc/debian_chroot 2>/dev/null) != "" ]]; then
+	# inside chroot, must execute outside
+	sudo chroot /proc/1/cwd /bin/sudo -u "$(whoami)" /bin/bash -c "XDG_RUNTIME_DIR=/run/user/$(id -u) $1"
+else
+	eval "$1"
+fi
