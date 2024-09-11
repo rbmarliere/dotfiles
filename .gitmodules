@@ -4,3 +4,6 @@
 [submodule ".deps/tpm"]
 	path = .deps/tpm
 	url = https://github.com/tmux-plugins/tpm.git
+[submodule ".deps/bash-preexec"]
+	path = .deps/bash-preexec
+	url = https://github.com/rcaloras/bash-preexec.git
