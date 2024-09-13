@@ -1,8 +1,8 @@
-local get_qf = function()
+local M = {}
+
+function M.get_qf()
 	local _qflist = vim.fn.getqflist()
-	if #_qflist == 0 then
-		return nil
-	end
+	if #_qflist == 0 then return nil end
 	local _qfinfo = vim.fn.getqflist({ title = 1 })
 
 	for _, entry in ipairs(_qflist) do
@@ -12,10 +12,10 @@ local get_qf = function()
 		entry.bufnr = nil
 	end
 
-	return { _qflist, _qfinfo }
+	local _setqflist = string.format('call setqflist(%s)', vim.fn.string(_qflist))
+	local _setqfinfo = string.format('call setqflist([], "a", %s)', vim.fn.string(_qfinfo))
+	return { _setqflist, _setqfinfo, 'copen' }
 end
-
-local M = {}
 
 function M.toggle_qf()
 	local opened_in_tab = false
@@ -40,15 +40,12 @@ M.save_qf = function(opts)
 	end
 
 	local filename = vim.fn.expand(opts.args)
-	local qf = get_qf()
+	local qf = M.get_qf()
 	if qf == nil then
 		return
 	end
 
-	local _setqflist = string.format("call setqflist(%s)", vim.fn.string(qf[1]))
-	local _setqfinfo = string.format('call setqflist([], "a", %s)', vim.fn.string(qf[2]))
-
-	vim.fn.writefile({ _setqflist, _setqfinfo }, filename)
+	vim.fn.writefile(qf, filename)
 end
 
 return M
