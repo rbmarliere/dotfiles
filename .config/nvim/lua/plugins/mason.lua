@@ -32,13 +32,6 @@ return {
 							cmd = { "clangd", "--offset-encoding=utf-16" },
 						})
 					end,
-					-- ruff_lsp = function()
-					-- 	lspconfig.ruff_lsp.setup({
-					-- 		settings = {
-					-- 			interpreter = vim.fn.getcwd() .. "/.venv/bin/python",
-					-- 		},
-					-- 	})
-					-- end,
 					-- pyright = function()
 					-- 	lspconfig.pyright.setup({
 					-- 		settings = {
@@ -146,7 +139,8 @@ return {
 					"lua-language-server",
 					"perlnavigator",
 					"prettier",
-					"ruff-lsp",
+					"pyright",
+					"ruff",
 					"rust-analyzer",
 					"shfmt",
 					"stylua",
