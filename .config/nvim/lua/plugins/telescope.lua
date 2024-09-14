@@ -135,7 +135,8 @@ return {
 							if not self.state then
 								return
 							end
-							local input = vim.api.nvim_replace_termcodes(direction > 0 and "<C-e>" or "<C-y>", true, false, true)
+							local input =
+								vim.api.nvim_replace_termcodes(direction > 0 and "<C-e>" or "<C-y>", true, false, true)
 							local count = math.abs(direction)
 							vim.api.nvim_buf_call(self.state.termopen_bufnr, function()
 								vim.cmd([[normal! ]] .. count .. input)
@@ -162,12 +163,12 @@ return {
 				file_browser = {
 					-- https://github.com/nvim-telescope/telescope.nvim/issues/2779
 					temp__scrolling_limit = 1000,
-					layout_strategy = "flex",
-					layout_config = {
-						vertical = {
-							preview_height = 0,
-						},
-					},
+					-- layout_strategy = "flex",
+					-- layout_config = {
+					-- 	vertical = {
+					-- 		preview_height = 0,
+					-- 	},
+					-- },
 					grouped = true,
 					prompt_path = true,
 					git_status = false,
@@ -193,6 +194,14 @@ return {
 				},
 			},
 		}
+
+		vim.keymap.set("v", "<M-g>", function()
+			vim.cmd('normal! "vy')
+			local visual_selection = vim.fn.getreg("v")
+			telescope.extensions.live_grep_args.live_grep_args({
+				default_text = visual_selection,
+			})
+		end, { noremap = true, silent = true })
 
 		telescope.setup(opts)
 		-- telescope.load_extension("cscope")
