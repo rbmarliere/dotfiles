@@ -14,7 +14,7 @@ set $ninth parenright
 set $tenth plus
 set $eleventh minus
 
-bindsym $mod+Shift+r exec swaymsg resize set width 1400 px height 1400 px, move right 200 px
+bindsym $mod+Shift+r exec swaymsg resize set width 1400 px height 1400 px
 bindsym $mod+n exec ~/.local/bin/notes
 
 set $out1 "Samsung Electric Company LC34G55T H4ZT500316"
@@ -25,19 +25,19 @@ workspace 1 output $out1
 workspace 2 output $out1
 workspace 3 output $out1
 workspace 4 output $out1
+workspace 5 output $out1
 
-set $out2 "HXS BM274K1W 0x00000001"
+set $out2 "HSX BM274K1W 0x000F69B5"
 output $out2 resolution 2560x1440 scale 1 pos 0 0
-workspace 10 output $out2
-workspace 11 output $out2
+workspace 6 output $out2
+workspace 7 output $out2
+workspace 8 output $out2
+workspace 9 output $out2
 
 set $out3 "Dell Inc. DELL P2222H 14XP8Q3"
 output $out3 pos 6000 0 transform 270
-workspace 5 output $out3
-workspace 6 output $out3
-workspace 7 output $out3
-workspace 8 output $out3
-workspace 9 output $out3
+workspace 10 output $out3
+workspace 11 output $out3
 
 input type:keyboard {
 	xkb_layout rbm
@@ -45,24 +45,28 @@ input type:keyboard {
 	# inspired by https://github.com/ThePrimeagen/keyboards
 }
 
-for_window [app_id="notes"] floating enable, resize set width 1400 px height 1400 px, move right 200 px, sticky enable
-for_window [app_id="firefox"] move container to workspace number 1
-for_window [app_id="neomutt"] move container to workspace number 2, floating enable, resize set width 1400 px height 1400 px, move right 200 px
-for_window [app_id="weechat"] move container to workspace number 3, floating enable, resize set width 1650 px height 1400 px
-for_window [app_id="newsboat"] move container to workspace number 4, floating enable, resize set width 1400 px height 1400 px, move right 200 px
-for_window [app_id="org.gnome.Calendar"] move container to workspace number 10
-for_window [class="Slack"] move container to workspace number 10
-for_window [app_id="org.gnome.Fractal"] move container to workspace number 11
-for_window [app_id="org.telegram.desktop"] move container to workspace number 11
-for_window [class="discord"] move container to workspace number 11
+for_window [app_id="evolution-alarm-notify"] floating enable
+for_window [app_id="notes"] floating enable, resize set width 1400 px height 1400 px, sticky enable
 
-exec firefox
-exec foot -a newsboat bash -l -c "sleep 10 && ssh server -t 'tmux -L newsboat a'"
-exec foot -a neomutt bash -l -c "sleep 10 && ssh server -t 'tmux -L neomutt a'"
-exec foot -a weechat bash -l -c "sleep 10 && ssh server -t 'tmux -L weechat a'"
-exec flatpak run com.discordapp.Discord
-exec flatpak run org.gnome.Fractal
-exec flatpak run org.telegram.desktop
-exec flatpak run com.slack.Slack
-exec gnome-calendar
+assign [app_id="firefox"] 1
+assign [app_id="evolution$"] 6
+assign [class="Slack"] 6
+assign [app_id="org.telegram.desktop"] 7
+assign [class="discord"] 7
+assign [app_id="org.gnome.Fractal"] 8
+assign [app_id="first_term"] 10
 
+exec /usr/bin/tmux new-session -d "~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh"
+
+exec swaymsg workspace 10 && swaymsg layout tabbed && foot -a first_term
+
+exec sleep 1 && firefox
+exec sleep 2 && flatpak run com.discordapp.Discord
+exec sleep 2 && flatpak run org.telegram.desktop
+exec sleep 2 && flatpak run org.gnome.Fractal
+exec sleep 3 && evolution
+exec sleep 4 && flatpak run com.slack.Slack
+
+exec sleep 5 && foot -H bash -l -c "sway.neomutt"
+exec sleep 7 && foot -H bash -l -c "sway.weechat"
+exec sleep 9 && foot -H bash -l -c "sway.newsboat"

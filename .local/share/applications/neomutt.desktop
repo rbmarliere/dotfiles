@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Neomutt
-Exec=foot -a neomutt -e sh -c "ssh server -t 'tmux -L neomutt a'"
+Exec=foot -H bash -l -c "sway.neomutt"
 Type=Application

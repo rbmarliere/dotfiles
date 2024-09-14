@@ -2,6 +2,7 @@ bash-completion
 dnsutils
 fzf
 htop
+libnotify-bin
 net-tools
 psmisc
 stow

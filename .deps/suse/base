@@ -1,8 +1,9 @@
 bash-completion
-git-core
 fzf
 fzf-bash-completion
+git-core
 htop
+libnotify-tools
 psmisc
 stow
 tmux

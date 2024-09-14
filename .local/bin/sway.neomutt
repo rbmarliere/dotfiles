@@ -1,0 +1,26 @@
+#!/bin/bash
+
+echo -ne "\033]0;NEOMUTT\007"
+sleep 1
+
+if grep -qE "desktop" ~/.config/sway/autoload; then
+	swaymsg '[title="NEOMUTT"]' move container to workspace 2, floating enable, resize set 1280 px 1400 px
+fi
+
+ if ! tmux -L neomutt list-sessions 2>/dev/null; then
+	tmux -L neomutt new-session -d -s neomutt
+	tmux -L neomutt set-option -g allow-rename off
+	tmux -L neomutt set-option -g automatic-rename off
+
+	i=1
+	while IFS= read -r acc; do
+		acc_file=${acc/private\///}
+		tmux -L neomutt new-window -t "neomutt:$i" -n "$acc_file"
+		tmux -L neomutt send-keys "neomutt -P $acc" C-m
+		((i++))
+	done < ~/.config/neomutt/accounts/enabled
+
+	tmux -L neomutt kill-pane -t neomutt:0
+fi
+
+tmux -L neomutt attach -t neomutt

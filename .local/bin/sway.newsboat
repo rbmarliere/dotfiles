@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo -ne "\033]0;NEWSBOAT\007"
+sleep 1
+
+if grep -qE "desktop" ~/.config/sway/autoload; then
+	swaymsg '[title="NEWSBOAT"]' move container to workspace 4, floating enable, resize set 1280 px 1400 px
+fi
+
+if ! tmux -L newsboat list-sessions 2>/dev/null; then
+	tmux -L newsboat new-session -d -s newsboat "vi ~/.config/newsboat/urls"
+	tmux -L newsboat new-window -t "newsboat:1"
+	tmux -L newsboat send-keys "newsboat" C-m
+fi
+
+tmux -L newsboat attach -t newsboat

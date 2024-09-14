@@ -6,12 +6,12 @@ avahi
 blueman
 brightnessctl
 cups
+evolution
 ffmpegthumbnailer
 firefox
 foot
 foot-extra-terminfo
 gdk-pixbuf-loader-libheif
-gnome-calendar
 gnome-control-center
 gnome-keyring
 gnome-settings-daemon
@@ -23,6 +23,7 @@ gstreamer-plugins-ugly
 jq
 libheif-ffmpeg
 libnotify-tools
+libqt5-qtwayland
 loupe
 mako
 mozilla-openh264

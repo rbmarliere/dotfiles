@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo -ne "\033]0;WEECHAT\007"
+sleep 1
+
+if grep -qE "desktop" ~/.config/sway/autoload; then
+	swaymsg '[title="WEECHAT"]' move container to workspace 3, floating enable, resize set 1700 px 1400 px
+fi
+
+ssh server -t 'tmux -L weechat attach'

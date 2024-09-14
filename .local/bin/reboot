@@ -11,9 +11,10 @@ if [[ ! "$ans" =~ ^[Yy]$ ]]; then
 	exit
 fi
 
-if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
-	root_runner "systemctl --user stop tmux"
-fi
+root_runner "$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh"
+# if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
+# 	root_runner "systemctl --user stop tmux"
+# fi
 
 if [ -n "$1" ]; then
 	root_runner "sudo grub-reboot $1 || sudo grub2-reboot $1"

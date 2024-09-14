@@ -5,7 +5,4 @@ exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 set $term foot bash -lc 'ch sid'
 bindsym $mod+Shift+Return exec foot
 
-exec copyq --start-server
-bindsym $mod+x exec copyq toggle
-
 include ../desktop

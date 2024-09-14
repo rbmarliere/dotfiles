@@ -2,7 +2,6 @@
 
 exec /usr/libexec/polkit-gnome-authentication-agent-1 &
 
-exec QT_QPA_PLATFORM=xcb flatpak run com.github.hluk.copyq --start-server
-bindsym $mod+x exec flatpak run com.github.hluk.copyq toggle
+for_window [title="^YaST"] floating enable
 
 include ../desktop
