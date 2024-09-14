@@ -29,13 +29,15 @@ DEPS_DIR := .deps/$(DISTRO)
 all: base links
 
 .PHONY: links
-links: base
+links:
 	mkdir -p $(DIR)
 	stow --verbose --restow --target=$$HOME .
 	touch ~/.config/neomutt/aliases
+	source ~/.bashrc
 
 .PHONY: base
 base:
+	git submodule update --init --recursive
 	$(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/base)
 	gpg --keyserver hkps://keyserver.ubuntu.com --recv-key 030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
