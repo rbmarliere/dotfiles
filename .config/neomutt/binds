@@ -18,14 +18,10 @@ bind index <Backtab> previous-unread
 bind index <Tab> next-unread
 bind index zA collapse-all
 bind index za collapse-thread
-bind index,pager <F1> sidebar-page-up
-bind index,pager <F2> sidebar-page-down
-bind index,pager B sidebar-toggle-visible
 bind index,pager N search-opposite
 bind index,pager R reply
-bind index,pager \CN sidebar-next
-bind index,pager \CO sidebar-open
-bind index,pager \CP sidebar-prev
+bind generic,index,pager \Cn next-entry
+bind generic,index,pager \Cp previous-entry
 bind index,pager r group-reply
 bind index,pager,attach g noop
 bind pager - exit

@@ -5,4 +5,4 @@ set realname="Ricardo B. Marliere"
 set from="rbmarliere@gmail.com"
 set sendmail="msmtp -a gmail.com"
 
-source "~/.config/neomutt/accounts/gmail"
+source "~/.config/neomutt/gmail"

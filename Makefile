@@ -1,5 +1,5 @@
 DIR = \
-	$$HOME/.cache/neomutt/ \
+	$$HOME/mail/.cache/neomutt.msg \
 	$$HOME/.cache/nvim/bkp \
 	$$HOME/.cache/nvim/swp \
 	$$HOME/.cache/nvim/und \
