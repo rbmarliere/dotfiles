@@ -8,20 +8,21 @@ if [ -z "$PROJECTS" ]; then
 	exit 1
 fi
 
-selected=$(find $PROJECTS -mindepth 1 -maxdepth 1 -type d -follow ! -name ".*" 2>/dev/null | sort -r | fzf)
+SELECTED=$(find $PROJECTS -mindepth 1 -maxdepth 1 -type d -follow ! -name ".*" 2>/dev/null | sort -r | fzf)
 
-if [ -z "$selected" ]; then
+if [ -z "$SELECTED" ]; then
 	exit 0
 fi
 
-selected_name=$(basename "$selected" | tr . _ | tr ':' _)
+SESSION=$(basename "$(dirname "$SELECTED")")/$(basename "$SELECTED")
+SESSION=$(echo "$SESSION" | tr . _ | tr ':' _)
 
-if ! tmux has-session -t="$selected_name" 2> /dev/null; then
-	tmux new-session -ds "$selected_name" -c "$selected"
+if ! tmux has-session -t="$SESSION" 2> /dev/null; then
+	tmux new-session -ds "$SESSION" -c "$SELECTED"
 fi
 
 if [ -z "$TMUX" ]; then
-	tmux attach-session -t "$selected_name"
+	tmux attach-session -t "$SESSION"
 else
-	tmux switch-client -t "$selected_name"
+	tmux switch-client -t "$SESSION"
 fi
