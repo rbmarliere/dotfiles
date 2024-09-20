@@ -1,19 +1,33 @@
 # vim: syntax=neomuttrc
+# https://neomutt.org/feature/notmuch
+# https://notmuchmail.org/mutttips/
 
 set realname="Ricardo B. Marliere"
 set from="ricardo.marliere@suse.com"
 set sendmail="msmtp -a suse.com"
 set folder="~/mail/kernel.org/"
 
+set nm_query_type=threads
+set nm_exclude_tags="junk"
+set nm_record=no
 set nm_default_uri="notmuch:///home/rbmarliere/mail/kernel.org"
 set virtual_spoolfile=yes
 virtual-mailboxes \
-"starred"          "notmuch://?query=tag:*" \
-`find -L ~/mail/kernel.org/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | while read folder; do   folder_name=$(basename "$folder");   echo -n "\"$folder_name\" \"notmuch://?query=folder:$folder_name date:6months..\" "; done` \
+"starred" "notmuch://?query=tag:*" \
+"junk" "notmuch://?query=tag:junk" \
+"archive" "notmuch://?query=tag:archive" \
+`find -L ~/mail/kernel.org/ -type d -name cur | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | sort | while read folder; do   folder_name=$(basename "$folder");   echo -n "\"$folder_name\" \"notmuch://?query=folder:$folder_name\" "; done`
 
-macro index \\\\ "<vfolder-from-query>"                           # looks up a hand made query
-macro index A "<modify-labels>+archive -unread -inbox<enter>"        # tag as Archived
-#macro index I "<modify-labels>-inbox -unread<enter>"                 # removed from inbox
-macro index S "<modify-labels-then-hide>-inbox -unread +junk<enter>" # tag as Junk mail
-macro index + "<modify-labels>+*<enter><sync-mailbox>"               # tag as starred
-macro index 0 "<modify-labels>-*<enter><sync-mailbox>"               # tag as unstarred
+bind index < vfolder-window-backward
+bind index > vfolder-window-forward
+macro index \\\\ "<vfolder-from-query>"
+macro index A "<modify-labels>+archive -unread -inbox -*<enter>"
+#macro index I "<modify-labels>-inbox -unread<enter>"
+macro index S "<modify-labels-then-hide>-inbox -unread +junk<enter>"
+macro index + "<modify-labels>+*<enter><sync-mailbox>"
+macro index 0 "<modify-labels>-*<enter><sync-mailbox>"
+
+# windowed queries
+folder-hook . "set nm_query_window_enable=no; set nm_query_window_duration=0"
+folder-hook "lkml|netdev|stable" "set nm_query_window_enable=yes; set nm_query_window_duration=3; set nm_query_window_timebase='month'"
+folder-hook "git|linux-doc|linux-fsdevel|linux-media|linux-mm|linux-riscv|linux-usb" "set nm_query_window_enable=yes; set nm_query_window_duration=0; set nm_query_window_timebase='year'"
