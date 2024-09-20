@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # https://openqa-bites.github.io/openqa/openqa-cli-cheat-sheet/
+
+TARGET=openqa  # defined in ~/.ssh/config
 HOST=http://rmarliere-openqa.qe.prg2.suse.org/
-#HOST=http://10.146.4.56/
 
 _set_host() {
 	case "$HOST" in
@@ -68,6 +69,7 @@ qa-clone() {
 	_set_host
 
 	local NS='_OBSOLETE=1 _GROUP=0 BUILD="rbmarliere" TEST="rbmarliere"'
+	local SSH=
 	local SKIP_DOWNLOAD=
 	local WITHIN_INSTANCE=
 	local _HOST="--host $HOST"
@@ -75,6 +77,7 @@ qa-clone() {
 	usage() {
 		echo "usage: qa-clone [options] JOB_NUMBER"
 		echo "  -s  --skip-download             Same openqa-clone-job option"
+		echo "  -S  --ssh                       Run command through ssh to $TARGET"
 		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
 		echo "  -w  --within-instance           Same as openqa-clone-job option"
 	}
@@ -90,7 +93,8 @@ qa-clone() {
 			usage
 			return 0
 			;;
-		-s | --skip-download) SKIP_DOWNLOAD=--skip-download ;;
+		-s | --no-skip-download) SKIP_DOWNLOAD=--skip-download ;;
+		-S | --ssh) SSH="ssh $TARGET -- " ;;
 		-u | --unnamed) NS= ;;
 		-w | --within-instance)
 			_HOST=
@@ -109,7 +113,7 @@ qa-clone() {
 		return 1
 	fi
 
-	_qa openqa-clone-job -v $_HOST $WITHIN_INSTANCE $SKIP_DOWNLOAD $JOB "$@" $NS
+	_qa $SSH openqa-clone-job -v $_HOST $WITHIN_INSTANCE $SKIP_DOWNLOAD $JOB "$@" $NS
 }
 
 qa-get() {
