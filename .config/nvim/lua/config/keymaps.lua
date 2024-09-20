@@ -10,3 +10,4 @@ vim.keymap.set("n", "<Leader>qs", ":SaveQf " .. vim.fn.stdpath("data") .. "/qf/"
 vim.keymap.set("n", "<Leader>qr", ":source " .. vim.fn.stdpath("data") .. "/qf/", opts)
 vim.keymap.set("n", "<Leader>qd", ":!rm " .. vim.fn.stdpath("data") .. "/qf/", opts)
 vim.keymap.set("n", "<Leader>q", ":ToggleQf<CR>", opts)
+vim.keymap.set("n", "<Leader>Q", ":cexpr []<CR>:cclose<CR>", opts)
