@@ -60,6 +60,8 @@ endif
 	tmux source-file $$HOME/.config/tmux/tmux.conf || true
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
+	~/.local/share/nvim/mason/packages/vale/vale --config=$HOME/.config/vale/.vale.ini sync
+
 .PHONY: flatpak
 flatpak:
 	- $(INSTALL_CMD) flatpak
