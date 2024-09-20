@@ -46,7 +46,7 @@ input type:keyboard {
 }
 
 for_window [app_id="evolution-alarm-notify"] floating enable
-for_window [app_id="notes"] floating enable, resize set width 1400 px height 1400 px, sticky enable
+for_window [app_id="notes"] floating enable, resize set width 800 px height 800 px, sticky enable
 
 assign [app_id="firefox"] 1
 assign [app_id="evolution$"] 6
