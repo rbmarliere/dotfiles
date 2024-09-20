@@ -109,5 +109,5 @@
 	new = green bold
 	whitespace = red reverse
 
-[includeIf "gitdir:~/src/"]
+[includeIf "gitdir:/"]
 	path = ~/src/.git/config

@@ -1,6 +1,3 @@
 [user]
 	name = Ricardo B. Marliere
 	email = ricardo.marliere@suse.com
-
-[commit]
-	template = ~/.config/git/templates/signed-off-by
