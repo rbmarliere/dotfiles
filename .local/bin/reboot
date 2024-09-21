@@ -5,6 +5,10 @@ if [ -n "$TMUX" ]; then
 	exit
 fi
 
+if pgrep -x "^(rsync|scp|dd|cp)"; then
+	echo "There are transfers in progress..."
+fi
+
 read -p "Reboot? [y|N] " ans
 ans=${ans:-N}
 if [[ ! "$ans" =~ ^[Yy]$ ]]; then

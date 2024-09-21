@@ -5,15 +5,20 @@ if [ -n "$TMUX" ]; then
 	exit
 fi
 
+if pgrep -x "^(rsync|scp|dd|cp)"; then
+	echo "There are transfers in progress..."
+fi
+
 read -p "Shutdown? [y|N] " ans
 ans=${ans:-N}
 if [[ ! "$ans" =~ ^[Yy]$ ]]; then
 	exit
 fi
 
-if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
-	root_runner "systemctl --user stop tmux"
-fi
+root_runner "$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh"
+# if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
+# 	root_runner "systemctl --user stop tmux"
+# fi
 
 root_runner "sudo shutdown -h --no-wall now"
 
