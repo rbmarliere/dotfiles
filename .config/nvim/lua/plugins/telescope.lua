@@ -10,7 +10,7 @@ return {
 	"nvim-telescope/telescope.nvim",
 	branch = "0.1.x",
 	-- name = "telescope.nvim",
-	-- dir = "~/src/extra/telescope.nvim/0.1.x",
+	-- dir = "~/src/extra/telescope.nvim/master",
 	-- dev = true,
 	dependencies = {
 		"keyvchan/telescope-find-pickers.nvim",
@@ -112,6 +112,7 @@ return {
 				},
 				-- https://github.com/nvim-telescope/telescope.nvim/issues/2933
 				git_branches = {
+					-- show_tags = true,
 					mappings = {
 						i = {
 							["<C-d>"] = "preview_scrolling_down",

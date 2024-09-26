@@ -25,6 +25,7 @@
 	ff = merge --ff-only
 	l = log --decorate --oneline --date=short --pretty=format:'%C(yellow)%h %C(green)%ad %C(cyan)%an %C(bold red)%d %C(reset)%s'
 	la = !git l --name-status
+	showp = show --pretty="shortp" --no-patch
 	noff = merge --no-ff
 	pa = !git --no-pager diff --no-color
 	pullff = pull --ff-only
@@ -83,6 +84,7 @@
 	pager = diff-so-fancy | less --tabs=8 -RF
 
 [pretty]
+	shortp = %h (\"%s\")
 	fixes = Fixes: %h (\"%s\")
 
 [advice]

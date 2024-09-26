@@ -5,7 +5,7 @@ if [ -n "$TMUX" ]; then
 	exit
 fi
 
-if pgrep -x "^(rsync|scp|dd|cp)"; then
+if pgrep -f "^(rsync|scp|dd|cp).*"; then
 	echo "There are transfers in progress..."
 fi
 

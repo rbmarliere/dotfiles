@@ -69,7 +69,7 @@ qa-clone() {
 	_set_host
 
 	local NS='_OBSOLETE=1 _GROUP=0 BUILD="rbmarliere" TEST="rbmarliere"'
-	local SSH=
+	local SSH="ssh $TARGET -- "
 	local SKIP_DOWNLOAD=
 	local WITHIN_INSTANCE=
 	local _HOST="--host $HOST"
@@ -77,7 +77,7 @@ qa-clone() {
 	usage() {
 		echo "usage: qa-clone [options] JOB_NUMBER"
 		echo "  -s  --skip-download             Same openqa-clone-job option"
-		echo "  -S  --ssh                       Run command through ssh to $TARGET"
+		echo "  -S  --no-ssh                    Don't run command through ssh to $TARGET"
 		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
 		echo "  -w  --within-instance           Same as openqa-clone-job option"
 	}
@@ -94,7 +94,7 @@ qa-clone() {
 			return 0
 			;;
 		-s | --no-skip-download) SKIP_DOWNLOAD=--skip-download ;;
-		-S | --ssh) SSH="ssh $TARGET -- " ;;
+		-S | --ssh) SSH= ;;
 		-u | --unnamed) NS= ;;
 		-w | --within-instance)
 			_HOST=

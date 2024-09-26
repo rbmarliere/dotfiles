@@ -66,10 +66,6 @@ exec_always nm-applet --indicator
 exec_always blueman-applet
 exec_always bash -c 'if [ -f ~/Pictures/bg ]; then swaymsg output "*" bg ~/Pictures/bg fill; else swaymsg output "*" bg "#000000" solid_color; fi'
 
-exec swayidle -w \
-	timeout 600 'swaylock -f -c 000000 -i $bg' \
-	timeout 900 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-	before-sleep 'swaylock -f -c 000000 -i $bg'
 exec gpg-connect-agent reloadagent /bye
 exec ~/.local/bin/notification-mon
 exec ~/.local/bin/inactive_windows_transparency.py

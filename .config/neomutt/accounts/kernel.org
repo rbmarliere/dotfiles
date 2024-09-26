@@ -21,8 +21,8 @@ virtual-mailboxes \
 bind index < vfolder-window-backward
 bind index > vfolder-window-forward
 macro index \\\\ "<vfolder-from-query>"
-macro index A "<modify-labels>+archive -unread -inbox -*<enter>"
-#macro index I "<modify-labels>-inbox -unread<enter>"
+macro index L "<shell-escape>read link; id=$(echo \$link | sed -n 's#.*/\\([^/]*\\)/#\\1#p'); echo \$id | wl-copy;<enter><vfolder-from-query>id:"
+macro index \Ca "<modify-labels>+archive -unread -inbox -*<enter>"
 macro index S "<modify-labels-then-hide>-inbox -unread +junk<enter>"
 macro index + "<modify-labels>+*<enter><sync-mailbox>"
 macro index 0 "<modify-labels>-*<enter><sync-mailbox>"
@@ -30,4 +30,4 @@ macro index 0 "<modify-labels>-*<enter><sync-mailbox>"
 # windowed queries
 folder-hook . "set nm_query_window_enable=no; set nm_query_window_duration=0"
 folder-hook "lkml|netdev|stable" "set nm_query_window_enable=yes; set nm_query_window_duration=3; set nm_query_window_timebase='month'"
-folder-hook "git|linux-doc|linux-fsdevel|linux-media|linux-mm|linux-riscv|linux-usb" "set nm_query_window_enable=yes; set nm_query_window_duration=0; set nm_query_window_timebase='year'"
+folder-hook "git|linux-doc|linux-fsdevel|linux-media|linux-mm|linux-riscv|linux-usb|u-boot" "set nm_query_window_enable=yes; set nm_query_window_duration=0; set nm_query_window_timebase='year'"

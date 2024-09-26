@@ -1,8 +1,9 @@
 return {
-	-- 	"polarmutex/git-worktree.nvim",
+	"rbmarliere/git-worktree.nvim",
 	name = "git-worktree.nvim",
-	dir = "~/src/rbmarliere/git-worktree.nvim/main",
-	dev = true,
+	branch = "track_upstream",
+	-- dir = "~/src/rbmarliere/git-worktree.nvim/track_upstream",
+	-- dev = true,
 	init = function()
 		-- vim.g.git_worktree_log_level = "debug"
 		vim.g.git_worktree = {

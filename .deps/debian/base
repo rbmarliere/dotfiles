@@ -1,6 +1,7 @@
 bash-completion
 dnsutils
 fzf
+gpg
 htop
 libnotify-bin
 net-tools
