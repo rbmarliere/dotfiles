@@ -14,6 +14,9 @@ return {
 	},
 	opts = {
 		-- log_level = vim.log.levels.DEBUG,
+		default_format_opts = {
+			lsp_format = "fallback",
+		},
 		formatters_by_ft = {
 			css = { "prettier" },
 			go = { "goimports", "gofmt" },
@@ -23,7 +26,7 @@ return {
 			json = { "prettier" },
 			lua = { "stylua" },
 			markdown = { "prettier" },
-			python = { "ruff_format" },
+			python = { "black" },
 			rust = { "rustfmt" },
 			scss = { "prettier" },
 			typescript = { "prettier" },

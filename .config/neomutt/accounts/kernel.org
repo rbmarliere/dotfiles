@@ -2,16 +2,16 @@
 # https://neomutt.org/feature/notmuch
 # https://notmuchmail.org/mutttips/
 
-set realname="Ricardo B. Marliere"
-set from="ricardo.marliere@suse.com"
+set real_name="Ricardo B. Marliere"
+set from="rbm@suse.com"
 set sendmail="msmtp -a suse.com"
 set folder="~/mail/kernel.org/"
 
+set spool_file="starred"
 set nm_query_type=threads
 set nm_exclude_tags="junk"
 set nm_record=no
-set nm_default_uri="notmuch:///home/rbmarliere/mail/kernel.org"
-set virtual_spoolfile=yes
+set nm_default_url="notmuch:///home/rbmarliere/mail/kernel.org"
 virtual-mailboxes \
 "starred" "notmuch://?query=tag:*" \
 "junk" "notmuch://?query=tag:junk" \
@@ -27,7 +27,16 @@ macro index S "<modify-labels-then-hide>-inbox -unread +junk<enter>"
 macro index + "<modify-labels>+*<enter><sync-mailbox>"
 macro index 0 "<modify-labels>-*<enter><sync-mailbox>"
 
+set my_bigfolders = "lkml|net|stable"
+set my_medfolders = "git|linux-doc|linux-fsdevel|linux-media|linux-mm|linux-riscv|linux-usb|u-boot"
+set my_smallfolders = "~$my_bigfolders|~$my_medfolders|~starred"
+folder-hook . "set collapse_all=yes; set collapse_flagged=yes; set collapse_unread=yes"
+folder-hook $my_bigfolders "push <last-entry><current-middle>"
+folder-hook $my_bigfolders "set collapse_all=yes; set collapse_flagged=yes; set collapse_unread=yes"
+folder-hook $my_medfolders "set collapse_all=yes; set collapse_flagged=no; set collapse_unread=no"
+folder-hook $my_smallfolders "set collapse_all=yes; set collapse_flagged=no; set collapse_unread=no"
+
 # windowed queries
 folder-hook . "set nm_query_window_enable=no; set nm_query_window_duration=0"
-folder-hook "lkml|netdev|stable" "set nm_query_window_enable=yes; set nm_query_window_duration=3; set nm_query_window_timebase='month'"
-folder-hook "git|linux-doc|linux-fsdevel|linux-media|linux-mm|linux-riscv|linux-usb|u-boot" "set nm_query_window_enable=yes; set nm_query_window_duration=0; set nm_query_window_timebase='year'"
+folder-hook $my_bigfolders "set nm_query_window_enable=yes; set nm_query_window_duration=3; set nm_query_window_timebase='month'"
+folder-hook $my_medfolders "set nm_query_window_enable=yes; set nm_query_window_duration=0; set nm_query_window_timebase='year'"

@@ -5,6 +5,7 @@ macro index - "<change-folder>?"
 macro index <esc>s ":set confirmappend=no delete=yes auto_tag=yes<enter><save-message>${my_spam}<enter><sync-mailbox>:set confirmappend=yes delete=ask-yes<enter>" "Move to Spam"
 macro index A "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>. <enter>" "mark all messages as read"
 macro index \Ca ":set confirmappend=no delete=yes auto_tag=yes<enter><save-message>${my_archive}<enter><sync-mailbox>:set confirmappend=yes delete=ask-yes<enter>" "Archive"
+macro index zA ":set collapse_all=yes<enter>:set collapse_flagged=yes<enter>:set collapse_unread=yes<enter><collapse-all>"
 macro pager \Co "<pipe-message> urlscan <enter>" "call urlscan to extract URLs out of a message"
 macro pager L '| grep -i "^^Message-ID: <.*>" | sed -n "s/.*<\(.*\)>.*/\1/p" | wl-copy<enter>'
 

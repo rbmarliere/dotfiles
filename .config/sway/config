@@ -19,7 +19,7 @@ set $down j
 set $up k
 set $right l
 set $term foot
-set $menu wofi -i -G --show drun
+set $menu wofi -i -G --show drun -D key_expand=Ctrl-d -D key_up=Ctrl-p -D key_down=Ctrl-n
 
 set $first 1
 set $second 2

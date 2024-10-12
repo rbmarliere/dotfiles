@@ -1,10 +1,7 @@
 local qf = require("utils.quickfix")
 
 return {
-	-- "rmagatti/auto-session",
-	name = "auto-session",
-	dir = "~/src/extra/auto-session/save_extra_cmds",
-	dev = true,
+	"rmagatti/auto-session",
 	opts = {
 		auto_session_enabled = true,
 		auto_save_enabled = true,

@@ -85,6 +85,8 @@ ifeq ($(DISTRO),suse)
 	sudo zypper install --from packman ffmpeg gstreamer-plugins-{good,bad,ugly,libav} libavcodec vlc-codecs
 	# nvidia
 	sudo zypper install nvidia-drivers-G06
+	# firefox reading profile
+	sed 's/^Name=.*/Name=Firefox (Reading)/; s/^Exec=.*/Exec=firefox %u -P reading/' /usr/share/applications/firefox.desktop > ~/.local/share/applications/firefox-reading.desktop
 endif
 
 .PHONY: autologin
@@ -102,9 +104,10 @@ desktop: wm autologin
 .PHONY: nouveau
 nouveau:
 ifeq ($(DISTRO),suse)
-	#sudo mv /etc/zypp/services.d/NVIDIA.service /etc/zypp/services.d/NVIDIA.service.bak
-	#sudo zypper rm $$(zypper se -i | grep nvidia | awk '{print $$3}') || true
-	#sudo zypper mr -d $$(zypper lr | awk -F '|' '{IGNORECASE=1} /nvidia/ {print $$2}') || true
+	sudo mv /etc/zypp/services.d/NVIDIA.service /etc/zypp/services.d/NVIDIA.service.bak
+	sudo zypper rm $$(zypper se -i | grep nvidia | awk '{print $$3}') || true
+	sudo zypper mr -d $$(zypper lr | awk -F '|' '{IGNORECASE=1} /nvidia/ {print $$2}') || true
+	sudo zypper in kernel-firmware-nvidia
 	echo "blacklist nvidia" | sudo tee /etc/modprobe.d/60-blacklist.conf
 	echo "blacklist amdgpu" | sudo tee -a /etc/modprobe.d/60-blacklist.conf
 	sudo dracut --force

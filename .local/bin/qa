@@ -2,83 +2,105 @@
 
 # https://openqa-bites.github.io/openqa/openqa-cli-cheat-sheet/
 
-TARGET=openqa  # defined in ~/.ssh/config
-HOST=http://rmarliere-openqa.qe.prg2.suse.org/
+TARGET=qa # defined in ~/.ssh/config
+HOST=
+SKIP_CONFIRMATION=0
 
 _set_host() {
+	TARGET=qa
 	case "$HOST" in
-	ooo | o3) HOST="https://openqa.opensuse.org" ;;
-	osd) HOST="http://openqa.suse.de" ;;
+	ooo | o3) HOST_OPT="--host https://openqa.opensuse.org" ;;
+	osd) HOST_OPT="--host http://openqa.suse.de" ;;
+	local) HOST_OPT= ;;
+	qa-tw)
+		HOST_OPT="--host http://10.146.5.95"
+		TARGET=qa-tw
+		;;
+	*) HOST_OPT="--host http://rmarliere-openqa.qe.prg2.suse.org" ;;
 	esac
 }
 
 _qa() {
-	local CMD=$*
+	local CMD=("$@")
 	shift
 
-	echo
-	echo "$CMD"
-
-	echo
-	read -rp "Confirm? [y|N] " ans
-	ans=${ans:-N}
-	if [[ ! "$ans" =~ ^[Yy]$ ]]; then
-		return 1
+	if [[ $SKIP_CONFIRMATION -eq 0 ]]; then
+		read -rp "$(printf "\n%s\n\nConfirm? [y|N] " "${CMD[*]}")" ans
+		ans=${ans:-N}
+		if [[ ! "$ans" =~ ^[Yy]$ ]]; then
+			return 1
+		fi
 	fi
 
-	$CMD
+	"${CMD[@]}"
+}
+
+_qa-get-build-jobs() {
+	_set_host
+
+	local URL_HOST
+	local QUERY
+	local JOBS
+	local URL
+
+	URL="$(printf '%b\n' "${1//%/\\x}")"
+	URL_HOST=$(echo "$URL" | awk -F '/tests' '{print $1}')
+	QUERY=$(echo "${URL##*\?}" | sed 's/&/ /g')
+
+	HOST=$URL_HOST qa jobs/overview $QUERY | jq -r '.[].id'
 }
 
 qa() {
 	_set_host
-	_qa openqa-cli api -v --host $HOST "$@"
+	_qa openqa-cli api $HOST_OPT "$@"
 }
 
-qa-load() {
+qa-load-templates() {
 	_set_host
-	_qa openqa-load-templates --host $HOST --update templates.json
+	_qa openqa-load-templates $HOST_OPT "$@"
 }
 
-qa-load-schedule() {
-	TEMPLATE=$1
-	shift
-	[[ -z $TEMPLATE ]] && return 1
-
-	qa -X POST job_templates_scheduling/1 schema=JobTemplates-01.yaml --param-file template=$TEMPLATE
-}
-
-qa-dump() {
+qa-dump-templates() {
 	_set_host
 
 	local GROUP=$1
 	shift
 
-	if [ -z $GROUP ]; then
+	if [ -z "$GROUP" ]; then
 		echo "usage: qa-dump GROUP"
 		return 1
 	fi
-	if [ -f templates.json ]; then
-		echo "error: templates.json exists, refusing to overwrite"
-		return 1
-	fi
 
-	_qa openqa-dump-templates --host "$HOST" --group "$GROUP" --json >templates.json
+	_qa openqa-dump-templates $HOST_OPT --group "$GROUP" --json "$@"
 }
 
-qa-clone() {
+qa-load-schedule() {
+	GID=$1
+	shift
+	TEMPLATE=$1
+	shift
+	[[ -z $GID || -z $TEMPLATE ]] && return 1
+
+	qa -X POST job_templates_scheduling/"$GID" schema=JobTemplates-01.yaml --param-file template="$TEMPLATE"
+}
+
+qa-clone-job() {
 	_set_host
 
 	local NS='_OBSOLETE=1 _GROUP=0 BUILD="rbmarliere" TEST="rbmarliere"'
 	local SSH="ssh $TARGET -- "
-	local SKIP_DOWNLOAD=
+	local SKIP_DOWNLOAD=--skip-download
 	local WITHIN_INSTANCE=
-	local _HOST="--host $HOST"
+	local SKIP_UPDATES=
+	local SKIP_DEPS=
 
 	usage() {
 		echo "usage: qa-clone [options] JOB_NUMBER"
 		echo "  -s  --skip-download             Same openqa-clone-job option"
 		echo "  -S  --no-ssh                    Don't run command through ssh to $TARGET"
 		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
+		echo "  -U  --skip-updates              Use the special variables to skip maintenance updates"
+		echo "  -D  --skip-chained-deps         Same as openqa-clone-job option"
 		echo "  -w  --within-instance           Same as openqa-clone-job option"
 	}
 
@@ -93,12 +115,16 @@ qa-clone() {
 			usage
 			return 0
 			;;
-		-s | --no-skip-download) SKIP_DOWNLOAD=--skip-download ;;
+		-s | --no-skip-download) SKIP_DOWNLOAD= ;;
 		-S | --ssh) SSH= ;;
 		-u | --unnamed) NS= ;;
+		-U | --skip-updates) SKIP_UPDATES="SKIP_MAINTENANCE_UPDATES=1 PUBLIC_CLOUD_IGNORE_EMPTY_REPO=1 PUBLIC_CLOUD_SKIP_MU=1" ;;
 		-w | --within-instance)
-			_HOST=
+			HOST_OPT=
 			WITHIN_INSTANCE="--within-instance $HOST"
+			;;
+		-D | --skip-chained-deps)
+			SKIP_DEPS=--skip-chained-deps
 			;;
 		*) break ;;
 		esac
@@ -108,22 +134,99 @@ qa-clone() {
 	local JOB=$1
 	shift
 
-	if [[ $_HOST == "" && ! "$JOB" =~ ^-?[0-9]+$ ]]; then
+	if [[ -n "$WITHIN_INSTANCE" && ! "$JOB" =~ ^-?[0-9]+$ ]]; then
 		echo "error: JOB should be a number"
 		return 1
 	fi
 
-	_qa $SSH openqa-clone-job -v $_HOST $WITHIN_INSTANCE $SKIP_DOWNLOAD $JOB "$@" $NS
+	_qa $SSH openqa-clone-job $HOST_OPT $WITHIN_INSTANCE $SKIP_DEPS $SKIP_DOWNLOAD $JOB $@ $NS $SKIP_UPDATES
 }
 
-qa-get() {
+qa-clone-build() {
+	local CLONE_ALL=1
+	local CLONE_FAILED=
+	local CLONE_SKIPPED=
+	local WITHIN_INSTANCE=0
+
+	usage() {
+		echo "usage: qa-clone-build [options] URL"
+		echo "  -F  --failed                    Clone failed jobs"
+		echo "  -S  --skipped                   Clone skipped jobs"
+		echo "  -w  --within-instance           Clone within openQA instance"
+		echo "  If no options is passed, it will clone all jobs."
+	}
+
+	if [[ $# -lt 1 ]]; then
+		usage
+		return 1
+	fi
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		-h | --help)
+			usage
+			return 0
+			;;
+		-F | --failed)
+			CLONE_FAILED=1
+			CLONE_ALL=0
+			;;
+		-S | --skipped)
+			CLONE_SKIPPED=1
+			CLONE_ALL=0
+			;;
+		-w | --within-instance)
+			WITHIN_INSTANCE=1
+			;;
+		*) break ;;
+		esac
+		shift
+	done
+
+	local URL=$1
+	shift
+	[[ -z $URL ]] && return 1
+
+	local JOBS
+	mapfile -t JOBS < <(_qa-get-build-jobs "$URL")
+	echo "found ${#JOBS[@]} jobs"
+
+	SKIP_CONFIRMATION=1
+	local STATUS=""
+	local CLONE_CUR=0
+	local CUR=1
+	for ID in "${JOBS[@]}"; do
+		echo "ID=$ID :: $CUR/${#JOBS[@]}"
+		if [[ $CLONE_ALL -ne 1 ]]; then
+			STATUS=$(qa jobs/"$ID" | jq -r '.job.result')
+			[[ $STATUS == "failed" && $CLONE_FAILED ]] && CLONE_CUR=1
+			[[ $STATUS == "skipped" && $CLONE_SKIPPED ]] && CLONE_CUR=1
+		fi
+		if [[ $CLONE_ALL -eq 1 || $CLONE_CUR -eq 1 ]]; then
+			echo "cloning $ID..."
+			# SKIP_CONFIRMATION=0
+			if [[ $WITHIN_INSTANCE -eq 1 ]]; then
+				qa-clone-job -w -u -U "$ID" "$@"
+			else
+				ID=${URL//overview*/$ID}
+				qa-clone-job -D -u -U "$ID" "$@"
+			fi
+			# SKIP_CONFIRMATION=1
+		fi
+		CLONE_CUR=0
+		((CUR++))
+	done
+	SKIP_CONFIRMATION=0
+}
+
+qa-get-job() {
 	local ID=$1
 	shift
 	[[ -z $ID ]] && return 1
-	qa jobs/$ID
+	qa jobs/"$ID"
 }
 
-qa-restart() {
+qa-restart-job() {
 	local ID=$1
 	shift
 	[[ -z $ID ]] && return 1
@@ -131,50 +234,69 @@ qa-restart() {
 	if [[ $1 == -s ]]; then
 		SKIP_PARENTS=skip_parents=1
 	fi
-	qa -X POST jobs/$ID/restart $SKIP_PARENTS
+	qa -X POST jobs/"$ID"/restart "$SKIP_PARENTS"
 }
 
-qa-start() {
+qa-start-job() {
 	qa -X POST isos BUILD="$(date +"%Y%m%d")" "$@"
 	# ARCH="x86_64" DISTRI="microos" FLAVOR="MicroOS-Image" VERSION="Tumbleweed" HDD_1="openSUSE-MicroOS.x86_64-kvm-and-xen_nohealthchecker.qcow2"
 }
 
-qa-stop() {
+qa-stop-job() {
 	local ID=$1
 	shift
 	[[ -z $ID ]] && return 1
-	qa -X POST jobs/$ID/cancel
+	qa -X POST jobs/"$ID"/cancel
 }
 
-qa-delete() {
+qa-stop-build() {
+	local URL=$1
+	shift
+	[[ -z $URL ]] && return 1
+
+	local JOBS
+	mapfile -t JOBS < <(_qa-get-build-jobs "$URL")
+	echo "found ${#JOBS[@]} jobs"
+
+	SKIP_CONFIRMATION=1
+	I=1
+	for ID in "${JOBS[@]}"; do
+		echo "stopping ID=$ID... :: $CUR/${#JOBS[@]}"
+		qa-stop-job "$ID"
+		((I++))
+	done
+	SKIP_CONFIRMATION=0
+}
+
+qa-delete-job() {
 	local ID=$1
 	shift
 	[[ -z $ID ]] && return 1
-	qa -X DELETE jobs/$ID
+	qa -X DELETE jobs/"$ID"
 }
 
 qa-sync-allow() {
-	echo fixing openqa:/var/lib/openqa/tests permissions...
-	ssh openqa "chown opensuse:geekotest -R /var/lib/openqa/tests/"
-	ssh openqa "chmod g+w /var/lib/openqa/tests/*"
+	echo fixing $TARGET:/var/lib/openqa/tests permissions...
+	ssh $TARGET "chown geekotest:nogroup -R /var/lib/openqa/tests/"
+	ssh $TARGET "chmod g+w /var/lib/openqa/tests/*"
 }
 
 qa-sync-casedir() {
 	local CASEDIR=$1
 	shift
 	[[ -z $CASEDIR ]] && return 1
-	_qa rsync -raP --delete $CASEDIR/ openqa:/var/lib/openqa/tests/$(basename $(dirname $(realpath $CASEDIR))) || return
+	_qa rsync -rahP --delete "$CASEDIR"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$CASEDIR")")")" || return
 
 	echo linking suse needles...
 	for product in alp sle sle-micro; do
 		local link=/var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
-		ssh openqa "rm -f $link; ln -s /var/lib/openqa/tests/os-autoinst-needles-sles $link"
+		ssh $TARGET "ln -sfn /var/lib/openqa/tests/os-autoinst-needles-sles/ $link"
 	done
 
 	echo linking opensuse needles...
 	for product in microos opensuse; do
 		local link=/var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
-		ssh openqa "rm -f $link; ln -s /var/lib/openqa/tests/os-autoinst-needles-opensuse $link"
+		ssh $TARGET "ln -sfn /var/lib/openqa/tests/os-autoinst-needles-opensuse/ $link"
 	done
 
 	qa-sync-allow
@@ -185,9 +307,16 @@ qa-sync-needles() {
 	shift
 	[[ -z $NEEDLES ]] && return 1
 
-	_qa rsync -raP --delete $NEEDLES/ openqa:/var/lib/openqa/tests/$(basename $(dirname $(realpath $NEEDLES))) || return
+	_qa rsync -rahP --delete "$NEEDLES"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")" || return
 
 	qa-sync-allow
+}
+
+qa-sync-needles-update() {
+	git -C "$HOME"/src/os-autoinst/os-autoinst-needles-opensuse/master pull os-autoinst
+	qa-sync-needles "$HOME"/src/os-autoinst/os-autoinst-needles-opensuse/master
+	git -C "$HOME"/src/suse.de/openqa/os-autoinst-needles-sles/master pull openqa
+	qa-sync-needles "$HOME"/src/suse.de/openqa/os-autoinst-needles-sles/master
 }
 
 qa-sync() {
@@ -199,6 +328,27 @@ qa-sync() {
 		echo "usage: qa-sync CASEDIR NEEDLES"
 		return 1
 	fi
-	qa-sync-casedir $CASEDIR
-	qa-sync-needles $NEEDLES
+	qa-sync-casedir "$CASEDIR"
+	qa-sync-needles "$NEEDLES"
+}
+
+qa-link() {
+	local DEST=$1
+	shift
+	[[ -z $DEST ]] && return 1
+
+	local LINK=/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$DEST")")")"
+	sudo ln -sfn "$(realpath "$DEST")" "$LINK"
+
+	echo linking suse needles...
+	for product in alp sle sle-micro; do
+		ln -sfn /var/lib/openqa/tests/os-autoinst-needles-sles /var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
+	done
+
+	echo linking opensuse needles...
+	for product in microos opensuse; do
+		ln -sfn /var/lib/openqa/tests/os-autoinst-needles-opensuse /var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
+	done
+
+	sudo chown geekotest:root -R /var/lib/openqa/tests/
 }

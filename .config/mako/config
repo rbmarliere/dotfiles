@@ -12,7 +12,8 @@ border-color=#FF0000
 default-timeout=5000
 ignore-timeout=0
 #font=monospace 14
-output=HDMI-A-2
+output=HDMI-A-1
+anchor=top-right
 
 [urgency=low]
 #border-color=#cccccc

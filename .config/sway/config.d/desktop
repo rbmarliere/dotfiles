@@ -36,7 +36,7 @@ workspace 5 output $out2
 set $out3 "Samsung Electric Company LC34G55T H4ZT500316"
 output $out3 pos 3640 0
 # only needed for nouveau
-#output $out3 mode --custom 3440x1440@59.973Hz pos 2560 0
+output $out3 mode --custom 3440x1440@99.982Hz
 workspace 6 output $out3
 workspace 7 output $out3
 workspace 8 output $out3
@@ -71,5 +71,7 @@ exec sleep 6 && foot -H bash -l -c "sway.neomutt"
 exec sleep 7 && foot -H bash -l -c "sway.weechat"
 exec sleep 8 && foot -H bash -l -c "sway.newsboat"
 exec sleep 9 && flatpak run com.slack.Slack
-exec sleep 11 && swaymsg workspace 6 && firefox
-exec sleep 13 && foot -a pad
+exec sleep 11 && swaymsg workspace 6
+exec sleep 12 && firefox
+exec sleep 13 && firefox -P reading
+exec sleep 14 && foot -a pad

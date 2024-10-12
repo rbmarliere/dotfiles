@@ -10,6 +10,6 @@ return {
 		},
 	},
 	keys = {
-		{ "<Leader><Leader>", ":nohlsearch | Fidget clear <CR>" },
+		{ "<Leader><Leader>", ":nohlsearch | Fidget clear | lua vim.lsp.buf.clear_references()<CR>" },
 	},
 }

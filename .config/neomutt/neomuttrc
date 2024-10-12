@@ -4,7 +4,6 @@ set alias_file="~/.config/neomutt/aliases"
 set allow_ansi=yes
 set beep=yes
 set beep_new=yes
-set collapse_all=yes
 set crypt_use_gpgme=yes
 set date_format="%e %b %y %H:%M"
 set display_filter="sed -e '/\\[-- Autoview using .* --]$/d'"
@@ -18,7 +17,7 @@ set mime_type_query_command="xdg-mime query filetype %s"
 set pager_stop=yes
 set send_charset="us-ascii:utf-8"
 set sleep_time=0
-set use_threads=yes sort=reverse-last-date sort_aux=date
+set use_threads=yes sort=last-date sort_aux=date
 
 set header_cache_backend=lmdb
 set header_cache=~/mail/.cache/neomutt.hdr
@@ -38,3 +37,5 @@ mime_lookup text/*
 source "~/.config/neomutt/aliases"
 source "~/.config/neomutt/binds"
 source "~/.config/neomutt/colors"
+
+folder-hook . "set collapse_all=yes; set collapse_flagged=no; set collapse_unread=no"
