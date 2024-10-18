@@ -1,6 +1,7 @@
 font TerminessNerdFont 12
 set $mod Mod4
 
+set $darkgrey   #3c3836
 set $grey       #323232
 set $lgrey      #7c6f64
 set $orange     #ff5f1f
@@ -38,6 +39,10 @@ smart_borders off
 smart_gaps on
 gaps inner 4
 focus_on_window_activation none
+
+client.focused $lgreen $lgreen $darkgrey #2e9ef4 #285577
+client.focused_inactive $green $green #000000 #484e50 #5f676a
+client.unfocused $green $green #000000 #292d2e #222222
 
 for_window [app_id="blueman-manager"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="nm-connection-editor"] floating enable, resize set 1000 height 60 ppt
