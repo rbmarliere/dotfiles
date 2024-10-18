@@ -4,19 +4,24 @@
 
 TARGET=qa # defined in ~/.ssh/config
 HOST=
+HOST_OPT=
 SKIP_CONFIRMATION=0
 
 _set_host() {
 	TARGET=qa
 	case "$HOST" in
-	ooo | o3) HOST_OPT="--host https://openqa.opensuse.org" ;;
-	osd) HOST_OPT="--host http://openqa.suse.de" ;;
-	local) HOST_OPT= ;;
-	qa-tw)
-		HOST_OPT="--host http://10.146.5.95"
-		TARGET=qa-tw
-		;;
-	*) HOST_OPT="--host http://rmarliere-openqa.qe.prg2.suse.org" ;;
+	ooo | o3)
+		HOST=https://openqa.opensuse.org
+		HOST_OPT="--host $HOST" ;;
+	osd) 
+		HOST=http://openqa.suse.de
+		HOST_OPT="--host $HOST" ;;
+	local)
+		HOST=
+		HOST_OPT= ;;
+	*)
+		HOST=http://rmarliere-openqa.qe.prg2.suse.org
+		HOST_OPT="--host $HOST" ;;
 	esac
 }
 
@@ -285,7 +290,7 @@ qa-sync-casedir() {
 	local CASEDIR=$1
 	shift
 	[[ -z $CASEDIR ]] && return 1
-	_qa rsync -rahP --delete "$CASEDIR"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$CASEDIR")")")" || return
+	_qa rsync -rltDv --delete "$CASEDIR"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$CASEDIR")")")" || return
 
 	echo linking suse needles...
 	for product in alp sle sle-micro; do
@@ -307,7 +312,7 @@ qa-sync-needles() {
 	shift
 	[[ -z $NEEDLES ]] && return 1
 
-	_qa rsync -rahP --delete "$NEEDLES"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")" || return
+	_qa rsync -rltDv --delete "$NEEDLES"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")" || return
 
 	qa-sync-allow
 }
