@@ -1,30 +1,34 @@
 local colors = require("utils.colors")
 
+local red = { bg = colors.red, fg = colors.white, gui = "bold" }
+local green = { bg = colors.green, fg = colors.black }
+local lightgreen = { bg = colors.lightgreen, fg = colors.darkgray }
+
 local my_theme = {
 	normal = {
 		a = { bg = colors.darkgray, fg = colors.white, gui = "bold" },
-		b = { bg = colors.green, fg = colors.black },
-		c = { bg = colors.lightgreen, fg = colors.darkgray },
+		b = green,
+		c = green,
 	},
 	insert = {
-		a = { bg = colors.purple, fg = colors.white, gui = "bold" },
-		b = { bg = colors.green, fg = colors.black },
-		c = { bg = colors.lightgreen, fg = colors.darkgray },
+		a = red,
+		b = green,
+		c = green,
 	},
 	visual = {
-		a = { bg = colors.red, fg = colors.white, gui = "bold" },
-		b = { bg = colors.green, fg = colors.black },
-		c = { bg = colors.lightgreen, fg = colors.darkgray },
+		a = { bg = colors.purple, fg = colors.white, gui = "bold" },
+		b = green,
+		c = green,
 	},
 	replace = {
 		a = { bg = colors.yellow, fg = colors.white, gui = "bold" },
-		b = { bg = colors.green, fg = colors.black },
-		c = { bg = colors.lightgreen, fg = colors.darkgray },
+		b = green,
+		c = green,
 	},
 	command = {
 		a = { bg = colors.blue, fg = colors.black, gui = "bold" },
-		b = { bg = colors.green, fg = colors.black },
-		c = { bg = colors.lightgreen, fg = colors.darkgray },
+		b = green,
+		c = green,
 	},
 	inactive = {
 		a = { bg = colors.lightgreen, fg = colors.inactivegray },
@@ -103,8 +107,8 @@ return {
 						path = 1,
 					},
 				},
-				lualine_c = { "branch", "diff", "diagnostics" },
-				lualine_x = { "encoding", "fileformat" }, --"fileformat", "filetype" },
+				lualine_c = { "branch" },
+				lualine_x = { "diff", "diagnostics" }, -- "encoding", "fileformat", "fileformat", "filetype" },
 				lualine_y = { "progress", "searchcount" },
 				lualine_z = { "location", "selectioncount" },
 			},
@@ -119,7 +123,7 @@ return {
 				lualine_c = {},
 				lualine_x = {},
 				lualine_y = {},
-				lualine_z = { "location" },
+				lualine_z = {},
 			},
 			tabline = {
 				lualine_a = {
@@ -144,8 +148,8 @@ return {
 
 						tabs_color = {
 							-- Same values as the general color option can be used here.
-							active = "lualine_c_normal", -- Color for active tab.
-							inactive = "lualine_b_normal", -- Color for inactive tab.
+							active = lightgreen, -- Color for active tab.
+							inactive = green, -- Color for inactive tab.
 						},
 
 						show_modified_status = true, -- Shows a symbol next to the tab name if the file has been modified.
@@ -153,7 +157,7 @@ return {
 							modified = "[+]", -- Text to show when the file is modified.
 						},
 
-						fmt = function(name, context)
+						fmt = function(name, _)
 							-- Show + if buffer is modified in tab
 							-- local buflist = vim.fn.tabpagebuflist(context.tabnr)
 							-- local winnr = vim.fn.tabpagewinnr(context.tabnr)
