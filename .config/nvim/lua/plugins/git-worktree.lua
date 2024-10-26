@@ -19,12 +19,16 @@ return {
 
 		local Hooks = require("git-worktree.hooks")
 		Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)
-			require("plenary.job"):new({
-				command = "git",
-				args= { "submodule", "update", "--recursive", "--init" },
-				cwd = path
-			}):start()
+			require("plenary.job")
+				:new({
+					command = "git",
+					args = { "submodule", "update", "--recursive", "--init" },
+					cwd = path,
+				})
+				:start()
 		end)
+		-- this will ignore the update_on_change setting:
+		-- Hooks.register(Hooks.type.SWITCH, Hooks.builtins.update_current_buffer_on_switch)
 
 		-- if cwd is a bare repo and there's zero arguments to the cmd,
 		-- open telescope extension upon entering nvim
