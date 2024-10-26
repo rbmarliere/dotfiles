@@ -92,7 +92,7 @@ qa-load-schedule() {
 qa-clone-job() {
 	_set_host
 
-	local NS='_OBSOLETE=1 _GROUP=0 BUILD="rbmarliere" TEST="rbmarliere"'
+	local NS='_GROUP=0 {BUILD,TEST}+="rbmarliere"' # _OBSOLETE=1
 	local SSH="ssh $TARGET -- "
 	local SKIP_DOWNLOAD=--skip-download
 	local WITHIN_INSTANCE=
@@ -139,9 +139,12 @@ qa-clone-job() {
 	local JOB=$1
 	shift
 
-	if [[ -n "$WITHIN_INSTANCE" && ! "$JOB" =~ ^-?[0-9]+$ ]]; then
-		echo "error: JOB should be a number"
-		return 1
+	if [[ -n "$WITHIN_INSTANCE" ]]; then
+		SSH=
+		if [[ ! "$JOB" =~ ^-?[0-9]+$ ]]; then
+			echo "error: JOB should be a number"
+			return 1
+		fi
 	fi
 
 	_qa $SSH openqa-clone-job $HOST_OPT $WITHIN_INSTANCE $SKIP_DEPS $SKIP_DOWNLOAD $JOB $@ $NS $SKIP_UPDATES
@@ -299,7 +302,7 @@ qa-sync-casedir() {
 	done
 
 	echo linking opensuse needles...
-	for product in microos opensuse; do
+	for product in microos opensuse leap-micro; do
 		local link=/var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
 		ssh $TARGET "ln -sfn /var/lib/openqa/tests/os-autoinst-needles-opensuse/ $link"
 	done
@@ -351,7 +354,7 @@ qa-link() {
 	done
 
 	echo linking opensuse needles...
-	for product in microos opensuse; do
+	for product in microos opensuse leap-micro; do
 		ln -sfn /var/lib/openqa/tests/os-autoinst-needles-opensuse /var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
 	done
 
