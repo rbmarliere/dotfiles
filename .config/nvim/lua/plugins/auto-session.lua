@@ -15,7 +15,38 @@ return {
 		},
 		save_extra_cmds = {
 			-- https://github.com/rmagatti/auto-session/issues/173
-			qf.get_qf
+			qf.get_qf,
+		},
+		pre_save_cmds = {
+			function()
+				-- close buffers by filetype like gitcommit
+				for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+					local bufft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+					if string.match(bufft, "git*") then
+						vim.api.nvim_buf_delete(bufnr, { force = true })
+					end
+				end
+			end,
+		},
+		post_save_cmds = {
+			function()
+				-- empty and close quickfix list so it doesn't flow into empty sessions
+				vim.cmd("cexpr []")
+				vim.cmd("cclose")
+				-- close all buffers so past sessions don't flow into empty sessions
+				vim.cmd("bufdo bd")
+			end,
+		},
+		post_restore_cmds = {
+			function()
+				-- re-enable git signs in all buffers
+				for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+					vim.api.nvim_buf_call(bufnr, function()
+						vim.cmd("Gitsigns attach")
+						require("lualine").refresh()
+					end)
+				end
+			end,
 		},
 	},
 	init = function()
