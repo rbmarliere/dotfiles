@@ -3,6 +3,7 @@ fzf
 fzf-bash-completion
 git-core
 gpg
+dirmngr
 htop
 libnotify-tools
 psmisc
