@@ -72,7 +72,7 @@ local create_groups = function()
 		group = "MyHighlights",
 		callback = function()
 			local tmux = vim.fn.getenv("TMUX")
-			if tmux ~= vim.NIL and not string.match(tmux, "neomutt") then
+			if tmux ~= vim.NIL and not string.match(tmux, "mail") then
 				vim.fn.system("tmux rename-window nvim")
 			end
 		end,
@@ -81,7 +81,7 @@ local create_groups = function()
 		group = "MyHighlights",
 		callback = function()
 			local tmux = vim.fn.getenv("TMUX")
-			if tmux ~= vim.NIL and not string.match(tmux, "neomutt") then
+			if tmux ~= vim.NIL and not string.match(tmux, "mail") then
 				vim.fn.system("tmux rename-window bash")
 			end
 		end,
