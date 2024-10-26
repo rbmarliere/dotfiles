@@ -1,39 +1,33 @@
 #!/bin/bash
 
+set -euo pipefail
+
 if [ $# -lt 1 ]; then
 	echo "usage: clone <url> [remote name] [target dir]"
 	exit
 fi
 
-URL="$1"
-if [ -z "$URL" ]; then
-	echo "no url specified"
-	exit 1
-fi
-
-REMOTE="$2"
-if [ -z "$REMOTE" ]; then
-	REMOTE=$(echo "$URL" | awk -F'[:/]' '{print $(NF-1)}')
-fi
-
-TARGET="$3"
-if [ -z "$TARGET" ]; then
-	TARGET=$(basename -s .git "$URL")
-fi
-
-CMD="git clone --bare $URL -o $REMOTE $TARGET"
+URL=${1:?no url specified}
+REMOTE=${2:-origin} # from URL: $(echo "$URL" | awk -F'[:/]' '{print $(NF-1)}')
+TARGET=${3:-$(basename -s .git "$URL")}
 
 set -x
-if ! $CMD; then
+
+if ! git clone --bare "$URL" -o "$REMOTE" "$TARGET"; then
 	echo "error cloning $URL"
 	exit 1
 fi
-cd $TARGET
+
+pushd "$TARGET"
 DEFAULT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-if ! git worktree add $DEFAULT_BRANCH; then
-	echo "error creating worktreer $DEFAULT_BRANCH"
+if ! git worktree add "$DEFAULT_BRANCH"; then
+	echo "error creating worktree $DEFAULT_BRANCH"
 	exit 1
 fi
-cd $DEFAULT_BRANCH
+
+pushd "$DEFAULT_BRANCH"
 git submodule update --init --recursive
+
 set +x
+popd
+popd
