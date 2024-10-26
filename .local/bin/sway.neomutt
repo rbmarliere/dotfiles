@@ -11,8 +11,9 @@ fi
 TMUX="tmux -L mail"
  if ! $TMUX list-sessions 2>/dev/null; then
 	$TMUX new-session -d -s mail
-	$TMUX set-option -g allow-rename off
-	$TMUX set-option -g automatic-rename off
+	$TMUX set-option -pg allow-rename off
+	$TMUX set-option -wg automatic-rename off
+	$TMUX set-option -g set-titles off
 
 	i=1
 	while IFS= read -r acc; do
