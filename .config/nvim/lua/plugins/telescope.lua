@@ -183,6 +183,7 @@ return {
 							["<C-t>"] = actions.select_tab, -- https://github.com/nvim-telescope/telescope-file-browser.nvim/issues/250
 							["<M-g>"] = grep_in_dir,
 							["<C-e>"] = path_toggle,
+							["<C-i>"] = fb_actions.toggle_respect_gitignore,
 						},
 						n = {
 							["-"] = fb_actions.goto_parent_dir,
@@ -190,6 +191,9 @@ return {
 							T = fb_actions.change_cwd,
 							["<M-g>"] = grep_in_dir,
 							["<C-e>"] = path_toggle,
+							["<C-i>"] = fb_actions.toggle_respect_gitignore,
+							["<C-p>"] = actions.move_selection_previous,
+							["<C-n>"] = actions.move_selection_next,
 						},
 					},
 				},
