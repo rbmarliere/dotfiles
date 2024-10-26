@@ -26,10 +26,10 @@ set $out1 "HSX BM274K1W 0x000F69B5"
 output $out1 resolution 2560x1440 scale 1 pos 0 0
 workspace 1 output $out1
 workspace 2 output $out1
+workspace 3 output $out1
 
 set $out2 "Dell Inc. DELL P2222H 14XP8Q3"
 output $out2 pos 2560 0 transform 90
-workspace 3 output $out2
 workspace 4 output $out2
 workspace 5 output $out2
 
@@ -49,20 +49,20 @@ input type:keyboard {
 }
 
 for_window [app_id="evolution-alarm-notify"] floating enable
-for_window [app_id="notes"] floating enable, resize set width 800 px height 800 px, sticky enable
+for_window [app_id="notes"] floating enable, resize set width 800 px height 1400 px, sticky enable
 
 #assign [app_id="firefox"] 6
-assign [app_id="evolution$"] 1
+assign [app_id="org.gnome.Evolution"] 1
 assign [class="Slack"] 1
 assign [app_id="org.telegram.desktop"] 2
 assign [class="discord"] 2
 # assign [app_id="org.gnome.Fractal"] 8
-assign [app_id="first_term"] 3
+assign [app_id="first_term"] 5
 assign [app_id="pad"] 6
 
-exec /usr/bin/tmux new-session -d "~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh"
+exec env TERM=$term /usr/bin/tmux new-session -d "~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh"
 
-exec sleep 1 && swaymsg workspace 3 && swaymsg layout tabbed && foot -a first_term
+exec sleep 1 && swaymsg workspace 5 && swaymsg layout tabbed && foot -a first_term
 exec sleep 2 && swaymsg workspace 4 && swaymsg layout tabbed
 exec sleep 3 && flatpak run com.discordapp.Discord
 exec sleep 4 && flatpak run org.telegram.desktop
