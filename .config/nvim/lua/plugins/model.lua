@@ -1,5 +1,6 @@
 return {
 	"gsuuon/model.nvim",
+	enabled = false,
 	cmd = { "M", "Model", "Mchat" },
 	init = function()
 		vim.filetype.add({
