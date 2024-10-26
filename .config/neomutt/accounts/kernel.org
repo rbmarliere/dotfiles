@@ -6,6 +6,12 @@ set real_name="Ricardo B. Marliere"
 set from="rbm@suse.com"
 set sendmail="msmtp -a suse.com"
 set folder="~/mail/kernel.org/"
+set record=""
+
+set beep=no
+set beep_new=no
+set timeout=60
+timeout-hook 'exec sync-mailbox'
 
 set spool_file="starred"
 set nm_query_type=threads
@@ -28,13 +34,9 @@ macro index + "<modify-labels>+*<enter><sync-mailbox>"
 macro index 0 "<modify-labels>-*<enter><sync-mailbox>"
 
 set my_bigfolders = "lkml|net|stable"
-set my_medfolders = "git|linux-doc|linux-fsdevel|linux-media|linux-mm|linux-riscv|linux-usb|u-boot"
-set my_smallfolders = "~$my_bigfolders|~$my_medfolders|~starred"
-folder-hook . "set collapse_all=yes; set collapse_flagged=yes; set collapse_unread=yes"
+folder-hook . "set collapse_all=yes; set collapse_flagged=no; set collapse_unread=no"
 folder-hook $my_bigfolders "push <last-entry><current-middle>"
 folder-hook $my_bigfolders "set collapse_all=yes; set collapse_flagged=yes; set collapse_unread=yes"
-folder-hook $my_medfolders "set collapse_all=yes; set collapse_flagged=no; set collapse_unread=no"
-folder-hook $my_smallfolders "set collapse_all=yes; set collapse_flagged=no; set collapse_unread=no"
 
 # windowed queries
 folder-hook . "set nm_query_window_enable=no; set nm_query_window_duration=0"
