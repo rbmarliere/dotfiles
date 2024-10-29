@@ -35,7 +35,14 @@ return {
 		vim.api.nvim_create_autocmd("VimEnter", {
 			callback = function()
 				if vim.fn.argc() > 0 then
+					-- unless opening a specific file
 					return
+				end
+				for _, arg in ipairs(vim.v.argv) do
+					if arg == "+Man!" then
+						-- unless opening as a manpage
+						return
+					end
 				end
 				local cmd = "git rev-parse --is-bare-repository"
 				if vim.fn.system(cmd) == "true\n" then
