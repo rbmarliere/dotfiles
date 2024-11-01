@@ -11,7 +11,7 @@ dbus-monitor "interface='org.freedesktop.Notifications'" |
 			CURR=$(date +%s)
                         # only one beep per 5 seconds
 			if ((CURR - LAST_BEEP >= 5)); then
-				paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
+				pw-play /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
                                 LAST_BEEP=$CURR
 			fi
 		fi
