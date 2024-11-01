@@ -202,7 +202,7 @@ return {
 
 		vim.keymap.set("v", "<M-g>", function()
 			vim.cmd('normal! "vy')
-			local visual_selection = vim.fn.getreg("v")
+			local visual_selection = vim.fn.getreg("v"):gsub("\n", "")
 			telescope.extensions.live_grep_args.live_grep_args({
 				default_text = visual_selection,
 			})
