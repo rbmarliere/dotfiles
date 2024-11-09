@@ -6,6 +6,6 @@ return {
 		vim.o.timeoutlen = 300
 	end,
 	opts = {
-		delay = 300,
+		delay = 1000,
 	},
 }
