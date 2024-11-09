@@ -9,6 +9,10 @@ DIR = \
 	$$HOME/.local/bin \
 	$$HOME/.local/share/applications
 
+FILES = \
+	$$HOME/.config/neomutt/aliases \
+	$$HOME/.config/nvim/lua/config/priv.lua
+
 ifeq (, $(shell which systemctl 2>/dev/null))
   $(error "Systemd is required")
 endif
@@ -41,7 +45,7 @@ links:
 		mv $$HOME/.bashrc $$HOME/.bashrc.bak; \
 	fi
 	stow --verbose --restow --target=$$HOME .
-	touch $$HOME/.config/neomutt/aliases
+	touch $(FILES)
 
 .PHONY: base
 base:
