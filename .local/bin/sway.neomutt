@@ -3,11 +3,6 @@
 echo -ne "\033]0;mail\007"
 sleep 1
 
-if grep -qE "desktop" ~/.config/sway/autoload; then
-	# swaymsg '[title="mail"]' move container to workspace 2, floating enable, resize set 1280 px 1400 px
-	swaymsg '[title="mail"]' move container to workspace 4
-fi
-
 TMUX="tmux -L mail"
  if ! $TMUX list-sessions 2>/dev/null; then
 	$TMUX new-session -d -s mail

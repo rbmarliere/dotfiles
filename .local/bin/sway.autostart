@@ -1,0 +1,27 @@
+#!/bin/bash
+
+swaymsg workspace 2
+i3-toolwait --waitfor discord flatpak run com.discordapp.Discord
+i3-toolwait --waitfor org.telegram.desktop flatpak run org.telegram.desktop
+
+swaymsg workspace 1
+i3-toolwait --waitfor org.gnome.Evolution evolution
+i3-toolwait --waitfor slack flatpak run com.slack.Slack
+
+swaymsg "workspace 5; layout tabbed"
+i3-toolwait foot
+
+swaymsg "workspace 6; layout tabbed"
+i3-toolwait foot
+
+swaymsg "workspace 4; layout tabbed"
+i3-toolwait -- foot -H bash -l -c "sway.newsboat"
+i3-toolwait -- foot -H bash -l -c "sway.weechat"
+i3-toolwait --nocheck -- firefox -P reading
+i3-toolwait -- foot -H bash -l -c "sway.neomutt"
+
+swaymsg workspace number 7
+i3-toolwait --nocheck firefox
+i3-toolwait foot
+
+swaymsg '[class="Slack"]' resize grow width 500px
