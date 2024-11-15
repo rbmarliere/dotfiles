@@ -61,7 +61,8 @@ nnoremap <Leader><Leader>K :resize +10<CR>
 nnoremap <Leader><Leader>L :vertical resize -50<CR>
 nnoremap <Leader><Space> :nohlsearch<CR>
 nnoremap <Leader>P O<Esc>pk<CR>
-nnoremap <Leader>S :%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>
+nnoremap <Leader>S :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+vnoremap <Leader>S y:%s/\zs<C-r>"\ze/<C-r>"/gI<Left><Left><Left>
 nnoremap <Leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap <Leader>X :!chmod +x %<CR>
 nnoremap <Leader>p :pu<CR>
