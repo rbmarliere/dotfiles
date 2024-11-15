@@ -2,7 +2,11 @@ local qf = require("utils.quickfix")
 
 return {
 	"rmagatti/auto-session",
+	-- name = "auto-session",
+	-- dir = "~/src/extra/auto-session/main",
+	-- dev = true,
 	opts = {
+		-- log_level = vim.log.levels.DEBUG,
 		auto_session_enabled = true,
 		auto_save_enabled = true,
 		auto_session_create_enabled = function()
@@ -10,9 +14,7 @@ return {
 			return vim.fn.system(cmd) == "true\n"
 		end,
 		silent_restore = false,
-		cwd_change_handling = {
-			restore_upcoming_session = true,
-		},
+		cwd_change_handling = true,
 		save_extra_cmds = {
 			-- https://github.com/rmagatti/auto-session/issues/173
 			qf.get_qf,
