@@ -20,14 +20,10 @@ require("conform").formatters.yamltidy = {
 	-- end,
 	stdin = true,
 }
-
--- local Hooks = require("git-worktree.hooks")
--- Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)
--- 	require("plenary.job")
--- 		:new({
--- 			command = "ln",
--- 			args = { "-s", "", "--recursive", "--init" },
--- 			cwd = path,
--- 		})
--- 		:start()
--- end)
+--
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "gitcommit",
+    callback = function()
+        vim.opt_local.colorcolumn = "72"
+    end,
+})
