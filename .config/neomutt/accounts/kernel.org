@@ -13,6 +13,10 @@ set beep_new=no
 set timeout=60
 timeout-hook 'exec sync-mailbox'
 
+set collapse_all=yes
+set collapse_flagged=yes
+set collapse_unread=yes
+
 set spool_file="starred"
 set nm_query_type=threads
 set nm_exclude_tags="junk"
@@ -26,6 +30,7 @@ virtual-mailboxes \
 
 bind index < vfolder-window-backward
 bind index > vfolder-window-forward
+bind index <esc>> vfolder-window-reset
 macro index \\\\ "<vfolder-from-query>"
 macro index L "<shell-escape>read link; id=$(echo \$link | sed -n 's#.*/\\([^/]*\\)/#\\1#p'); echo \$id | wl-copy;<enter><vfolder-from-query>id:"
 macro index \Ca "<modify-labels>+archive -unread -inbox -*<enter>"
@@ -33,12 +38,11 @@ macro index S "<modify-labels-then-hide>-inbox -unread +junk<enter>"
 macro index + "<modify-labels>+*<enter><sync-mailbox>"
 macro index 0 "<modify-labels>-*<enter><sync-mailbox>"
 
-set my_bigfolders = "lkml|net|stable"
-folder-hook . "set collapse_all=yes; set collapse_flagged=no; set collapse_unread=no"
-folder-hook $my_bigfolders "push <last-entry><current-middle>"
-folder-hook $my_bigfolders "set collapse_all=yes; set collapse_flagged=yes; set collapse_unread=yes"
+folder-hook . "push <last-entry><current-middle>"
 
 # windowed queries
-folder-hook . "set nm_query_window_enable=no; set nm_query_window_duration=0"
-folder-hook $my_bigfolders "set nm_query_window_enable=yes; set nm_query_window_duration=3; set nm_query_window_timebase='month'"
-folder-hook $my_medfolders "set nm_query_window_enable=yes; set nm_query_window_duration=0; set nm_query_window_timebase='year'"
+set nm_query_window_timebase='month'
+folder-hook . "set nm_query_window_enable=yes; set nm_query_window_duration=0;"
+folder-hook -noregex 'notmuch://?query=tag:*' "set nm_query_window_enable=no; set nm_query_window_duration=0;"
+macro index <esc>y "<enter-command>set nm_query_window_timebase='year'<enter>"
+macro index <esc>m "<enter-command>set nm_query_window_timebase='month'<enter>"

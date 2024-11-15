@@ -14,7 +14,6 @@ set index_format="%6C %Z %[${date_format}] %-15.15L %s"
 set mail_check_stats=yes
 set mailcap_path=~/.config/neomutt/mailcap:$mailcap_path
 set markers=no
-set mask=""
 set mime_type_query_command="xdg-mime query filetype %s"
 set pager_stop=yes
 set quote_regex="^([ \t]*[|>:}])+"
@@ -41,4 +40,6 @@ source "~/.config/neomutt/aliases"
 source "~/.config/neomutt/binds"
 source "~/.config/neomutt/colors"
 
-folder-hook . "set collapse_all=yes; set collapse_flagged=no; set collapse_unread=no"
+set collapse_all=yes
+set collapse_flagged=no
+set collapse_unread=no
