@@ -1,15 +1,14 @@
 return {
-	"rbmarliere/git-worktree.nvim",
-	name = "git-worktree.nvim",
-	branch = "track_upstream",
-	-- dir = "~/src/rbmarliere/git-worktree.nvim/track_upstream",
+	"polarmutex/git-worktree.nvim",
+	-- name = "git-worktree.nvim",
+	-- dir = "~/src/rbmarliere/git-worktree.nvim/main",
 	-- dev = true,
 	init = function()
 		-- vim.g.git_worktree_log_level = "debug"
 		vim.g.git_worktree = {
 			change_directory_command = "cd",
 			update_on_change = false,
-			update_on_change_command = "e .",
+			update_on_change_command = "",
 			clearjumps_on_change = true,
 			confirm_telescope_deletions = true,
 			autopush = false,
