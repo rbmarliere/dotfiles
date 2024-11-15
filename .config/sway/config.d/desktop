@@ -17,7 +17,6 @@ set $eleventh minus
 seat seat0 hide_cursor 2000
 
 bindsym $mod+Shift+r exec swaymsg resize set width 1400 px height 1400 px
-bindsym $mod+n exec ~/.local/bin/notes
 bindsym $mod+Ctrl+l \
 exec swayidle -w \
 	timeout 1 'swaylock -f -c 000000 -i $bg' \
@@ -51,7 +50,11 @@ input type:keyboard {
 }
 
 for_window [app_id="evolution-alarm-notify"] floating enable
-for_window [app_id="notes"] floating enable, resize set width 800 px height 1400 px, sticky enable
+# assign [app_id="notes"] 4
+# assign [class="obsidian"] 4
 
 exec env TERM=$term /usr/bin/tmux new-session -d "~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh"
 exec ~/.local/bin/sway.autostart
+
+bindsym $mod+n exec ~/.local/bin/notes
+bindsym $mod+shift+n exec ~/.local/bin/obsidian

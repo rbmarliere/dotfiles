@@ -12,7 +12,7 @@ swaymsg "workspace 5; layout tabbed"
 i3-toolwait foot
 
 swaymsg "workspace 6; layout tabbed"
-i3-toolwait foot
+i3-toolwait --wait notes -- foot -a notes -H bash -l -c "sway.notes"
 
 swaymsg "workspace 4; layout tabbed"
 i3-toolwait -- foot -H bash -l -c "sway.newsboat"
