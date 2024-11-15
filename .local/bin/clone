@@ -3,13 +3,13 @@
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
-	echo "usage: clone <url> [remote name] [target dir]"
+	echo "usage: clone <url> [target dir] [remote name]"
 	exit
 fi
 
 URL=${1:?no url specified}
-REMOTE=${2:-origin} # from URL: $(echo "$URL" | awk -F'[:/]' '{print $(NF-1)}')
-TARGET=${3:-$(basename -s .git "$URL")}
+TARGET=${2:-$(basename -s .git "$URL")}
+REMOTE=${3:-origin} # from URL: $(echo "$URL" | awk -F'[:/]' '{print $(NF-1)}')
 
 set -x
 
