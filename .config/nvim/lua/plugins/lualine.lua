@@ -107,7 +107,7 @@ return {
 						path = 1,
 					},
 				},
-				lualine_c = { "branch" },
+				lualine_c = { }, -- "branch"
 				lualine_x = { "diff", "diagnostics" }, -- "encoding", "fileformat", "fileformat", "filetype" },
 				lualine_y = { "progress", "searchcount" },
 				lualine_z = { "location", "selectioncount" },
