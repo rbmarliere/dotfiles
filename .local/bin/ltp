@@ -12,3 +12,8 @@ sudo make DESTDIR=$ROOT install
 sudo vng --run $KDIR --rw --root $ROOT
 
 # /opt/ltp/kirk --run-command $CMD
+
+
+# metadata:
+# cd metadata && make
+# xdg-open ../docparse/metadata.html
