@@ -28,7 +28,7 @@ return {
 		}
 		lint.linters_by_ft = {
 			c = { "checkpatch" },
-			markdown = { "vale" },
+			-- markdown = { "vale" },
 			-- rust = { "klint" },
 			yaml = { "yamllint" },
 		}
