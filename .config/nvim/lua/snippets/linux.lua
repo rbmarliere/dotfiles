@@ -1,4 +1,5 @@
 return {
+	s("Signed-off-by", t("Signed-off-by: "), i(1)),
 	s("Suggested-by", t("Suggested-by: "), i(1)),
 	s("Reviewed-by", t("Reviewed-by: "), i(1)),
 	s("Tested-by", t("Tested-by: "), i(1)),
