@@ -22,6 +22,7 @@ i3-toolwait -- foot -H bash -l -c "sway.neomutt"
 
 swaymsg workspace number 7
 i3-toolwait --nocheck firefox
-i3-toolwait foot
+i3-toolwait --waitfor todoist flatpak run com.todoist.Todoist
 
 swaymsg '[class="Slack"]' resize grow width 500px
+swaymsg '[class="Todoist"]' resize shrink width 500px

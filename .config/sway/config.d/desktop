@@ -58,3 +58,4 @@ exec ~/.local/bin/sway.autostart
 
 bindsym $mod+n exec ~/.local/bin/notes
 bindsym $mod+shift+n exec ~/.local/bin/obsidian
+bindsym $mod+t exec swaymsg "[class=Todoist]" focus

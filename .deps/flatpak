@@ -1,5 +1,6 @@
 com.discordapp.Discord
 com.slack.Slack
+com.todoist.Todoist
+md.obsidian.Obsidian
 org.gnome.Fractal
 org.telegram.desktop
-md.obsidian.Obsidian
