@@ -12,15 +12,20 @@ swaymsg "workspace 5; layout tabbed"
 i3-toolwait foot
 
 swaymsg "workspace 6; layout tabbed"
-i3-toolwait --wait notes -- foot -a notes -H bash -l -c "sway.notes"
+i3-toolwait foot
 
 swaymsg "workspace 4; layout tabbed"
 i3-toolwait -- foot -H bash -l -c "sway.newsboat"
 i3-toolwait -- foot -H bash -l -c "sway.weechat"
-i3-toolwait --nocheck -- firefox -P reading
 i3-toolwait -- foot -H bash -l -c "sway.neomutt"
+i3-toolwait --wait notes -- foot -a notes -H bash -l -c "sway.notes"
 
-swaymsg workspace number 7
+swaymsg workspace 8
+i3-toolwait --nocheck -- firefox -P reading
+i3-toolwait --wait pad -- foot -a pad
+swaymsg '[app_id="pad"]' resize grow width 500px
+
+swaymsg workspace 7
 i3-toolwait --nocheck firefox
 i3-toolwait --waitfor todoist flatpak run com.todoist.Todoist
 
