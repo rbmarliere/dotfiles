@@ -15,7 +15,8 @@ return {
 		"nvim-lua/plenary.nvim",
 	},
 	keys = {
-		{ "<leader>o", ":ObsidianQuickSwitch<CR>" },
+		{ "<leader>oo", ":ObsidianQuickSwitch<CR>" },
+		{ "<leader>on", ":ObsidianNew<CR>" },
 		{ "<leader>ot", ":ObsidianToday<CR>" },
 		{ "<leader>O", ":Obsidian" },
 	},
@@ -38,9 +39,9 @@ return {
 		disable_frontmatter = true,
 		notes_subdir = "inbox",
 		daily_notes = {
-			folder = "journal",
+			folder = "journal/",
 			default_tags = {},
-			date_format = "%Y%m%d",
+			date_format = "%Y/%m-%B/%Y-%m-%d-%A",
 		},
 		-- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
 		completion = {
