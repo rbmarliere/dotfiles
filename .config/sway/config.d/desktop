@@ -44,7 +44,7 @@ workspace 8 output $out3
 workspace 9 output $out3
 
 input type:keyboard {
-	xkb_layout rbm
+	xkb_layout rbm,us(altgr-intl)
 	xkb_options caps:shiftlock
 	# inspired by https://github.com/ThePrimeagen/keyboards
 }
