@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # https://openqa-bites.github.io/openqa/openqa-cli-cheat-sheet/
+# TODO: qa-sync should call qa-sync-allow only once, maybe add a --no-check to intermediate calls
 
 TARGET=qa # defined in ~/.ssh/config
 HOST=
@@ -12,16 +13,20 @@ _set_host() {
 	case "$HOST" in
 	ooo | o3)
 		HOST=https://openqa.opensuse.org
-		HOST_OPT="--host $HOST" ;;
-	osd) 
+		HOST_OPT="--host $HOST"
+		;;
+	osd)
 		HOST=http://openqa.suse.de
-		HOST_OPT="--host $HOST" ;;
+		HOST_OPT="--host $HOST"
+		;;
 	local)
 		HOST=
-		HOST_OPT= ;;
+		HOST_OPT=
+		;;
 	*)
 		HOST=http://rmarliere-openqa.qe.prg2.suse.org
-		HOST_OPT="--host $HOST" ;;
+		HOST_OPT="--host $HOST"
+		;;
 	esac
 }
 
@@ -103,7 +108,7 @@ qa-clone-job() {
 
 	usage() {
 		echo "usage: qa-clone [options] JOB_NUMBER"
-		echo "  -s  --skip-download             Same openqa-clone-job option"
+		echo "  -s  --no-skip-download             Same openqa-clone-job option"
 		echo "  -S  --no-ssh                    Don't run command through ssh to $TARGET"
 		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
 		echo "  -U  --skip-updates              Use the special variables to skip maintenance updates"
@@ -330,16 +335,35 @@ qa-sync-needles-update() {
 }
 
 qa-sync() {
+	usage() {
+		echo "usage: qa-sync CASEDIR [NEEDLES]"
+		echo "  If NEEDLES is empty, qa-sync-needles-update will be called first"
+	}
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		-h | --help)
+			usage
+			return 0
+			;;
+		*) break ;;
+		esac
+		shift
+	done
 	local CASEDIR=$1
 	shift
 	local NEEDLES=$1
 	shift
-	if [[ -z $CASEDIR || -z $NEEDLES ]]; then
-		echo "usage: qa-sync CASEDIR NEEDLES"
+	if [[ -z $CASEDIR ]]; then
+		usage
 		return 1
 	fi
+	if [[ -z $NEEDLES ]]; then
+		echo "NEEDLES not informed, running qa-sync-needles-update..."
+		qa-sync-needles-update
+	else
+		qa-sync-needles "$NEEDLES"
+	fi
 	qa-sync-casedir "$CASEDIR"
-	qa-sync-needles "$NEEDLES"
 }
 
 qa-link() {
@@ -372,9 +396,52 @@ qa-sql() {
 }
 
 qa-vnc() {
-	ssh -NL 6000:localhost:"${1:-5991}" -J qa qa &
+	LOCAL_PORT=6000
+	REMOTE_PORT=5991
+	REMOTE_HOST=$TARGET
+	WORKER=localhost
+
+	usage() {
+		echo "usage: qa-vnc [options]"
+		echo "  -p  --port             Local port ($LOCAL_PORT)"
+		echo "  -P  --remote-port      Remote port ($REMOTE_PORT)"
+		echo "  -t  --target           Remote host ($REMOTE_HOST)"
+		echo "  -w  --worker           Target worker ($WORKER)"
+	}
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		-h | --help)
+			usage
+			return 0
+			;;
+		-p | --port)
+			shift
+			LOCAL_PORT="$1"
+			;;
+		-P | --remote-port)
+			shift
+			REMOTE_PORT="$1"
+			;;
+		-t | --target)
+			shift
+			REMOTE_HOST="$1"
+			;;
+		-w | --worker)
+			shift
+			WORKER="$1"
+			;;
+		*) break ;;
+		esac
+		shift
+	done
+
+	ssh \
+		-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+		-NL $LOCAL_PORT:$WORKER:$REMOTE_PORT $REMOTE_HOST &
 	SSH_PID=$!
+
 	sleep 5
-	vncviewer -shared localhost:6000
+	vncviewer -shared localhost:$LOCAL_PORT
 	kill $SSH_PID
 }
