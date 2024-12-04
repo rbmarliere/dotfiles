@@ -22,5 +22,6 @@ return {
 		{ "<Leader>gE", ":e %:h<CR>" }, -- parent tree of a blob http://vimcasts.org/episodes/fugitive-vim-browsing-the-git-object-database/
 		{ "<Leader>gp", ":G pull origin<CR>" },
 		{ "<Leader>gP", ":G push " },
+		{ "<Leader>gR", ":!git set-pushRemote " },
 	},
 }

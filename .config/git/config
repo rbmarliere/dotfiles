@@ -37,6 +37,7 @@
 	st = status
 	w = worktree
 	staash = stash --all
+	set-pushRemote = "!git config --unset-all branch.$(git branch --show-current).pushRemote 2>/dev/null; git config branch.$(git branch --show-current).pushRemote $1"
 
 [rerere]
 	enabled = true
