@@ -11,3 +11,4 @@ python3-pip
 python3-virtualenv
 ripgrep
 rustup
+source-highlight
