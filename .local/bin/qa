@@ -177,6 +177,7 @@ qa-clone-build() {
 	local WITHIN_INSTANCE=0
 	local LIMIT=0
 	local CONFIRM=
+	local GROUP=
 
 	usage() {
 		echo "usage: qa-clone-build [options] URL"
@@ -215,7 +216,13 @@ qa-clone-build() {
 		-C | --ask-confirm)
 			CONFIRM=1
 			;;
-		*) break ;;
+		-G | --group)
+			shift
+			GROUP="_GROUP_ID=$1"
+			;;
+		*)
+			break
+			;;
 		esac
 		shift
 	done
@@ -243,10 +250,10 @@ qa-clone-build() {
 			echo "cloning $ID..."
 			[ -n "$CONFIRM" ] && SKIP_CONFIRMATION=0
 			if [[ $WITHIN_INSTANCE -eq 1 ]]; then
-				qa-clone-job -w -u -U "$ID" "$@"
+				qa-clone-job -w -u -U "$ID" "$@" $GROUP
 			else
 				ID=${URL//overview*/$ID}
-				qa-clone-job -D -u -U "$ID" "$@"
+				qa-clone-job -D -u -U "$ID" "$@" $GROUP
 			fi
 			[ -n "$CONFIRM" ] && SKIP_CONFIRMATION=0
 		fi
