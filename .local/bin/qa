@@ -10,14 +10,15 @@ SKIP_CONFIRMATION=0
 MY_HOST=http://rmarliere-openqa.qe.prg2.suse.org
 
 _set_host() {
+	# echo $HOST >&2
 	TARGET=qa
 	case "$HOST" in
-	ooo | o3)
+	ooo | o3 | *openqa.opensuse.org)
 		HOST=https://openqa.opensuse.org
 		HOST_OPT="--host $HOST"
 		;;
-	osd)
-		HOST=http://openqa.suse.de
+	osd | *openqa.suse.de)
+		HOST=https://openqa.suse.de
 		HOST_OPT="--host $HOST"
 		;;
 	local)
@@ -67,7 +68,7 @@ _qa-get-build-jobs() {
 	URL_HOST=$(echo "$URL" | awk -F '/tests' '{print $1}')
 	QUERY=$(echo "${URL##*\?}" | sed 's/&/ /g')
 
-	HOST=$URL_HOST qa jobs/overview $QUERY | jq -r '.[].id'
+	HOST=$URL_HOST qa api jobs/overview $QUERY | jq -r '.[].id'
 }
 
 qa() {
