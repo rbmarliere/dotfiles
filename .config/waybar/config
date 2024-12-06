@@ -9,10 +9,10 @@
 
 	"modules-right": [
 		//"pulseaudio",
+		"sway/language",
 		"pulseaudio#sink",
 		"pulseaudio#source",
 		"bluetooth",
-		"sway/language",
 		"backlight",
 		"battery",
 		"network",
