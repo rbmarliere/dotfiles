@@ -23,5 +23,6 @@ return {
 		{ "<Leader>gp", ":G pull origin<CR>" },
 		{ "<Leader>gP", ":G push " },
 		{ "<Leader>gR", ":!git set-pushRemote " },
+		{ "<Leader>gO", ":!git set-origin<CR>" },
 	},
 }

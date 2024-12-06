@@ -38,6 +38,8 @@
 	w = worktree
 	staash = stash --all
 	set-pushRemote = "!git config --unset-all branch.$(git branch --show-current).pushRemote 2>/dev/null; git config branch.$(git branch --show-current).pushRemote $1"
+	set-origin = !sh -c 'git config remote.${1:-origin}.fetch \"+refs/heads/*:refs/remotes/${1:-origin}/*\"' -
+
 
 [rerere]
 	enabled = true

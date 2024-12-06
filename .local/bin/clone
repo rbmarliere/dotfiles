@@ -11,8 +11,6 @@ URL=${1:?no url specified}
 TARGET=${2:-$(basename -s .git "$URL")}
 REMOTE=${3:-origin} # from URL: $(echo "$URL" | awk -F'[:/]' '{print $(NF-1)}')
 
-set -x
-
 if ! git clone --bare "$URL" -o "$REMOTE" "$TARGET"; then
 	echo "error cloning $URL"
 	exit 1
@@ -27,7 +25,8 @@ fi
 
 pushd "$DEFAULT_BRANCH"
 git submodule update --init --recursive
+git set-origin "$REMOTE"
+git fetch "$REMOTE"
 
-set +x
 popd
 popd
