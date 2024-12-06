@@ -347,8 +347,11 @@ qa-sync-needles-update() {
 }
 
 qa-sync() {
+	local IGNORE_NEEDLES=
 	usage() {
-		echo "usage: qa-sync CASEDIR [NEEDLES]"
+		echo "usage: qa-sync [options] CASEDIR [NEEDLES]"
+		echo "  -h  --help                    Display this message"
+		echo "  -f  --force                   Ignore NEEDLES argument"
 		echo "  If NEEDLES is empty, qa-sync-needles-update will be called first"
 	}
 	while [[ $# -gt 0 ]]; do
@@ -357,6 +360,7 @@ qa-sync() {
 			usage
 			return 0
 			;;
+		-f | --force) IGNORE_NEEDLES=1 ;;
 		*) break ;;
 		esac
 		shift
@@ -369,11 +373,12 @@ qa-sync() {
 		usage
 		return 1
 	fi
-	if [[ -z $NEEDLES ]]; then
-		echo "NEEDLES not informed, running qa-sync-needles-update..."
-		qa-sync-needles-update
-	else
-		qa-sync-needles "$NEEDLES"
+	if [[ $IGNORE_NEEDLES -ne 1 ]]; then
+		if [[ -z $NEEDLES ]]; then
+			qa-sync-needles-update
+		else
+			qa-sync-needles "$NEEDLES"
+		fi
 	fi
 	qa-sync-casedir "$CASEDIR"
 }
