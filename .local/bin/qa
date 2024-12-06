@@ -121,7 +121,7 @@ qa-clone-job() {
 
 	usage() {
 		echo "usage: qa-clone [options] JOB_NUMBER"
-		echo "  -s  --no-skip-download             Same openqa-clone-job option"
+		echo "  -s  --no-skip-download          Same openqa-clone-job option"
 		echo "  -S  --no-ssh                    Don't run command through ssh to $TARGET"
 		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
 		echo "  -U  --skip-updates              Use the special variables to skip maintenance updates"
@@ -176,6 +176,7 @@ qa-clone-build() {
 	local CLONE_SKIPPED=
 	local WITHIN_INSTANCE=0
 	local LIMIT=0
+	local CONFIRM=
 
 	usage() {
 		echo "usage: qa-clone-build [options] URL"
@@ -211,6 +212,9 @@ qa-clone-build() {
 			shift
 			LIMIT=$1
 			;;
+		-C | --ask-confirm)
+			CONFIRM=1
+			;;
 		*) break ;;
 		esac
 		shift
@@ -237,14 +241,14 @@ qa-clone-build() {
 		fi
 		if [[ $CLONE_ALL -eq 1 || $CLONE_CUR -eq 1 ]]; then
 			echo "cloning $ID..."
-			# SKIP_CONFIRMATION=0
+			[ -n "$CONFIRM" ] && SKIP_CONFIRMATION=0
 			if [[ $WITHIN_INSTANCE -eq 1 ]]; then
 				qa-clone-job -w -u -U "$ID" "$@"
 			else
 				ID=${URL//overview*/$ID}
 				qa-clone-job -D -u -U "$ID" "$@"
 			fi
-			# SKIP_CONFIRMATION=1
+			[ -n "$CONFIRM" ] && SKIP_CONFIRMATION=0
 		fi
 		CLONE_CUR=0
 		((CUR++))
