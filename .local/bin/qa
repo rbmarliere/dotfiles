@@ -7,6 +7,7 @@ TARGET=qa # defined in ~/.ssh/config
 HOST=
 HOST_OPT=
 SKIP_CONFIRMATION=0
+MY_HOST=http://rmarliere-openqa.qe.prg2.suse.org
 
 _set_host() {
 	TARGET=qa
@@ -24,10 +25,19 @@ _set_host() {
 		HOST_OPT=
 		;;
 	*)
-		HOST=http://rmarliere-openqa.qe.prg2.suse.org
+		HOST=$MY_HOST
 		HOST_OPT="--host $HOST"
 		;;
 	esac
+}
+
+_host_check() {
+	_set_host
+	if [ "$HOST" != $MY_HOST ]; then
+		echo "error: HOST is not $MY_HOST"
+		return 1
+	fi
+	return 0
 }
 
 _qa() {
@@ -68,7 +78,7 @@ qa() {
 }
 
 qa-load-templates() {
-	_set_host
+	_host_check || return
 	_qa openqa-load-templates $HOST_OPT "$@"
 }
 
@@ -87,6 +97,8 @@ qa-dump-templates() {
 }
 
 qa-load-schedule() {
+	_host_check || return
+
 	GID=$1
 	shift
 	TEMPLATE=$1
