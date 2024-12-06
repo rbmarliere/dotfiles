@@ -21,6 +21,7 @@ return {
 			css = { "prettier" },
 			go = { "goimports", "gofmt" },
 			gohtmltmpl = { "prettier" },
+			gotmpl = { "prettier" },
 			html = { "prettier" },
 			javascript = { "prettier" },
 			json = { "prettier" },
