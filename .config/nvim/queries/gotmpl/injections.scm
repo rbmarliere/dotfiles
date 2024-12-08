@@ -1,3 +1,3 @@
 ((text) @injection.content
- (#set! injection.language "gohtmltmpl")
+ (#set! injection.language "html")
  (#set! injection.combined))
