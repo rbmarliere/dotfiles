@@ -114,18 +114,19 @@ qa-clone-job() {
 
 	local NS='_GROUP=0 BUILD+="rbmarliere"' # _OBSOLETE=1
 	local SSH="ssh $TARGET -- "
-	local SKIP_DOWNLOAD=--skip-download
+	local SKIP_DOWNLOAD=
 	local WITHIN_INSTANCE=
 	local SKIP_UPDATES=
 	local SKIP_DEPS=
 
 	usage() {
 		echo "usage: qa-clone [options] JOB_NUMBER"
-		echo "  -s  --no-skip-download          Same openqa-clone-job option"
-		echo "  -S  --no-ssh                    Don't run command through ssh to $TARGET"
-		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
-		echo "  -U  --skip-updates              Use the special variables to skip maintenance updates"
+		echo ""
+		echo "      --no-ssh                    Don't run command through ssh to $TARGET"
 		echo "  -D  --skip-chained-deps         Same as openqa-clone-job option"
+		echo "  -U  --skip-updates              Use the special variables to skip maintenance updates"
+		echo "  -s  --skip-download          Same openqa-clone-job option"
+		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
 		echo "  -w  --within-instance           Same as openqa-clone-job option"
 	}
 
@@ -140,10 +141,18 @@ qa-clone-job() {
 			usage
 			return 0
 			;;
-		-s | --no-skip-download) SKIP_DOWNLOAD= ;;
-		-S | --ssh) SSH= ;;
-		-u | --unnamed) NS= ;;
-		-U | --skip-updates) SKIP_UPDATES="SKIP_MAINTENANCE_UPDATES=1 PUBLIC_CLOUD_IGNORE_EMPTY_REPO=1 PUBLIC_CLOUD_SKIP_MU=1" ;;
+		-s | --skip-download)
+			SKIP_DOWNLOAD=--skip-download
+			;;
+		--no-ssh)
+			SSH=
+			;;
+		-u | --unnamed)
+			NS=
+			;;
+		-U | --skip-updates)
+			SKIP_UPDATES="SKIP_MAINTENANCE_UPDATES=1 PUBLIC_CLOUD_IGNORE_EMPTY_REPO=1 PUBLIC_CLOUD_SKIP_MU=1"
+			;;
 		-w | --within-instance)
 			HOST_OPT=
 			WITHIN_INSTANCE="--within-instance $HOST"
@@ -151,7 +160,9 @@ qa-clone-job() {
 		-D | --skip-chained-deps)
 			SKIP_DEPS=--skip-chained-deps
 			;;
-		*) break ;;
+		*)
+			break
+			;;
 		esac
 		shift
 	done
@@ -391,6 +402,7 @@ qa-sync() {
 	local IGNORE_NEEDLES=
 	usage() {
 		echo "usage: qa-sync [options] CASEDIR [NEEDLES]"
+		echo ""
 		echo "  -h  --help                    Display this message"
 		echo "  -f  --force                   Ignore NEEDLES argument"
 		echo "  If NEEDLES is empty, qa-sync-needles-update will be called first"
@@ -461,6 +473,7 @@ qa-vnc() {
 
 	usage() {
 		echo "usage: qa-vnc [options]"
+		echo ""
 		echo "  -p  --port             Local port ($LOCAL_PORT)"
 		echo "  -P  --remote-port      Remote port ($REMOTE_PORT)"
 		echo "  -t  --target           Remote host ($REMOTE_HOST)"
