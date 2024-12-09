@@ -35,7 +35,7 @@ _set_host() {
 _host_check() {
 	_set_host
 	if [ "$HOST" != $MY_HOST ]; then
-		echo "error: HOST is not $MY_HOST"
+		echo "error: HOST is not $MY_HOST" >&2
 		return 1
 	fi
 	return 0
@@ -162,7 +162,7 @@ qa-clone-job() {
 	if [[ -n "$WITHIN_INSTANCE" ]]; then
 		SSH=
 		if [[ ! "$JOB" =~ ^-?[0-9]+$ ]]; then
-			echo "error: JOB should be a number"
+			echo "error: JOB should be a number" >&2
 			return 1
 		fi
 	fi
@@ -178,9 +178,12 @@ qa-clone-build() {
 	local LIMIT=0
 	local CONFIRM=
 	local GROUP=
+	local URL=
+	local QA_CLONE_ARG=()
+	local QA_CLONE_OPT=()
 
 	usage() {
-		echo "usage: qa-clone-build [options] URL"
+		echo "usage: qa-clone-build [options] URL -- [qa-clone-job options] [variables]"
 		echo "  -F  --failed                    Clone failed jobs"
 		echo "  -S  --skipped                   Clone skipped jobs"
 		echo "  -w  --within-instance           Clone within openQA instance"
@@ -194,6 +197,19 @@ qa-clone-build() {
 
 	while [[ $# -gt 0 ]]; do
 		case "$1" in
+		--)
+			shift
+			# parse arguments and options to qa-clone-job
+			while [[ $# -gt 0 ]]; do
+				if [[ "$1" == -* ]]; then
+					QA_CLONE_OPT+=("$1")
+				else
+					QA_CLONE_ARG+=("$1")
+				fi
+				shift
+			done
+			break
+			;;
 		-h | --help)
 			usage
 			return 0
@@ -221,15 +237,16 @@ qa-clone-build() {
 			GROUP="_GROUP_ID=$1"
 			;;
 		*)
-			break
+			if [[ -z "$URL" ]]; then
+				URL="$1"
+			else
+				echo "error: multiple URL provided ($URL and $1)" >&2
+				return 1
+			fi
 			;;
 		esac
 		shift
 	done
-
-	local URL=$1
-	shift
-	[[ -z $URL ]] && return 1
 
 	local JOBS
 	mapfile -t JOBS < <(_qa-get-build-jobs "$URL")
@@ -250,10 +267,10 @@ qa-clone-build() {
 			echo "cloning $ID..."
 			[ -n "$CONFIRM" ] && SKIP_CONFIRMATION=0
 			if [[ $WITHIN_INSTANCE -eq 1 ]]; then
-				qa-clone-job -w -u -U "$ID" "$@" $GROUP
+				qa-clone-job -w "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
 			else
 				ID=${URL//overview*/$ID}
-				qa-clone-job -D -u -U "$ID" "$@" $GROUP
+				qa-clone-job "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
 			fi
 			[ -n "$CONFIRM" ] && SKIP_CONFIRMATION=0
 		fi
