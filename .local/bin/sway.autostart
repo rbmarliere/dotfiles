@@ -7,6 +7,7 @@ i3-toolwait --waitfor org.telegram.desktop flatpak run org.telegram.desktop
 swaymsg workspace 1
 i3-toolwait --waitfor org.gnome.Evolution evolution
 i3-toolwait --waitfor slack flatpak run com.slack.Slack
+swaymsg '[class="Slack"]' resize grow width 500px
 
 swaymsg "workspace 5; layout tabbed"
 i3-toolwait foot
@@ -28,6 +29,7 @@ swaymsg '[app_id="pad"]' resize grow width 500px
 swaymsg workspace 7
 i3-toolwait --nocheck firefox
 i3-toolwait --waitfor todoist flatpak run com.todoist.Todoist
-
-swaymsg '[class="Slack"]' resize grow width 500px
 swaymsg '[class="Todoist"]' resize shrink width 500px
+
+i3-toolwait --nocheck nautilus
+swaymsg '[app_id="org.gnome.Nautilus"]' move to scratchpad
