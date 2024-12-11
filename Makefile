@@ -10,6 +10,7 @@ DIR = \
 	$$HOME/.local/share/applications
 
 FILES = \
+	$$HOME/.bash_eternal_history \
 	$$HOME/.config/neomutt/aliases \
 	$$HOME/.config/nvim/lua/config/priv.lua
 
