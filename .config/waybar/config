@@ -100,7 +100,8 @@
 			"default": ["", "", ""]
 		},
 		"on-click": "/usr/bin/pavucontrol -t 3",
-		"on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+		//"on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+		"on-click-right": "~/.local/bin/sway.toggle_sink",
 		"on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%",
 		"on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%"
 	},

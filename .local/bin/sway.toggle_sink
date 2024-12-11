@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# pactl list short sinks
+S1="alsa_output.usb-Focusrite_Scarlett_2i4_USB-00.HiFi__Line1__sink"
+S2="alsa_output.pci-0000_10_00.6.analog-stereo"
+
+CUR=$(pactl get-default-sink)
+
+if [[ $CUR == "$S1" ]]; then
+    pactl set-default-sink "$S2"
+else
+    pactl set-default-sink "$S1"
+fi
