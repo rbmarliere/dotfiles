@@ -26,8 +26,6 @@ fi
 pushd "$DEFAULT_BRANCH"
 git submodule update --init --recursive
 git set-origin "$REMOTE"
-git fetch "$REMOTE"
-git branch -u "$REMOTE/$DEFAULT_BRANCH" "$DEFAULT_BRANCH"
 
 popd
 popd
