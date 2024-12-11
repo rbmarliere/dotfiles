@@ -97,7 +97,7 @@ qa-dump-templates() {
 	_qa openqa-dump-templates $HOST_OPT --group "$GROUP" --json "$@"
 }
 
-qa-load-schedule() {
+qa-post-schedule() {
 	_host_check || return
 
 	GID=$1
@@ -107,6 +107,11 @@ qa-load-schedule() {
 	[[ -z $GID || -z $TEMPLATE ]] && return 1
 
 	qa api -X POST job_templates_scheduling/"$GID" schema=JobTemplates-01.yaml --param-file template="$TEMPLATE"
+}
+
+qa-post() {
+	_set_host
+	qa api -X POST isos "$@"
 }
 
 qa-clone-job() {
@@ -182,6 +187,8 @@ qa-clone-job() {
 }
 
 qa-clone-build() {
+	# trap 'SKIP_CONFIRMATION=0; trap - SIGINT; return 1' SIGINT
+
 	local CLONE_ALL=1
 	local CLONE_FAILED=
 	local CLONE_SKIPPED=
@@ -280,12 +287,12 @@ qa-clone-build() {
 			echo "cloning $ID..."
 			[[ -n $NO_CONFIRM ]] && SKIP_CONFIRMATION=1
 			if [[ $WITHIN_INSTANCE -eq 1 ]]; then
-				echo qa-clone-job -w "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
+				qa-clone-job -w "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
 			else
 				ID=${URL//overview*/$ID}
 				qa-clone-job "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
 			fi
-			[[ -n $NO_CONFIRM ]] && SKIP_CONFIRMATION=1
+			SKIP_CONFIRMATION=0
 		fi
 		CLONE_CUR=0
 		((CUR++))
@@ -295,7 +302,6 @@ qa-clone-build() {
 			break
 		fi
 	done
-	SKIP_CONFIRMATION=0
 }
 
 qa-get-job() {
