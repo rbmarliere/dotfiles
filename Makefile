@@ -17,10 +17,10 @@ ifeq (, $(shell which systemctl 2>/dev/null))
   $(error "Systemd is required")
 endif
 
-ifneq ($(shell id -u), 0)
-  SUDO := $(SUDO)
+ifeq ($(shell id -u), 0)
+	SUDO :=
 else
-  SUDO :=
+	SUDO := sudo
 endif
 
 ifneq (, $(shell which zypper 2>/dev/null))
@@ -72,7 +72,9 @@ endif
 	tmux source-file $$HOME/.config/tmux/tmux.conf || true
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
-	$$HOME/.local/share/nvim/mason/packages/vale/vale --config=$HOME/.config/vale/.vale.ini sync
+	# install plugins and sync vale
+	vi
+	$$HOME/.local/share/nvim/mason/packages/vale/vale --config=$$HOME/.config/vale/.vale.ini sync
 
 .PHONY: flatpak
 flatpak:
@@ -97,7 +99,7 @@ ifeq ($(DISTRO),suse)
 	$(SUDO) zypper dup --from packman --allow-vendor-change
 	$(SUDO) zypper install --from packman ffmpeg gstreamer-plugins-{good,bad,ugly,libav} libavcodec vlc-codecs
 	# nvidia
-	$(SUDO) zypper install nvidia-drivers-G06
+	# $(SUDO) zypper install nvidia-drivers-G06
 	# firefox reading profile
 	sed 's/^Name=.*/Name=Firefox (Reading)/; s/^Exec=.*/Exec=firefox %u -P reading/' /usr/share/applications/firefox.desktop > $$HOME/.local/share/applications/firefox-reading.desktop
 endif
@@ -120,12 +122,12 @@ ifeq ($(DISTRO),suse)
 	$(SUDO) mv /etc/zypp/services.d/NVIDIA.service /etc/zypp/services.d/NVIDIA.service.bak
 	$(SUDO) zypper rm $$(zypper se -i | grep nvidia | awk '{print $$3}') || true
 	$(SUDO) zypper mr -d $$(zypper lr | awk -F '|' '{IGNORECASE=1} /nvidia/ {print $$2}') || true
-	$(SUDO) zypper in kernel-firmware-nvidia
+	$(SUDO) zypper in kernel-firmware-nvidia kernel-firmware-nvidia-gsp-G06
 	echo "blacklist nvidia" | $(SUDO) tee /etc/modprobe.d/60-blacklist.conf
 	echo "blacklist amdgpu" | $(SUDO) tee -a /etc/modprobe.d/60-blacklist.conf
-	$(SUDO) dracut --force
-	echo GRUB_CMDLINE_LINUX="nvidia-drm.modeset=0" | $(SUDO) tee -a /etc/default/grub
-	$(SUDO) grub2-mkconfig -o /boot/grub2/grub.cfg
+	$(SUDO) dracut --force --regenerate-all
+	echo GRUB_CMDLINE_LINUX="nvidia-drm.modeset=0 nouveau.modeset=1 video=3440x1440" | $(SUDO) tee -a /etc/default/grub
+	$(SUDO) update-bootloader
 endif
 
 .PHONY: laptop
