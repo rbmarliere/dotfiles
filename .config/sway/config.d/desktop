@@ -50,12 +50,9 @@ input type:keyboard {
 }
 
 for_window [app_id="evolution-alarm-notify"] floating enable
-# assign [app_id="notes"] 4
-# assign [class="obsidian"] 4
 
 exec env TERM=$term /usr/bin/tmux new-session -d "~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh"
 exec ~/.local/bin/sway.autostart
 
-bindsym $mod+n exec ~/.local/bin/notes
-bindsym $mod+shift+n exec ~/.local/bin/obsidian
+bindsym $mod+shift+n exec ~/.local/bin/notes
 bindsym $mod+t exec swaymsg "[class=Todoist]" focus
