@@ -116,7 +116,7 @@ return {
 						end, opts)
 						vim.keymap.set("n", "<Leader>D", vim.lsp.buf.type_definition, opts)
 						vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename, opts)
-						vim.keymap.set("n", "<Leader>a", vim.lsp.buf.code_action, opts)
+						vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, opts)
 						vim.keymap.set("n", "<Leader>*", vim.lsp.buf.document_highlight, opts)
 						vim.keymap.set("n", "<Leader><Leader>*", vim.lsp.buf.clear_references, opts)
 						vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
