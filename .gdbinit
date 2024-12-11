@@ -1,5 +1,9 @@
 # add-auto-load-safe-path ~/src/
 
+set history save on
+set history filename ~/.gdb.hist
+set history size 4096
+
 # opensuse workaround
 set debuginfod enabled off
 
@@ -38,3 +42,4 @@ class Less(gdb.Command):
 
 Less()
 end
+
