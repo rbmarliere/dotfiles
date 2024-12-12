@@ -120,8 +120,9 @@ desktop: wm autologin
 .PHONY: nouveau
 nouveau:
 ifeq ($(DISTRO),suse)
-	$(SUDO) mv /etc/zypp/services.d/NVIDIA.service /etc/zypp/services.d/NVIDIA.service.bak
-	$(SUDO) zypper rm $$(zypper se -i | grep nvidia | awk '{print $$3}') || true
+	# $(SUDO) mv /etc/zypp/services.d/NVIDIA.service /etc/zypp/services.d/NVIDIA.service.bak
+	# $(SUDO) zypper rm $$(zypper se -i | grep nvidia | awk '{print $$3}') || true
+	$(SUDO) zypper ms -d NVIDIA
 	$(SUDO) zypper mr -d $$(zypper lr | awk -F '|' '{IGNORECASE=1} /nvidia/ {print $$2}') || true
 	$(SUDO) zypper in kernel-firmware-nvidia kernel-firmware-nvidia-gsp-G06
 	echo "blacklist nvidia" | $(SUDO) tee /etc/modprobe.d/60-blacklist.conf
