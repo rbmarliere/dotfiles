@@ -19,10 +19,12 @@ return {
 		{ "<Leader>gL", ":GcLog %<CR>" }, -- add file history to quickfix
 		{ "<Leader>gD", ":Gdiffsplit!<CR>" }, -- solve merge conflicts (use d2o and d3o)
 		{ "<Leader>gW", ":Gwrite!<CR>" }, -- e.g. choose a version during conflict
+		{ "<Leader>ge", ":Gedit<CR>" }, -- go to current version, from a fugitive-object
 		{ "<Leader>gE", ":e %:h<CR>" }, -- parent tree of a blob http://vimcasts.org/episodes/fugitive-vim-browsing-the-git-object-database/
 		{ "<Leader>gp", ":G pull origin<CR>" },
 		{ "<Leader>gP", ":G push " },
-		{ "<Leader>gR", ":!git set-pushRemote rbmarliere" },
-		{ "<Leader>gO", ":!git set-origin<CR>" },
+		{ "<Leader>gsR", ":G set-pushRemote rbmarliere" },
+		{ "<Leader>gsO", ":G set-origin origin" },
+		{ "<Leader>gsU", ":G branch -u master" },
 	},
 }
