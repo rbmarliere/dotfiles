@@ -129,7 +129,7 @@ return {
 				lualine_a = {
 					{
 						"tabs",
-						tab_max_length = 15, -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
+						tab_max_length = 10, -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
 						max_length = vim.o.columns, -- Maximum width of tabs component.
 						-- Note:
 						-- It can also be a function that returns
@@ -157,16 +157,19 @@ return {
 							modified = "[+]", -- Text to show when the file is modified.
 						},
 
-						fmt = function(name, _)
+						fmt = function(name, context)
 							-- Show + if buffer is modified in tab
-							-- local buflist = vim.fn.tabpagebuflist(context.tabnr)
-							-- local winnr = vim.fn.tabpagewinnr(context.tabnr)
-							-- local bufnr = buflist[winnr]
+							local buflist = vim.fn.tabpagebuflist(context.tabnr)
+							local winnr = vim.fn.tabpagewinnr(context.tabnr)
+							local bufnr = buflist[winnr]
 							-- local mod = vim.fn.getbufvar(bufnr, "&mod")
 							-- return name .. (mod == 1 and " +" or "")
 
+							local bufft = vim.api.nvim_buf_get_option(bufnr, "filetype")
 							if string.match(name, "^fugitive:") then
-								name = "git"
+								name = "G"
+							elseif string.match(bufft, "git*") then
+								name = "g"
 							end
 
 							return name
