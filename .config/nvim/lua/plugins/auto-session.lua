@@ -32,11 +32,16 @@ return {
 		},
 		post_save_cmds = {
 			function()
-				-- empty and close quickfix list so it doesn't flow into empty sessions
-				vim.cmd("cexpr []")
-				vim.cmd("cclose")
-				-- close all buffers so past sessions don't flow into empty sessions
-				vim.cmd("bufdo bd")
+				local buffers = vim.tbl_filter(function(buf)
+					return vim.api.nvim_buf_is_loaded(buf)
+				end, vim.api.nvim_list_bufs())
+				if #buffers > 1 then
+					-- empty and close quickfix list so it doesn't flow into empty sessions
+					vim.cmd("bufdo bd")
+					-- close all buffers so past sessions don't flow into empty sessions
+					vim.cmd("cexpr []")
+					vim.cmd("cclose")
+				end
 			end,
 		},
 		post_restore_cmds = {
