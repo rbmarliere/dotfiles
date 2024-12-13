@@ -124,7 +124,7 @@ ifeq ($(DISTRO),suse)
 	# $(SUDO) zypper rm $$(zypper se -i | grep nvidia | awk '{print $$3}') || true
 	$(SUDO) zypper ms -d NVIDIA
 	$(SUDO) zypper mr -d $$(zypper lr | awk -F '|' '{IGNORECASE=1} /nvidia/ {print $$2}') || true
-	$(SUDO) zypper in kernel-firmware-nvidia kernel-firmware-nvidia-gsp-G06
+	$(SUDO) zypper in kernel-firmware-nvidia kernel-firmware-nvidia-gspx-G06-cuda
 	echo "blacklist nvidia" | $(SUDO) tee /etc/modprobe.d/60-blacklist.conf
 	echo "blacklist amdgpu" | $(SUDO) tee -a /etc/modprobe.d/60-blacklist.conf
 	$(SUDO) dracut --force --regenerate-all
