@@ -24,6 +24,7 @@ jq
 libheif-ffmpeg
 libnotify-tools
 libqt5-qtwayland
+libsixel-tools
 loupe
 mako
 mozilla-openh264
@@ -42,6 +43,7 @@ swaylock
 systemd-network
 udisks2
 vlc
+w3m
 waybar
 wf-recorder
 wireplumber

@@ -35,6 +35,7 @@ auto_view text/*
 auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
 mime_lookup text/*
+macro attach 'V' "<pipe-entry>iconv -c --to-code=UTF8 > ~/.cache/mutt-mail.html<enter><shell-escape>firefox ~/.cache/mutt-mail.html<enter>"
 
 source "~/.config/neomutt/aliases"
 source "~/.config/neomutt/binds"

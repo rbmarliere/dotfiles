@@ -19,6 +19,7 @@ heif-thumbnailer
 jq
 libheif-plugin-ffmpegdec
 libnotify-bin
+libsixel-bin
 loupe
 mako-notifier
 nautilus
@@ -39,6 +40,7 @@ swaylock
 systemd-resolved
 udisks2
 vlc
+w3m
 waybar
 wf-recorder
 wireplumber

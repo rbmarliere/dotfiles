@@ -1,4 +1,17 @@
 text/x-diff; cat %s; copiousoutput;
 text/x-patch; cat %s; copiousoutput;
-text/html; lynx -assume_charset=%{charset} -dump -width=1024 %s; nametemplate=%s.html; copiousoutput;
 text/markdown; pandoc -f markdown -t plain %s | less; copiousoutput
+
+image/*; (clear && img2sixel %s); needsterminal
+
+# https://www.reddit.com/r/commandline/comments/z7vkwn/comment/khpbtxp/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+# The first one here is triggered when going in to view the attachments, then pressing 'm' on the text/html
+# -sixel changes w3m behavior a bit. Without it, images will show up, but only when you do something to the screen
+# having the option shows the images immediately
+text/html;                         w3m -o confirm_qq=false -sixel -o auto_image=TRUE -o display_image=1 -T text/html %s; nametemplate=%s.html; needsterminal
+
+# This second one is chosen by auto_view due to the copiousoutput tag
+text/html;                         w3m -o confirm_qq=false -I %{charset} -T text/html -cols 140 -o display_link_number=1 -dump; copiousoutput
+
+# The third, non-existent one is going in to view the attachments,
+# then press 'V' on the text/html attachment, which opens in a proper browser
