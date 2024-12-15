@@ -10,6 +10,12 @@ return {
 				-- vim.g.gitlab_api_keys = { [""] = "" }
 			end,
 		},
+		{
+			"sudotac/fugitive-cgit.vim",
+			init = function()
+				vim.g.fugitive_cgit_domains = { "https://git.kernel.org" }
+			end,
+		},
 	},
 	keys = {
 		{ "<Leader>g", ":tab Git<CR>:tabm 0<CR>" },
