@@ -122,22 +122,19 @@ return {
 			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-			require("cmp_git").setup({
-				git = {
-					commits = {
-						limit = 5000,
-						format = {
-							insertText = function(trigger_char, commit)
-								return commit.sha .. ' ("' .. commit.title .. '")'
-							end,
-						},
-						sha_length = 12,
-					},
-				},
-				gitlab = {
-					hosts = { "gitlab.suse.de" },
-				},
-			})
+			-- require("cmp_git").setup({
+			-- 	git = {
+			-- 		commits = {
+			-- 			limit = 5000,
+			-- 			format = {
+			-- 				insertText = function(trigger_char, commit)
+			-- 					return commit.sha .. ' ("' .. commit.title .. '")'
+			-- 				end,
+			-- 			},
+			-- 			sha_length = 12,
+			-- 		},
+			-- 	},
+			-- })
 
 			-- why am I having to force this, should be auto...?
 			-- vim.api.nvim_create_autocmd("FileType", {
