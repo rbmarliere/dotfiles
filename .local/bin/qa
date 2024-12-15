@@ -1,7 +1,20 @@
 #!/bin/bash
 
 # https://openqa-bites.github.io/openqa/openqa-cli-cheat-sheet/
-# TODO: qa-sync should call qa-sync-allow only once, maybe add a --no-check to intermediate calls
+
+# TODO:
+#
+# qa-sync should call qa-sync-allow only once, maybe add a --no-check to intermediate calls
+#
+# using CASEDIR in $TARGET leads to this:
+# Reason: Failed to get origin url (/var/lib/openqa/share/tests/os-autoinst-distri-opensuse): fatal: not a git repository: /mnt/ext/src/os-autoinst/os-autoinst-distri-opensuse/worktrees/169354 at /usr/share/openqa/script/../lib/OpenQA/Git.pm line 139.
+# for HOST=$MY_HOST and qa-post and qa-clone-job with CASEDIR=, do this in $TARGET:
+# rm /var/lib/openqa/share/tests/os-autoinst-distri-opensuse
+# unlink /var/lib/openqa/share/tests/{microos,opensuse,leap-micro,sle,sle-micro}
+# git clone osado /var/lib/openqa/share/tests/os-autoinst-distri-opensuse
+# link needles...
+#
+# or simply clone osado locally without bare, rsync .git into $TARGET?
 
 TARGET=qa # defined in ~/.ssh/config
 HOST=
@@ -279,23 +292,22 @@ qa-clone-build() {
 	local STATUS=""
 	local CLONE_CUR=0
 	local CUR=1
+	[[ -n $NO_CONFIRM ]] && SKIP_CONFIRMATION=1
 	for ID in "${JOBS[@]}"; do
 		echo "ID=$ID :: $CUR/${#JOBS[@]}"
 		if [[ $CLONE_ALL -ne 1 ]]; then
-			STATUS=$(qa jobs/"$ID" | jq -r '.job.result')
+			STATUS=$(qa api jobs/"$ID" | jq -r '.job.result')
 			[[ $STATUS == "failed" && $CLONE_FAILED ]] && CLONE_CUR=1
 			[[ $STATUS == "skipped" && $CLONE_SKIPPED ]] && CLONE_CUR=1
 		fi
 		if [[ $CLONE_ALL -eq 1 || $CLONE_CUR -eq 1 ]]; then
 			echo "cloning $ID..."
-			[[ -n $NO_CONFIRM ]] && SKIP_CONFIRMATION=1
 			if [[ $WITHIN_INSTANCE -eq 1 ]]; then
 				qa-clone-job -w "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
 			else
 				ID=${URL//overview*/$ID}
 				qa-clone-job "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
 			fi
-			SKIP_CONFIRMATION=0
 		fi
 		CLONE_CUR=0
 		((CUR++))
@@ -305,6 +317,7 @@ qa-clone-build() {
 			break
 		fi
 	done
+	SKIP_CONFIRMATION=0
 }
 
 qa-get-job() {
@@ -392,7 +405,7 @@ qa-sync-casedir() {
 		return 1
 	fi
 
-	_qa rsync -rltDv --delete "$CASEDIR"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$CASEDIR")")")" || return
+	_qa rsync -rltDvu --delete "$CASEDIR"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$CASEDIR")")")" || return
 
 	echo linking suse needles...
 	for product in alp sle sle-micro; do
@@ -410,16 +423,44 @@ qa-sync-casedir() {
 }
 
 qa-sync-needles() {
-	local NEEDLES=$1
+	local DOWNLOAD=
+
+	usage() {
+		echo "usage: qa-sync-needles [options] NEEDLES"
+		echo ""
+		echo "  -h  --help                    Display this message"
+		echo "  -d  --download                Download NEEDLES from $TARGET instead of uploading"
+	}
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		-h | --help)
+			usage
+			return 0
+			;;
+		-d | --download)
+			DOWNLOAD=1
+			;;
+		*)
+			break
+			;;
+		esac
+		shift
+	done
+
+	local NEEDLES="$1"
 	shift
 	if [[ -z $NEEDLES ]]; then
-		echo "usage: qa-sync-needles NEEDLES"
+		usage
 		return 1
 	fi
 
-	_qa rsync -rltDv --delete "$NEEDLES"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")" || return
-
-	qa-sync-allow
+	if [[ -z $DOWNLOAD ]]; then
+		_qa rsync -rltDvu --delete "$NEEDLES"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")"/ || return
+		qa-sync-allow
+	else
+		_qa rsync -rltDvu --delete $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")"/ "$NEEDLES"/
+	fi
 }
 
 qa-update-needles() {
@@ -492,7 +533,7 @@ qa-link() {
 }
 
 qa-schedule() {
-	qa schedule $@
+	qa schedule "$@"
 }
 
 qa-sql() {

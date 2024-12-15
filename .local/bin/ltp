@@ -6,13 +6,13 @@ KDIR=${1:?missing kernel directory}
 ROOT=${2:?missing root filesystem}
 
 make autotools
-./configure --with-linux-dir=$KDIR
-bear --append -- make -j32 all # -C testcases/...
-sudo make DESTDIR=$ROOT install
-sudo vng --run $KDIR --rw --root $ROOT
+./configure --with-linux-dir="$KDIR"
+bear --append -- make -j"$(nproc)" all # -C testcases/...
+sudo make -j"$(nproc)" DESTDIR="$ROOT" install
+sudo vng --run "$KDIR" --rw --root "$ROOT"
+# must do `vng -k` before building so it appends its min config
 
 # /opt/ltp/kirk --run-command $CMD
-
 
 # metadata:
 # cd metadata && make
