@@ -3,6 +3,23 @@ local function simple_restore(args, _)
 end
 
 return {
+	s("sysctl const", {
+		i(1, "subsystem"),
+		t(" Make sysctl table const"),
+		t({ "", "", "" }),
+		t('Since commit 7abc9b53bd51 ("sysctl: allow registration of const struct'),
+		t({ "", "" }),
+		t('ctl_table"), the sysctl registration API allows for struct ctl_table to be'),
+		t({ "", "" }),
+		t("in read-only memory. Move "),
+		i(2, "structure"),
+		t(" to be declared at build time, instead"),
+		t({ "", "" }),
+		t("of having to be dynamically allocated at boot time."),
+		t({ "", "", "Cc: Thomas Weißschuh <linux@weissschuh.net>" }),
+		t({ "", "Suggested-by: Thomas Weißschuh <linux@weissschuh.net>" }),
+	}),
+
 	s("bus_type const", {
 		i(1, "subsystem"),
 		t(" make "),

@@ -3,9 +3,9 @@ return {
 	event = "VeryLazy",
 	init = function()
 		vim.o.timeout = true
-		vim.o.timeoutlen = 300
+		vim.o.timeoutlen = 500
 	end,
 	opts = {
-		delay = 1000,
+		-- delay = 1000,
 	},
 }

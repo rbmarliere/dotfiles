@@ -36,9 +36,9 @@ return {
 					return vim.api.nvim_buf_is_loaded(buf)
 				end, vim.api.nvim_list_bufs())
 				if #buffers > 1 then
-					-- empty and close quickfix list so it doesn't flow into empty sessions
-					vim.cmd("bufdo bd")
 					-- close all buffers so past sessions don't flow into empty sessions
+					vim.cmd("bufdo bd")
+					-- empty and close quickfix list so it doesn't flow into empty sessions
 					vim.cmd("cexpr []")
 					vim.cmd("cclose")
 				end
