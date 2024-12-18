@@ -55,10 +55,10 @@ nnoremap <C-u> <C-u>zz
 nnoremap <C-w><C-t> :tabnew<CR>
 nnoremap <C-w>C :tabclose<CR>
 nnoremap <C-w>z <C-w><Bar><C-w>_
-nnoremap <C-w>H :vertical resize +50<CR>
-nnoremap <C-w>J :resize -10<CR>
-nnoremap <C-w>K :resize +10<CR>
-nnoremap <C-w>L :vertical resize -50<CR>
+nnoremap <C-w>h :vertical resize +10<CR>
+nnoremap <C-w>j :resize -10<CR>
+nnoremap <C-w>k :resize +10<CR>
+nnoremap <C-w>l :vertical resize -10<CR>
 nnoremap <Leader><Space> :nohlsearch<CR>
 nnoremap <Leader>P O<Esc>pk<CR>
 nnoremap <Leader>S :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>

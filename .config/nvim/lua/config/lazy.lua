@@ -11,7 +11,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-return require("lazy").setup({
+local r = require("lazy").setup({
 	change_detection = {
 		enabled = true,
 		notify = false,
@@ -20,3 +20,9 @@ return require("lazy").setup({
 		{ import = "plugins" },
 	},
 })
+
+vim.api.nvim_set_hl(0, "LazyButton", {
+	link = "Search"
+})
+
+return r

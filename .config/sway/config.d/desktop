@@ -23,7 +23,7 @@ exec swayidle -w \
 	timeout 1 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on" && killall swayidle' \
 	before-sleep 'swaylock -f -c 000000 -i $bg'
 
-set $out1 "HSX BM274K1W 0x000F69B5"
+set $out1 "HXS BM274K1W 0x00000001"
 output $out1 resolution 2560x1440 scale 1 pos 0 0
 workspace 1 output $out1
 workspace 2 output $out1

@@ -32,6 +32,7 @@
 	ra = !git r --all
 	re = remote
 	rb = rebase
+	rc = rebase --continue
 	ri = rebase --interactive
 	st = status
 	w = worktree

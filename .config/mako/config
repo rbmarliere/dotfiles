@@ -12,7 +12,7 @@ border-color=#FF0000
 default-timeout=5000
 ignore-timeout=0
 #font=monospace 14
-output=HDMI-A-1
+output=DP-3
 anchor=top-right
 
 [urgency=low]
@@ -26,6 +26,6 @@ anchor=top-right
 #default-timeout=0
 
 [category=mpd]
-default-timeout=2000
+default-timeout=3000
 group-by=category
 

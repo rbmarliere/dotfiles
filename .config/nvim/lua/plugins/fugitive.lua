@@ -31,6 +31,6 @@ return {
 		{ "<Leader>gP", ":G push " },
 		{ "<Leader>gsR", ":G set-pushRemote rbmarliere" },
 		{ "<Leader>gsO", ":G set-origin origin" },
-		{ "<Leader>gsU", ":G branch -u master" },
+		{ "<Leader>gsU", ":G branch -u main" },
 	},
 }

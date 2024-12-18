@@ -22,7 +22,7 @@ root_runner "$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh"
 
 if [ -d $HOME/notes ]; then
 	root_runner "git -C $HOME/notes add --all && git -C $HOME/notes commit -m 'bkp'"
-	root_runner "git -C $HOME/notes push || git -C $HOME/notes pull --rebase && git -C $HOME/notes push"
+	root_runner "git -C $HOME/notes push || git -C $HOME/notes pull --rebase && git -C $HOME/notes push" || exit 1
 fi
 
 root_runner "sudo shutdown -h --no-wall now"

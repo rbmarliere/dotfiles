@@ -1,27 +1,19 @@
-# add-auto-load-safe-path ~/src/
-
 set history save on
 set history filename ~/.gdb.hist
 set history size 4096
-
-# opensuse workaround
 set debuginfod enabled off
-
-# enable TUI
-layout src
-
-# move focus to cmd pane to enable arrow keys navigation
-focus cmd
-
 set print pretty on
-
-# enable logging so output from TUI is still visible
 set logging file ~/.gdb.log
 set trace-commands on
 set logging on
+set follow-fork-mode child
 
+alias follow-child = set follow-fork-mode child
+alias follow-parent = set follow-fork-mode parent
 alias re = target remote :1234
 alias rr = tui refresh
+
+# add-auto-load-safe-path ~/src/
 
 python
 import os
