@@ -30,6 +30,7 @@ return {
 			c = { "checkpatch" },
 			-- markdown = { "vale" },
 			-- rust = { "klint" },
+			json = { "jsonlint" },
 			yaml = { "yamllint" },
 		}
 		vim.api.nvim_create_autocmd(

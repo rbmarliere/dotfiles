@@ -1,0 +1,6 @@
+{
+  "debug": {
+    "prefix": "debug",
+    "body": "vim.fn.input('> ')"
+  }
+}

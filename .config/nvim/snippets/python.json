@@ -1,0 +1,6 @@
+{
+  "debug": {
+    "prefix": "debug",
+    "body": "import code; code.interact(local=vars())"
+  }
+}

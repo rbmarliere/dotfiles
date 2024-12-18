@@ -1,0 +1,22 @@
+{
+  "Signed-off-by": {
+    "prefix": "Signed-off-by",
+    "body": "Signed-off-by: $1"
+  },
+  "Suggested-by": {
+    "prefix": "Suggested-by",
+    "body": "Suggested-by: $1"
+  },
+  "Reviewed-by": {
+    "prefix": "Reviewed-by",
+    "body": "Reviewed-by: $1"
+  },
+  "Tested-by": {
+    "prefix": "Tested-by",
+    "body": "Tested-by: $1"
+  },
+  "Cc": {
+    "prefix": "Cc",
+    "body": "Cc: $1"
+  }
+}

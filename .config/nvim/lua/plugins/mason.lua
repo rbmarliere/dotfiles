@@ -140,6 +140,7 @@ return {
 					"css-lsp",
 					"goimports",
 					"gopls",
+					"jsonlint",
 					"lua-language-server",
 					"perlnavigator",
 					"prettier",

@@ -1,0 +1,40 @@
+{
+  "Obrigado": {
+    "prefix": "Obrigado",
+    "body": ["Obrigado,", "-\tRicardo.", "", ""],
+    "description": "A snippet to sign off with 'Obrigado'"
+  },
+  "Thanks": {
+    "prefix": "Thanks",
+    "body": ["Thanks,", "-\tRicardo.", "", ""],
+    "description": "A snippet to sign off with 'Thanks'"
+  },
+  "Thanks for reviewing": {
+    "prefix": "Thanks for reviewing",
+    "body": ["Thanks for reviewing,", "-\tRicardo.", "", ""],
+    "description": "A snippet to sign off with 'Thanks for reviewing'"
+  },
+  "Thank you": {
+    "prefix": "Thank you",
+    "body": ["Thank you,", "-\tRicardo.", "", ""],
+    "description": "A snippet to sign off with 'Thank you'"
+  },
+  "Best regards": {
+    "prefix": "Best regards",
+    "body": ["Best regards,", "-\tRicardo.", "", ""],
+    "description": "A snippet to sign off with 'Best regards'"
+  },
+  "All the best": {
+    "prefix": "All the best",
+    "body": ["All the best,", "-\tRicardo.", "", ""],
+    "description": "A snippet to sign off with 'All the best'"
+  },
+  "Sign": {
+    "prefix": "Sign",
+    "body": [
+      "Ricardo B. Marliere         https://marliere.net/",
+      "030A 8E9E 424E E3C0 6557 87E1 C90B 8A7C 6386 58A6"
+    ],
+    "description": "A snippet to insert your signature"
+  }
+}

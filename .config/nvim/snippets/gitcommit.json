@@ -1,0 +1,24 @@
+{
+  "sysctl const": {
+    "prefix": "sysctl const",
+    "body": [
+      "$1 Make sysctl table const",
+      "",
+      "Since commit 7abc9b53bd51 (\"sysctl: allow registration of const struct",
+      "ctl_table\"), the sysctl registration API allows for struct ctl_table to be",
+      "in read-only memory. Move $2 to be declared at build time, instead",
+      "of having to be dynamically allocated at boot time.",
+      "",
+      "Cc: Thomas Weißschuh <linux@weissschuh.net>",
+      "Suggested-by: Thomas Weißschuh <linux@weissschuh.net>"
+    ]
+  },
+  "fixme": {
+    "prefix": "fixme",
+    "body": [
+      "*****************************FIXME*************************************",
+      "FIXME: $1",
+      "*****************************FIXME*************************************"
+    ]
+  }
+}

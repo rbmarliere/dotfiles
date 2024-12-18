@@ -1,0 +1,33 @@
+{
+  "contributes": {
+    "snippets": [
+      {
+        "language": "all",
+        "path": "./all.json"
+      },
+      {
+        "language": [
+          "gitcommit",
+          "mail"
+        ],
+        "path": "./linux.json"
+      },
+      {
+        "language": "gitcommit",
+        "path": "./gitcommit.json"
+      },
+      {
+        "language": "lua",
+        "path": "./lua.json"
+      },
+      {
+        "language": "mail",
+        "path": "./mail.json"
+      },
+      {
+        "language": "python",
+        "path": "./python.json"
+      }
+    ]
+  }
+}
