@@ -1,5 +1,5 @@
 return {
-	"polarmutex/git-worktree.nvim",
+	"rbmarliere/git-worktree.nvim",
 	-- name = "git-worktree.nvim",
 	-- dir = "~/src/rbmarliere/git-worktree.nvim/main",
 	-- dev = true,
