@@ -142,6 +142,7 @@ return {
 					"gopls",
 					"jsonlint",
 					"lua-language-server",
+					"marksman",
 					"perlnavigator",
 					"prettier",
 					"pyright",
@@ -153,8 +154,8 @@ return {
 					"typescript-language-server",
 					"vale",
 					"yamllint",
-					-- "yaml-language-server",
 				},
+				-- use :MasonToolsUpdateSync
 				run_on_start = false,
 			},
 			config = function(_, opts)

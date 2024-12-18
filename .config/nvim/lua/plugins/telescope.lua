@@ -22,7 +22,7 @@ return {
 	},
 	keys = {
 		{ "<C-Space>", ":Telescope find_pickers<CR>" },
-		{ "<C-(>", ":Telescope lsp_document_symbols<CR>" },
+		{ "<M-P>", ":Telescope lsp_document_symbols<CR>" },
 		{ "<M-p>", ":Telescope find_files<CR>" },
 		{ "<C-p>", ":Telescope git_files<CR>" },
 		{ "<M-g>", ":Telescope live_grep_args<CR>" },

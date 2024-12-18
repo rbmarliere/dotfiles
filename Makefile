@@ -74,7 +74,7 @@ endif
 	$$HOME/.config/tmux/plugins/tpm/bin/install_plugins
 
 	# install plugins and sync vale
-	vi
+	nvim +MasonToolsUpdateSync
 	$$HOME/.local/share/nvim/mason/packages/vale/vale --config=$$HOME/.config/vale/.vale.ini sync
 
 .PHONY: flatpak
