@@ -43,13 +43,6 @@ return {
 			default_tags = {},
 			date_format = "%Y/%m-%B/%Y-%m-%d-%A",
 		},
-		-- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
-		completion = {
-			-- Set to false to disable completion.
-			nvim_cmp = true,
-			-- Trigger completion at 2 chars.
-			min_chars = 0,
-		},
 		note_id_func = function(title)
 			-- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
 			-- In this case a note with the title 'My new note' will be given an ID that looks

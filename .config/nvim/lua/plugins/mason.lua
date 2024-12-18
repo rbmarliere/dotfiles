@@ -11,7 +11,7 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			dependencies = {
 				"folke/neodev.nvim",
-				"hrsh7th/nvim-cmp",
+				"saghen/blink.cmp",
 				"neovim/nvim-lspconfig",
 			},
 			config = function()
@@ -25,10 +25,11 @@ return {
 				local lspconfig = require("lspconfig")
 				require("mason-lspconfig").setup_handlers({
 					function(server_name)
-						lspconfig[server_name].setup({})
+						lspconfig[server_name].setup({ capabilities = require("blink.cmp").get_lsp_capabilities() })
 					end,
 					clangd = function()
 						lspconfig.clangd.setup({
+							capabilities = require("blink.cmp").get_lsp_capabilities(),
 							cmd = { "clangd", "--offset-encoding=utf-16" },
 						})
 					end,
@@ -49,6 +50,7 @@ return {
 					-- end,
 					lua_ls = function()
 						lspconfig.lua_ls.setup({
+							capabilities = require("blink.cmp").get_lsp_capabilities(),
 							settings = {
 								Lua = {
 									workspace = {
@@ -60,6 +62,7 @@ return {
 					end,
 					rust_analyzer = function()
 						lspconfig.rust_analyzer.setup({
+							capabilities = require("blink.cmp").get_lsp_capabilities(),
 							on_attach = function(_, bufnr)
 								vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 							end,
