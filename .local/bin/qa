@@ -20,7 +20,7 @@ TARGET=qa # defined in ~/.ssh/config
 HOST=
 HOST_OPT=
 SKIP_CONFIRMATION=0
-MY_HOST=http://rmarliere-openqa.qe.prg2.suse.org
+MY_HOST=https://rmarliere-openqa.qe.prg2.suse.org
 
 _set_host() {
 	# echo $HOST >&2
@@ -500,7 +500,7 @@ qa-sync() {
 	fi
 	if [[ $IGNORE_NEEDLES -ne 1 ]]; then
 		if [[ -z $NEEDLES ]]; then
-			qa-sync-needles-update
+			qa-update-needles
 		else
 			qa-sync-needles "$NEEDLES"
 		fi
