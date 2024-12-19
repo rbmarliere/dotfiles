@@ -39,7 +39,7 @@
 	staash = stash --all
 	set-pushRemote = "!git config --unset-all branch.$(git branch --show-current).pushRemote 2>/dev/null; git config branch.$(git branch --show-current).pushRemote $1"
 	set-origin = "!f() { local re=${1:-origin}; git config remote.$re.fetch \"+refs/heads/*:refs/remotes/$re/*\"; git fetch $re; git branch -u $re/$(git rev-parse --abbrev-ref HEAD); }; f"
-	show-commit = show --pretty="commit" --no-patch
+	show-commit = "!f() { git show --pretty="commit" --no-patch $1 | tee >(wl-copy); }; f"
 	# https://josefbacik.github.io/kernel/2021/10/19/patch-review.html
 	show-pager = -c 'core.pager=less -+F' show
 	review = "!f() { local c=${1:-HEAD}; git difftool -y \"$c\"~1 \"$c\"; }; f"
