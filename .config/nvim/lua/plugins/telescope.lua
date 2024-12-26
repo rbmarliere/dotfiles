@@ -122,6 +122,15 @@ return {
 			},
 		}
 
+		-- open grep extension pre-loaded with the selected text
+		vim.keymap.set("v", "<M-g>", function()
+			vim.cmd('normal! "vy')
+			local visual_selection = vim.fn.getreg("v"):gsub("\n", "")
+			telescope.extensions.live_grep_args.live_grep_args({
+				default_text = visual_selection,
+			})
+		end, { noremap = true, silent = true })
+
 		telescope.setup(opts)
 		telescope.load_extension("find_pickers")
 		telescope.load_extension("fzf")
