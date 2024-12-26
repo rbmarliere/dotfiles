@@ -6,7 +6,7 @@ return {
 		{
 			"shumphrey/fugitive-gitlab.vim",
 			init = function()
-				-- vim.g.fugitive_gitlab_domains = { "" }
+				vim.g.fugitive_gitlab_domains = { "gitlab.suse.de" }
 				-- vim.g.gitlab_api_keys = { [""] = "" }
 			end,
 		},
