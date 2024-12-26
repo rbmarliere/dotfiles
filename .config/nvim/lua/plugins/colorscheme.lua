@@ -38,6 +38,16 @@ local create_groups = function()
 		end
 	end
 
+	-- TODO highlight
+	vim.api.nvim_set_hl(0, "TodoHighlight", { bg = colors.purple, fg = colors.lightwhite, bold = true })
+	vim.api.nvim_create_augroup("TodoHighlighting", { clear = true })
+	vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile", "TextChanged", "InsertLeave" }, {
+		group = "TodoHighlighting",
+		callback = function()
+			vim.cmd([[syntax match TodoHighlight /\vTODO:|\vNOTE:/]])
+		end,
+	})
+
 	-- highlight groups used to set active window bg opaque and keep others transparent
 	vim.api.nvim_set_hl(0, "Transparent", {
 		bg = "none",
