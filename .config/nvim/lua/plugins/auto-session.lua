@@ -1,5 +1,3 @@
-local qf = require("utils.quickfix")
-
 return {
 	"rmagatti/auto-session",
 	-- name = "auto-session",
@@ -17,40 +15,37 @@ return {
 		cwd_change_handling = true,
 		save_extra_cmds = {
 			-- https://github.com/rmagatti/auto-session/issues/173
-			qf.get_qf,
+			require("utils.quickfix").get_qf,
 		},
 		pre_save_cmds = {
 			function()
-				-- close buffers by filetype like gitcommit
+				-- close buffers by filetype
 				for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
 					local bufft = vim.api.nvim_buf_get_option(bufnr, "filetype")
-					if string.match(bufft, "git*") then
+					if
+						string.match(bufft, "^git$")
+						or string.match(bufft, "gitcommit")
+						or string.match(bufft, "^fugitive$")
+					then
 						vim.api.nvim_buf_delete(bufnr, { force = true })
 					end
 				end
 			end,
 		},
-		post_save_cmds = {
+		pre_cwd_changed_cmds = {
 			function()
-				local buffers = vim.tbl_filter(function(buf)
-					return vim.api.nvim_buf_is_loaded(buf)
-				end, vim.api.nvim_list_bufs())
-				if #buffers > 1 then
-					-- close all buffers so past sessions don't flow into empty sessions
-					vim.cmd("bufdo bd")
-					-- empty and close quickfix list so it doesn't flow into empty sessions
-					vim.cmd("cexpr []")
-					vim.cmd("cclose")
-				end
+				-- empty and close quickfix list so it doesn't flow into empty sessions
+				vim.cmd("cexpr []")
+				vim.cmd("cclose")
 			end,
 		},
 		post_restore_cmds = {
 			function()
+				require("lualine").refresh()
 				-- re-enable git signs in all buffers
 				for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
 					vim.api.nvim_buf_call(bufnr, function()
 						vim.cmd("Gitsigns attach")
-						require("lualine").refresh()
 					end)
 				end
 			end,

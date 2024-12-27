@@ -168,7 +168,7 @@ return {
 							local bufft = vim.api.nvim_buf_get_option(bufnr, "filetype")
 							if string.match(name, "^fugitive:") then
 								name = "G"
-							elseif string.match(bufft, "git") then
+							elseif string.match(bufft, "^git$") then
 								name = "g"
 							end
 
