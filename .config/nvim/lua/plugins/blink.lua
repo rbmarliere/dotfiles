@@ -16,6 +16,9 @@ return {
 		},
 	},
 	opts = {
+		enabled = function()
+			return vim.bo.buftype ~= "prompt" and vim.b.completion ~= false
+		end,
 		keymap = { preset = "default" },
 		signature = { enabled = true },
 		appearance = {
