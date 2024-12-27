@@ -10,7 +10,6 @@ return {
 		{
 			"williamboman/mason-lspconfig.nvim",
 			dependencies = {
-				"folke/neodev.nvim",
 				"saghen/blink.cmp",
 				"neovim/nvim-lspconfig",
 			},
@@ -21,7 +20,6 @@ return {
 				})
 				-- vim.lsp.set_log_level("DEBUG")
 
-				require("neodev").setup()
 				local lspconfig = require("lspconfig")
 				require("mason-lspconfig").setup_handlers({
 					function(server_name)

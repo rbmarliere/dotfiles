@@ -1,6 +1,20 @@
 return {
 	"saghen/blink.cmp",
-	version = "v0.*",
+	version = "*",
+	-- build = 'cargo build --release',
+	dependencies = {
+		{
+			"folke/lazydev.nvim",
+			ft = "lua", -- only load on lua files
+			opts = {
+				library = {
+					-- See the configuration section for more details
+					-- Load luvit types when the `vim.uv` word is found
+					{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+				},
+			},
+		},
+	},
 	opts = {
 		keymap = { preset = "default" },
 		signature = { enabled = true },
@@ -19,7 +33,15 @@ return {
 			},
 		},
 		sources = {
+			default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+			cmdline = {},
 			providers = {
+				lazydev = {
+					name = "LazyDev",
+					module = "lazydev.integrations.blink",
+					-- make lazydev completions top priority (see `:h blink.cmp`)
+					score_offset = 100,
+				},
 				snippets = {
 					opts = {
 						search_paths = {
