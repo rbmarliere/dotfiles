@@ -14,6 +14,8 @@ return {
 				},
 			},
 		},
+		{ "saghen/blink.compat", lazy = true, version = false },
+		{ "epwalsh/obsidian.nvim" },
 	},
 	opts = {
 		enabled = function()
@@ -36,7 +38,7 @@ return {
 			},
 		},
 		sources = {
-			default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+			default = { "obsidian", "obsidian_new", "obsidian_tags", "lazydev", "lsp", "path", "snippets", "buffer" },
 			cmdline = {},
 			providers = {
 				lazydev = {
@@ -52,6 +54,21 @@ return {
 							"snippets", -- relative path, per-project
 						},
 					},
+				},
+				obsidian = {
+					name = "obsidian",
+					module = "blink.compat.source",
+					score_offset = 100,
+				},
+				obsidian_new = {
+					name = "obsidian_new",
+					module = "blink.compat.source",
+					score_offset = 100,
+				},
+				obsidian_tags = {
+					name = "obsidian_tags",
+					module = "blink.compat.source",
+					score_offset = 100,
 				},
 			},
 		},

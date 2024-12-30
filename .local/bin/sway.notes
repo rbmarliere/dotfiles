@@ -4,7 +4,7 @@ echo -ne "\033]0;notes\007"
 
 TMUX="tmux -L notes"
 if ! $TMUX list-sessions 2>/dev/null; then
-	$TMUX new-session -d -s notes -c "$HOME/notes" "vi"
+	$TMUX new-session -d -s notes -c "$HOME/notes" "vi; exec bash"
 	$TMUX set-option -pg allow-rename off
 	$TMUX set-option -wg automatic-rename off
 	$TMUX set-option -g set-titles off

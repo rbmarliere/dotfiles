@@ -29,7 +29,8 @@ return {
 			date_format = "%Y/%m-%B/%Y-%m-%d-%A",
 		},
 		completion = {
-			nvim_cmp = false,
+			nvim_cmp = true,
+			min_chars = 2,
 		},
 		note_id_func = function(title)
 			local suffix = ""
