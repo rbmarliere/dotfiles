@@ -100,7 +100,7 @@ end
 
 return {
 	"p00f/alabaster.nvim",
-	lazy = false,
+	-- lazy = false,
 	priority = 1000,
 	config = function()
 		if os.getenv("TERM") == "linux" then
