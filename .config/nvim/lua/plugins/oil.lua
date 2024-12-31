@@ -13,7 +13,13 @@ return {
 			--   ["<C-s>"] = { "actions.select", opts = { vertical = true } },
 			--   ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
 			--   ["<C-t>"] = { "actions.select", opts = { tab = true } },
-			["<C-p>"] = { "actions.preview", opts = { horizontal = true, split = "belowright" } },
+			["<M-P>"] = { "actions.preview", opts = { horizontal = true, split = "belowright" } },
+			["<C-p>"] = {
+				callback = function()
+					local count = vim.v.count1
+					vim.cmd("normal! " .. count .. "k")
+				end,
+			},
 			--   ["<C-c>"] = { "actions.close", mode = "n" },
 			--   ["<C-l>"] = "actions.refresh",
 			--   ["-"] = { "actions.parent", mode = "n" },

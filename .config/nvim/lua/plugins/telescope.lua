@@ -53,7 +53,7 @@ return {
 						height = 0.98,
 						mirror = true,
 						prompt_position = "top",
-						preview_height = 30,
+						preview_height = 0.7,
 					},
 				},
 				border = true,

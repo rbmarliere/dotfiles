@@ -3,6 +3,7 @@ return {
 	config = function()
 		require("colorizer").setup({
 			"lua",
+			"scss",
 			"css",
 			"html",
 		})

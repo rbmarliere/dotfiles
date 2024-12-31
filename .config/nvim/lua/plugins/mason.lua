@@ -31,21 +31,21 @@ return {
 							cmd = { "clangd", "--offset-encoding=utf-16" },
 						})
 					end,
-					-- pyright = function()
-					-- 	lspconfig.pyright.setup({
-					-- 		settings = {
-					-- 			pyright = {
-					-- 				disableOrganizeImports = true,
-					-- 			},
-					-- 			python = {
-					-- 				pythonPath = vim.fn.getcwd() .. "/.venv/bin/python",
-					-- 				analysis = {
-					-- 					typeCheckingMode = "off",
-					-- 				},
-					-- 			},
-					-- 		},
-					-- 	})
-					-- end,
+					pyright = function()
+						lspconfig.pyright.setup({
+							settings = {
+								pyright = {
+									disableOrganizeImports = true,
+								},
+								python = {
+									pythonPath = vim.fn.getcwd() .. "/venv/bin/python",
+									analysis = {
+										typeCheckingMode = "off",
+									},
+								},
+							},
+						})
+					end,
 					lua_ls = function()
 						lspconfig.lua_ls.setup({
 							capabilities = require("blink.cmp").get_lsp_capabilities(),
