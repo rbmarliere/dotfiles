@@ -76,6 +76,8 @@ endif
 	# install plugins and sync vale
 	nvim +MasonToolsUpdateSync
 	$$HOME/.local/share/nvim/mason/packages/vale/vale --config=$$HOME/.config/vale/.vale.ini sync
+	cd $$HOME/.local/share/nvim/mason/packages/prettier && npm install --save-dev prettier-plugin-go-template
+
 
 .PHONY: flatpak
 flatpak:
