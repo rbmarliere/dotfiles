@@ -2,6 +2,9 @@ return {
 	"epwalsh/obsidian.nvim",
 	version = "*", -- recommended, use latest release instead of latest commit
 	ft = "markdown",
+	enabled = function()
+		return vim.fn.isdirectory(vim.fn.expand("~/notes")) == 1
+	end,
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 	},
