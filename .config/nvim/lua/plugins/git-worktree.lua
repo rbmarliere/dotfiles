@@ -4,8 +4,8 @@ return {
 	-- dir = "~/src/rbmarliere/git-worktree.nvim/main",
 	-- dev = true,
 	init = function()
-		-- vim.g.git_worktree_log_level = "debug"
 		vim.g.git_worktree = {
+			-- log_level = "DEBUG",
 			change_directory_command = "cd",
 			update_on_change = false,
 			update_on_change_command = "",
