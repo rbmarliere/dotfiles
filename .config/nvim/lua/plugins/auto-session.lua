@@ -1,17 +1,16 @@
 return {
 	"rmagatti/auto-session",
-	-- name = "auto-session",
-	-- dir = "~/src/extra/auto-session/main",
-	-- dev = true,
+	lazy = false,
 	opts = {
-		-- log_level = vim.log.levels.DEBUG,
-		auto_session_enabled = true,
-		auto_save_enabled = true,
-		auto_session_create_enabled = function()
+		-- log_level = "debug",
+		session_lens = {
+			load_on_setup = false,
+		},
+		auto_create = function()
 			local cmd = "git rev-parse --is-inside-work-tree"
 			return vim.fn.system(cmd) == "true\n"
 		end,
-		silent_restore = false,
+		continue_restore_on_error = false,
 		cwd_change_handling = true,
 		save_extra_cmds = {
 			-- https://github.com/rmagatti/auto-session/issues/173
@@ -39,6 +38,14 @@ return {
 				vim.cmd("cclose")
 			end,
 		},
+		post_cwd_changed_cmds = {
+			function()
+				local re = require("auto-session")
+				if not re.session_exists_for_cwd() then
+					vim.cmd("bufdo bd")
+				end
+			end,
+		},
 		post_restore_cmds = {
 			function()
 				require("lualine").refresh()
@@ -52,8 +59,6 @@ return {
 		},
 	},
 	init = function()
-		vim.opt.sessionoptions:remove({ "blank", "terminal" }) -- exclude nvim-dap buffers
-		-- https://github.com/rmagatti/auto-session/issues/204
-		vim.opt.sessionoptions:append({ "localoptions" })
+		vim.o.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
 	end,
 }
