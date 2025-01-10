@@ -491,6 +491,7 @@ qa-sync() {
 		usage
 		return 1
 	fi
+	SKIP_CONFIRMATION=1
 	if [[ $IGNORE_NEEDLES -ne 1 ]]; then
 		if [[ -z $NEEDLES ]]; then
 			qa-update-needles
@@ -499,6 +500,7 @@ qa-sync() {
 		fi
 	fi
 	qa-sync-casedir "$CASEDIR"
+	SKIP_CONFIRMATION=0
 }
 
 qa-link() {
