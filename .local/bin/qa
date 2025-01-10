@@ -141,7 +141,7 @@ qa-clone-job() {
 	local SKIP_DEPS=
 
 	usage() {
-		echo "usage: qa-clone [options] JOB_NUMBER"
+		echo "usage: qa-clone-job [options] JOB"
 		echo ""
 		echo "      --no-ssh                    Don't run command through ssh to $TARGET"
 		echo "  -D  --skip-chained-deps         Same as openqa-clone-job option"
@@ -175,8 +175,9 @@ qa-clone-job() {
 			SKIP_UPDATES="SKIP_MAINTENANCE_UPDATES=1 PUBLIC_CLOUD_IGNORE_EMPTY_REPO=1 PUBLIC_CLOUD_SKIP_MU=1"
 			;;
 		-w | --within-instance)
+			SSH=
 			HOST_OPT=
-			WITHIN_INSTANCE="--within-instance $HOST"
+			WITHIN_INSTANCE="--within-instance"
 			;;
 		-D | --skip-chained-deps)
 			SKIP_DEPS=--skip-chained-deps
@@ -191,15 +192,7 @@ qa-clone-job() {
 	local JOB=$1
 	shift
 
-	if [[ -n "$WITHIN_INSTANCE" ]]; then
-		SSH=
-		if [[ ! "$JOB" =~ ^-?[0-9]+$ ]]; then
-			echo "error: JOB should be a number" >&2
-			return 1
-		fi
-	fi
-
-	_qa $SSH openqa-clone-job $HOST_OPT $WITHIN_INSTANCE $SKIP_DEPS $SKIP_DOWNLOAD $JOB $@ $NS $SKIP_UPDATES
+	_qa $SSH openqa-clone-job $HOST_OPT $SKIP_DEPS $SKIP_DOWNLOAD $WITHIN_INSTANCE $JOB $@ $NS $SKIP_UPDATES
 }
 
 qa-clone-build() {
