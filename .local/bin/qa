@@ -21,6 +21,7 @@ HOST=
 HOST_OPT=
 SKIP_CONFIRMATION=0
 MY_HOST=https://rmarliere-openqa.qe.prg2.suse.org
+RSYNC_FLAGS="-qrvahP --delete" #-rltDvu
 
 _set_host() {
 	# echo $HOST >&2
@@ -64,6 +65,8 @@ _qa() {
 		if [[ ! "$ans" =~ ^[Yy]$ ]]; then
 			return 1
 		fi
+	else
+		echo "${CMD[@]}"
 	fi
 
 	"${CMD[@]}"
@@ -398,7 +401,7 @@ qa-sync-casedir() {
 		return 1
 	fi
 
-	_qa rsync -rltDvu --delete "$CASEDIR"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$CASEDIR")")")" || return
+	_qa rsync $RSYNC_FLAGS "$CASEDIR"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$CASEDIR")")")" || return
 
 	echo linking suse needles...
 	for product in alp sle sle-micro; do
@@ -449,10 +452,10 @@ qa-sync-needles() {
 	fi
 
 	if [[ -z $DOWNLOAD ]]; then
-		_qa rsync -rltDvu --delete "$NEEDLES"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")"/ || return
+		_qa rsync $RSYNC_FLAGS "$NEEDLES"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")"/ || return
 		qa-sync-allow
 	else
-		_qa rsync -rltDvu --delete $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")"/ "$NEEDLES"/
+		_qa rsync $RSYNC_FLAGS $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")"/ "$NEEDLES"/
 	fi
 }
 
