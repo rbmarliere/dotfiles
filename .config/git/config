@@ -124,3 +124,6 @@
 
 [includeIf "gitdir:/"]
 	path = ~/src/.git/config
+
+[b4]
+	prep-cover-strategy = branch-description

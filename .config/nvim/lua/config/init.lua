@@ -6,4 +6,5 @@ require("config.priv")
 require("config.keymaps")
 require("config.lazy")
 
+require("utils.b4")
 require("utils.tabmove")
