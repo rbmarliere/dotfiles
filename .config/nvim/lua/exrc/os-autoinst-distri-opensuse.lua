@@ -2,9 +2,9 @@ local lspconfig = require("lspconfig")
 lspconfig.perlnavigator.setup({
 	settings = {
 		perlnavigator = {
-			includePaths = { "~/src/os-autoinst/os-autoinst/main" },
+			includePaths = { "~/src/os-autoinst/os-autoinst/master" },
 			enableWarnings = true,
-			perltidyProfile = "~/src/os-autoinst/os-autoinst/main/.perltidyrc",
+			perltidyProfile = "~/src/os-autoinst/os-autoinst/master/.perltidyrc",
 			perlcriticProfile = "",
 			perlcriticEnabled = true,
 		},
@@ -14,7 +14,7 @@ lspconfig.perlnavigator.setup({
 local conform = require("conform")
 require("conform").formatters.yamltidy = {
 	command = "yamltidy",
-	args = "-c ~/src/os-autoinst/os-autoinst/main/.yamltidy $FILENAME",
+	args = "-c ~/src/os-autoinst/os-autoinst/master/.yamltidy $FILENAME",
 	-- range_args = function(self, ctx)
 	-- 	return { "--partial" }
 	-- end,
