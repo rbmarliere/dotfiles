@@ -1,2 +1,4 @@
+# vim: set filetype=gitconfig:
+
 [commit]
 	template = ~/.config/git/templates/signed-off-by
