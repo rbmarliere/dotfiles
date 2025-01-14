@@ -17,7 +17,7 @@ set collapse_all=yes
 set collapse_flagged=yes
 set collapse_unread=yes
 
-set spool_file="starred"
+set spool_file="ltp"
 set nm_query_type=threads
 set nm_exclude_tags="junk"
 set nm_record=no
