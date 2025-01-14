@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ARCH=x86_64
+RUN=.
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	-h|--help)
+		echo "$0 [options]"
+		echo ''
+		echo ' A stupid vng wrapper'
+		echo ''
+		echo '-a    --arch     Architecture'
+		echo '-r    --run      Kernel directory to run (default: .)'
+		echo '-R    --root     Root filesystem path (default: $ROOTS/$ARCH/sid)'
+		echo '(...)            Other vng options'
+		shift
+		exit 0
+		;;
+	-a|--arch)
+		ARCH="$2"
+		shift 2
+		;;
+	-r|--run)
+		RUN="$2"
+		shift 2
+		;;
+	*)
+		break
+		;;
+	esac
+done
+
+EXTRA=
+if [[ $ARCH != "x86_64" ]]; then
+	EXTRA="--arch $ARCH --force-9p"
+fi
+
+sudo \vng --run $RUN --root "$ROOTS/$ARCH/sid/" $EXTRA "$@"
