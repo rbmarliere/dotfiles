@@ -7,6 +7,6 @@ macro index A "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>. <enter>" "mar
 macro index \Ca ":set confirmappend=no delete=yes auto_tag=yes<enter><save-message>${my_archive}<enter><sync-mailbox>:set confirmappend=yes delete=ask-yes<enter>" "Archive"
 macro index zA ":set collapse_all=yes<enter>:set collapse_flagged=yes<enter>:set collapse_unread=yes<enter><collapse-all>"
 macro pager \Co "<pipe-message> urlscan <enter>" "call urlscan to extract URLs out of a message"
-macro pager L '| grep -i "^^Message-ID: <.*>" | sed -n "s/.*<\(.*\)>.*/\1/p" | wl-copy<enter>'
+macro pager L '| grep -i "^^Message-ID: <.*>" | sed -n "s/.*<\(.*\)>.*/https:\/\/lore.kernel.org\/all\/\1/p" | xargs xdg-open<enter>'
 
 #macro pager \Co "<pipe-message> urlscan --run '~/.local/bin/neomutt.urlwrapper \"{}\"' --single<enter>" "call urlscan to extract URLs out of a message"
