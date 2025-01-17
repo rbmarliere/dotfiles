@@ -1,6 +1,8 @@
 return {
 	"stevearc/oil.nvim",
+	lazy = false,
 	opts = {
+		default_file_explorer = true,
 		-- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
 		-- options with a `callback` (e.g. { callback = function() ... end, desc = "", mode = "n" })
 		-- Additionally, if it is a string that matches "actions.<name>",
