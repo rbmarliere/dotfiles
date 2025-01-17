@@ -2,26 +2,11 @@
 
 # https://openqa-bites.github.io/openqa/openqa-cli-cheat-sheet/
 
-# TODO:
-#
-# qa-sync should call qa-sync-allow only once, maybe add a --no-check to intermediate calls
-#
-# using CASEDIR in $TARGET leads to this:
-# Reason: Failed to get origin url (/var/lib/openqa/share/tests/os-autoinst-distri-opensuse): fatal: not a git repository: /mnt/ext/src/os-autoinst/os-autoinst-distri-opensuse/worktrees/169354 at /usr/share/openqa/script/../lib/OpenQA/Git.pm line 139.
-# for HOST=$MY_HOST and qa-post and qa-clone-job with CASEDIR=, do this in $TARGET:
-# rm /var/lib/openqa/share/tests/os-autoinst-distri-opensuse
-# unlink /var/lib/openqa/share/tests/{microos,opensuse,leap-micro,sle,sle-micro}
-# git clone osado /var/lib/openqa/share/tests/os-autoinst-distri-opensuse
-# link needles...
-#
-# or simply clone osado locally without bare, rsync .git into $TARGET?
-
 TARGET=qa # defined in ~/.ssh/config
+MY_HOST=https://rmarliere-openqa.qe.prg2.suse.org
 HOST=
 HOST_OPT=
 SKIP_CONFIRMATION=0
-MY_HOST=https://rmarliere-openqa.qe.prg2.suse.org
-RSYNC_FLAGS="-qrvahP --delete" #-rltDvu
 
 _set_host() {
 	# echo $HOST >&2
@@ -142,6 +127,8 @@ qa-clone-job() {
 	local WITHIN_INSTANCE=
 	local SKIP_UPDATES=
 	local SKIP_DEPS=
+	local REMOTE=os-autoinst
+	local BRANCH=
 
 	usage() {
 		echo "usage: qa-clone-job [options] JOB"
@@ -149,9 +136,11 @@ qa-clone-job() {
 		echo "      --no-ssh                    Don't run command through ssh to $TARGET"
 		echo "  -D  --skip-chained-deps         Same as openqa-clone-job option"
 		echo "  -U  --skip-updates              Use the special variables to skip maintenance updates"
-		echo "  -s  --skip-download          Same openqa-clone-job option"
+		echo "  -s  --skip-download             Same openqa-clone-job option"
 		echo "  -u  --unnamed                   Don't append '$NS' to the test environment"
 		echo "  -w  --within-instance           Same as openqa-clone-job option"
+		echo "  -r  --remote                    Remote to use in CASEDIR"
+		echo "  -b  --branch                    Branch to use in CASEDIR"
 	}
 
 	if [[ $# -lt 1 ]]; then
@@ -185,6 +174,14 @@ qa-clone-job() {
 		-D | --skip-chained-deps)
 			SKIP_DEPS=--skip-chained-deps
 			;;
+		-r | --remote)
+			REMOTE="$2"
+			shift
+			;;
+		-b | --branch)
+			BRANCH="$2"
+			shift
+			;;
 		*)
 			break
 			;;
@@ -195,7 +192,12 @@ qa-clone-job() {
 	local JOB=$1
 	shift
 
-	_qa $SSH openqa-clone-job $HOST_OPT $SKIP_DEPS $SKIP_DOWNLOAD $WITHIN_INSTANCE $JOB $@ $NS $SKIP_UPDATES
+	local CASEDIR="https://github.com/$REMOTE/os-autoinst-distri-opensuse"
+	if [[ -n $BRANCH ]]; then
+		CASEDIR+="#$BRANCH"
+	fi
+
+	_qa $SSH openqa-clone-job $HOST_OPT $SKIP_DEPS $SKIP_DOWNLOAD $WITHIN_INSTANCE $JOB $@ $NS $SKIP_UPDATES CASEDIR=$CASEDIR
 }
 
 qa-clone-build() {
@@ -387,147 +389,50 @@ qa-delete-job() {
 	qa api -X DELETE jobs/"$ID"
 }
 
-qa-sync-allow() {
-	echo fixing $TARGET:/var/lib/openqa/tests permissions...
-	ssh $TARGET "chown geekotest:nogroup -R /var/lib/openqa/tests/"
-	ssh $TARGET "chmod g+w /var/lib/openqa/tests/*"
-}
-
-qa-sync-casedir() {
-	local CASEDIR=$1
-	shift
-	if [[ -z $CASEDIR ]]; then
-		echo "usage: qa-sync-casedir CASEDIR"
-		return 1
-	fi
-
-	_qa rsync $RSYNC_FLAGS "$CASEDIR"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$CASEDIR")")")" || return
-
-	echo linking suse needles...
-	for product in alp sle sle-micro; do
-		local link=/var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
-		ssh $TARGET "ln -sfn /var/lib/openqa/tests/os-autoinst-needles-sles/ $link"
-	done
-
-	echo linking opensuse needles...
-	for product in microos opensuse leap-micro; do
-		local link=/var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
-		ssh $TARGET "ln -sfn /var/lib/openqa/tests/os-autoinst-needles-opensuse/ $link"
-	done
-
-	qa-sync-allow
-}
-
-qa-sync-needles() {
-	local DOWNLOAD=
-
-	usage() {
-		echo "usage: qa-sync-needles [options] NEEDLES"
-		echo ""
-		echo "  -h  --help                    Display this message"
-		echo "  -d  --download                Download NEEDLES from $TARGET instead of uploading"
-	}
-
-	while [[ $# -gt 0 ]]; do
-		case "$1" in
-		-h | --help)
-			usage
-			return 0
-			;;
-		-d | --download)
-			DOWNLOAD=1
-			;;
-		*)
-			break
-			;;
-		esac
-		shift
-	done
-
-	local NEEDLES="$1"
-	shift
-	if [[ -z $NEEDLES ]]; then
-		usage
-		return 1
-	fi
-
-	if [[ -z $DOWNLOAD ]]; then
-		_qa rsync $RSYNC_FLAGS "$NEEDLES"/ $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")"/ || return
-		qa-sync-allow
-	else
-		_qa rsync $RSYNC_FLAGS $TARGET:/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$NEEDLES")")")"/ "$NEEDLES"/
-	fi
-}
-
 qa-update-needles() {
-	git -C "$HOME"/src/os-autoinst/os-autoinst-needles-opensuse/master pull
-	qa-sync-needles "$HOME"/src/os-autoinst/os-autoinst-needles-opensuse/master
-	git -C "$HOME"/suse.de/openqa/os-autoinst-needles-sles/master pull
-	qa-sync-needles "$HOME"/suse.de/openqa/os-autoinst-needles-sles/master
-}
+	local SSH="ssh $TARGET -- "
 
-qa-sync() {
-	local IGNORE_NEEDLES=
-	usage() {
-		echo "usage: qa-sync [options] CASEDIR [NEEDLES]"
-		echo ""
-		echo "  -h  --help                    Display this message"
-		echo "  -f  --force                   Ignore NEEDLES argument"
-		echo "  If NEEDLES is empty, qa-sync-needles-update will be called first"
-	}
 	while [[ $# -gt 0 ]]; do
 		case "$1" in
-		-h | --help)
-			usage
-			return 0
+		--no-ssh)
+			SSH=
 			;;
-		-f | --force) IGNORE_NEEDLES=1 ;;
-		*) break ;;
 		esac
 		shift
 	done
-	local CASEDIR=$1
-	shift
-	local NEEDLES=$1
-	shift
-	if [[ -z $CASEDIR ]]; then
-		usage
-		return 1
-	fi
-	SKIP_CONFIRMATION=1
-	if [[ $IGNORE_NEEDLES -ne 1 ]]; then
-		if [[ -z $NEEDLES ]]; then
-			qa-update-needles
-		else
-			qa-sync-needles "$NEEDLES"
-		fi
-	fi
-	qa-sync-casedir "$CASEDIR"
-	SKIP_CONFIRMATION=0
+
+	$SSH git -C /var/lib/openqa/tests/os-autoinst-needles-opensuse pull
+	$SSH git -C /var/lib/openqa/tests/os-autoinst-needles-sles pull
 }
 
 qa-link() {
-	local DEST=$1
-	shift
-	if [[ -z $DEST ]]; then
-		echo "usage: qa-link DEST"
-		return 1
-	fi
+	local SSH="ssh $TARGET -- "
 
-	local LINK=/var/lib/openqa/tests/"$(basename "$(dirname "$(realpath "$DEST")")")"
-	sudo ln -sfn "$(realpath "$DEST")" "$LINK"
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--no-ssh)
+			SSH=
+			;;
+		esac
+		shift
+	done
 
 	echo linking suse needles...
 	for product in alp sle sle-micro; do
-		ln -sfn /var/lib/openqa/tests/os-autoinst-needles-sles /var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
+		$SSH ln -sfn /var/lib/openqa/tests/os-autoinst-needles-sles /var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
 	done
 
 	echo linking opensuse needles...
 	for product in microos opensuse leap-micro; do
-		ln -sfn /var/lib/openqa/tests/os-autoinst-needles-opensuse /var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
+		$SSH ln -sfn /var/lib/openqa/tests/os-autoinst-needles-opensuse /var/lib/openqa/tests/os-autoinst-distri-opensuse/products/$product/needles
 	done
 
-	sudo chown geekotest:root -R /var/lib/openqa/tests/
+	echo fixing /var/lib/openqa/tests permissions...
+	$SSH sudo chown geekotest:root -R /var/lib/openqa/tests/
+	$SSH sudo chown geekotest:nogroup -R /var/lib/openqa/tests/
+	$SSH sudo chmod g+w /var/lib/openqa/tests/*
+	$SSH git config --global --add safe.directory /var/lib/openqa/share/tests/os-autoinst-needles-opensuse
+	$SSH git config --global --add safe.directory /var/lib/openqa/share/tests/os-autoinst-needles-sles
 }
 
 qa-schedule() {
@@ -535,7 +440,18 @@ qa-schedule() {
 }
 
 qa-sql() {
-	ssh -t $TARGET -- su - postgres -c \'psql -d openqa\'
+	local SSH="ssh $TARGET -- "
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--no-ssh)
+			SSH=
+			;;
+		esac
+		shift
+	done
+
+	$SSH su - postgres -c \'psql -d openqa\'
 }
 
 qa-vnc() {
