@@ -61,39 +61,40 @@ return {
 	},
 	config = function()
 		local dap = require("dap")
-		dap.set_log_level("TRACE")
-
+		local dap_utils = require("dap.utils")
+		local dapui = require("dapui")
+		local virtual_text = require("nvim-dap-virtual-text")
 		local widgets = require("dap.ui.widgets")
-		local opts = { silent = true }
 
-		vim.keymap.set("n", "<Leader><C-x>", require("dapui").toggle, opts)
-		vim.keymap.set("n", "<F8>", require("nvim-dap-virtual-text").toggle, opts)
-		vim.keymap.set("n", "<F10>", dap.step_over, opts)
-		vim.keymap.set("n", "<F11>", dap.step_into, opts)
-		vim.keymap.set("n", "<F12>", dap.step_over, opts)
-		vim.keymap.set("n", "<F4>", dap.close, opts)
-		vim.keymap.set("n", "<F5>", dap.continue, opts)
-		vim.keymap.set("n", "<Leader>B", function()
+		-- dap.set_log_level("TRACE")
+
+		vim.keymap.set("n", "<Leader>dxx", dap.close, { silent = true, desc = "DAP Close" })
+		vim.keymap.set("n", "<Leader>dxc", dap.continue, { silent = true, desc = "DAP Continue" })
+		vim.keymap.set("n", "<Leader>dxi", dap.step_into, { silent = true, desc = "DAP Step Into" })
+		vim.keymap.set("n", "<Leader>dxo", dap.step_over, { silent = true, desc = "DAP Step Over" })
+		vim.keymap.set("n", "<Leader>dtv", virtual_text.toggle, { silent = true, desc = "DAP Toggle Virtual Text" })
+		vim.keymap.set("n", "<Leader>dtu", dapui.toggle, { silent = true, desc = "DAP Toggle UI" })
+		vim.keymap.set("n", "<Leader>dbB", function()
 			dap.set_breakpoint(vim.fn.input("condition: "))
-		end, opts)
-		vim.keymap.set("n", "<Leader>b", dap.toggle_breakpoint, opts)
-		vim.keymap.set("n", "<Leader>dl", function()
+		end, { silent = true, desc = "DAP Add conditional breakpoint" })
+		vim.keymap.set("n", "<Leader>dbb", dap.toggle_breakpoint, { silent = true, desc = "DAP Add breakpoint" })
+		vim.keymap.set("n", "<Leader>dbm", function()
+			dap.set_breakpoint(nil, nil, vim.fn.input("message: "))
+		end, { silent = true, desc = "DAP Add breakpoint with log message" })
+		vim.keymap.set("n", "<Leader>drl", function()
 			vim.cmd("silent! write")
 			dap.run_last()
-		end, opts)
-		vim.keymap.set("n", "<Leader>lb", function()
+		end, { silent = true, desc = "DAP Run last" })
+		vim.keymap.set("n", "<Leader>dlb", function()
 			dap.list_breakpoints()
 			vim.cmd.copen()
-		end, opts)
-		vim.keymap.set("n", "<Leader>lp", function()
-			dap.set_breakpoint(nil, nil, vim.fn.input("message: "))
-		end, opts)
-		vim.keymap.set("n", "<Leader>ls", function()
+		end, { silent = true, desc = "DAP List breakpoints" })
+		vim.keymap.set("n", "<Leader>dls", function()
 			widgets.centered_float(widgets.sessions)
-		end, opts)
-		vim.keymap.set("n", "<Leader>lt", function()
+		end, { silent = true, desc = "DAP List sessions" })
+		vim.keymap.set("n", "<Leader>dlt", function()
 			widgets.centered_float(widgets.threads)
-		end, opts)
+		end, { silent = true, desc = "DAP List threads" })
 
 		dap.adapters.gdb = {
 			type = "executable",
@@ -127,7 +128,7 @@ return {
 				end,
 				pid = function()
 					local name = vim.fn.input("Executable name (filter): ")
-					return require("dap.utils").pick_process({ filter = name })
+					return dap_utils.pick_process({ filter = name })
 				end,
 				cwd = "${workspaceFolder}",
 			},
