@@ -131,6 +131,7 @@ qa-clone-job() {
 	local SKIP_DEPS=
 	local REMOTE=os-autoinst
 	local BRANCH=
+	local NO_CASEDIR=
 
 	usage() {
 		echo "usage: qa-clone-job [options] JOB"
@@ -143,6 +144,7 @@ qa-clone-job() {
 		echo "  -w  --within-instance           Same as openqa-clone-job option"
 		echo "  -r  --remote                    Remote to use in CASEDIR"
 		echo "  -b  --branch                    Branch to use in CASEDIR"
+		echo "      --no-casedir                Don't pass CASEDIR"
 	}
 
 	if [[ $# -lt 1 ]]; then
@@ -184,6 +186,9 @@ qa-clone-job() {
 			BRANCH="$2"
 			shift
 			;;
+		--no-casedir)
+			NO_CASEDIR=1
+			;;
 		*)
 			break
 			;;
@@ -199,7 +204,13 @@ qa-clone-job() {
 		CASEDIR+="#$BRANCH"
 	fi
 
-	_qa $SSH openqa-clone-job $HOST_OPT $SKIP_DEPS $SKIP_DOWNLOAD $WITHIN_INSTANCE $JOB $@ $NS $SKIP_UPDATES CASEDIR=$CASEDIR
+	if [[ -n $NO_CASEDIR ]]; then
+		CASEDIR=
+	else
+		CASEDIR="CASEDIR=$CASEDIR"
+	fi
+
+	_qa $SSH openqa-clone-job $HOST_OPT $SKIP_DEPS $SKIP_DOWNLOAD $WITHIN_INSTANCE $JOB $@ $NS $SKIP_UPDATES $CASEDIR
 }
 
 qa-clone-build() {
