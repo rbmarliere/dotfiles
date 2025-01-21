@@ -1,6 +1,7 @@
 #!/bin/bash
 
-if [ -n "$TMUX" ]; then
+if [[ -n $TMUX ]]; then
+	# if currently within tmux, detach and re-run the script
 	tmux detach-client -E "/bin/bash -lc 'shut $*'"
 	exit
 fi
@@ -9,21 +10,20 @@ if pgrep -f "^(rsync|scp|dd|cp).*"; then
 	echo "There are transfers in progress..."
 fi
 
-read -p "Shutdown? [y|N] " ans
+read -rp "Shutdown? [y|N] " ans
 ans=${ans:-N}
-if [[ ! "$ans" =~ ^[Yy]$ ]]; then
+if [[ ! $ans =~ ^[Yy]$ ]]; then
 	exit
 fi
 
-root_runner "$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh"
-# if root_runner "systemctl --user status tmux >/dev/null 2>&1"; then
-# 	root_runner "systemctl --user stop tmux"
-# fi
+if tmux ls &>/dev/null && [[ -f "$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh" ]]; then
+	# if tmux is running in the default socket, save it
+	root_runner "$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh"
+fi
 
-if [ -d $HOME/notes ]; then
+if [[ -d $HOME/notes ]]; then
 	root_runner "git -C $HOME/notes add --all && git -C $HOME/notes commit -m 'bkp'"
 	root_runner "git -C $HOME/notes push || git -C $HOME/notes pull --rebase && git -C $HOME/notes push" || exit 1
 fi
 
 root_runner "sudo shutdown -h --no-wall now"
-
