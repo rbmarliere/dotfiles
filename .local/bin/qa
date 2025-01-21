@@ -121,7 +121,9 @@ qa-post() {
 qa-clone-job() {
 	_set_host
 
-	local NS='_GROUP=0 BUILD+="rbmarliere"' # _OBSOLETE=1
+	# https://openqa-bites.github.io/posts/2023/2023-02-23-safely_clone_a_job_on_a_production_instance/
+	local NS='_GROUP=0 BUILD+="rbmarliere" TEST+="rbmarliere"'
+
 	local SSH="ssh $TARGET -- "
 	local SKIP_DOWNLOAD=
 	local WITHIN_INSTANCE=
