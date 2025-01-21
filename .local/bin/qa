@@ -388,6 +388,10 @@ qa-delete-job() {
 		echo "usage: qa-delete-job ID"
 		return 1
 	fi
+	if [[ ! "$ID" =~ ^-?[0-9]+$ ]]; then
+		echo "error: ID should be a number" >&2
+		return 1
+	fi
 	qa api -X DELETE jobs/"$ID"
 }
 
