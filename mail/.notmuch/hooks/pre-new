@@ -1,22 +1,20 @@
 #!/bin/bash
 
+# adapted from https://github.com/wkz/notmuch-lore
+
 set -e
 
-die()
-{
-    echo "ERROR: $1" >&2
-    exit 1
+die() {
+	echo "ERROR: $1" >&2
+	exit 1
 }
 
-db=$(notmuch config get database.path)
-meta=$db/.notmuch
-base=$meta/.lore
-[ -d $db -a -d $meta ] || die "Please run 'notmuch setup' first."
-mkdir -p $base
+DB=$(notmuch config get database.path)
+META=$DB/.notmuch
 
 getvar() {
-    # From the INI file $1, get the value of key $3 in section $2.
-    awk -vsect=$2 -vvar=$3 -F= '
+	# From the INI file $1, get the value of key $3 in section $2.
+	awk -vsect=$2 -vvar=$3 -F= '
     	/^\[.*\]$/ {
 		accept = $1 == "[" sect "]";
 	}
@@ -28,105 +26,111 @@ getvar() {
         }' $1
 }
 
-import()
-{
-    local git="git --git-dir=$2"
+import() {
+	local GIT="git --git-dir=$2"
 
-    # Make sure the Maildir exists
-    mkdir -p $db/$1/tmp -p $db/$1/new $db/$1/cur
+	# Make sure the Maildir exists
+	mkdir -p $DB/kernel.org/$1/tmp -p $DB/kernel.org/$1/new $DB/kernel.org/$1/cur
 
-    # local head=$(find $db/$1/cur/ -type f -printf "%T@ %f\n" | sort -n | head -1 | cut -d' ' -f2 | sed 's/.\///' | sed 's/:2$//')
-    # $git fetch --all --unshallow
-    # $git update-ref refs/heads/master $head
-    # $git gc --prune=all
-    # $git fetch
+	# Extract the message from each commit in the range and store it
+	# in the Maildir for notmuch to consume.
+	$GIT rev-list $3 | while read SHA; do
+		if [[ "$4" = "init" ]]; then
+			# initial import should not mark anything as new, therefore add to "cur"
+			# so neomutt does not need to re-write everything (N->O)
+			# after closing the mailbox for the first time
+			$GIT show $SHA:m >$DB/kernel.org/$1/cur/$SHA:2
+		elif [[ "$4" = "new" ]]; then
+			$GIT show $SHA:m >$DB/kernel.org/$1/new/$SHA
+		fi
+	done
+}
 
-    # Extract the message from each commit in the range and store it
-    # in the Maildir for notmuch to consume.
-    $git rev-list $3 | while read sha; do
-	if [ "$4" = "init" ]; then
-	    # initial import should not mark anything as new, therefore add to "cur"
-	    # so neomutt does not need to re-write everything (N->O)
-	    # after closing the mailbox for the first time
-	    $git show $sha:m >$db/$1/cur/$sha:2
-	elif [ "$4" = "new" ]; then
-	    $git show $sha:m >$db/$1/new/$sha
+sync() {
+	local GITDIR=$BASE/git/$1
+
+	# Fetch new messages from all epochs and inject them to the
+	# corresponding Maildir.
+	for EPOCH in $(ls -v $GITDIR/); do
+		local GIT="git --git-dir=$GITDIR/$EPOCH"
+		local HEAD=$($GIT rev-list -n1 master)
+
+		echo "  epoch$EPOCH: syncing" >&2
+		$GIT fetch --quiet
+		#import $1 $GITDIR/$EPOCH $HEAD..master init
+		import $1 $GITDIR/$EPOCH $HEAD..master new
+
+		# Basically we now want to `git fetch --depth=1`, but that
+		# would race against new messages that came in during the
+		# import. So instead we "manually" move the shallow boundary
+		# to HEAD, and then get rid of all objects beyond it.
+		echo $HEAD >$GITDIR/$EPOCH/shallow
+		$GIT gc --prune=all --quiet
+	done
+}
+
+initialize() {
+	local GITDIR=$BASE/git/$1
+	local EPOCH=$(ls -v $GITDIR/ 2>/dev/null | tail -n1)
+	local URL=$(getvar $BASE/sources $1 url)
+	local SINCE=$(getvar $BASE/sources $1 since)
+
+	EPOCH=${EPOCH:--1}
+	SINCE=${SINCE:-3 months ago}
+
+	echo "$1: initialize ($URL)" >&2
+
+	# Try to fetch newer epochs until there are no more.
+	while git clone --mirror $URL/$(($EPOCH + 1)) $GITDIR/$(($EPOCH + 1)) 2>/dev/null; do
+		EPOCH=$(($EPOCH + 1))
+		echo "  epoch$EPOCH: initial import" >&2
+		import $1 $GITDIR/$EPOCH master init
+	done
+
+	if [[ $EPOCH -lt 0 ]]; then
+		echo "  WARN: no epochs found." >&2
+		return 1
 	fi
-    done
 }
 
-sync()
-{
-    local gitdir=$base/git/$1
+if [[ -d $DB/kernel.org ]]; then
+	echo "-------------------------"
+	echo "Syncing $DB/kernel.org"
+	BASE=$META/.lore
+	[[ -d $DB && -d $META ]] || die "Please run 'notmuch setup' first."
+	mkdir -p $BASE
+	SOURCES=$(grep -e '^\[.*\]$' <$BASE/sources | tr -d '[]')
+	for SOURCE in $SOURCES; do
+		if ! initialize $SOURCE; then
+			continue
+		fi
+		sync $SOURCE
+	done
+fi
 
-    # Fetch new messages from all epochs and inject them to the
-    # corresponding Maildir.
-    for epoch in $(ls -v $gitdir/); do
-	local git="git --git-dir=$gitdir/$epoch"
-	local head=$($git rev-list -n1 master)
+if [[ -f ~/.mbsyncrc && -d $DB/marliere.net ]] && type mbsync &>/dev/null; then
+	echo "-------------------------"
+	echo "Syncing $DB/marliere.net"
+	mbsync -V sync
+	mbsync -V trash
+	mbsync -V all
+	echo $DB/marliere.net/trash/**/{cur,new}/* | xargs rm -f
+fi
 
-	echo "  epoch$epoch: syncing" >&2
-	$git fetch --quiet
-	#import $1 $gitdir/$epoch $head..master new
-	import $1 $gitdir/$epoch $head..master init
+if [[ -f ~/src/extra/lieer/master/venv/bin/activate ]]; then
+	source ~/src/extra/lieer/master/venv/bin/activate || die 'could not activate lieer venv'
 
-	# Basically we now want to `git fetch --depth=1`, but that
-	# would race against new messages that came in during the
-	# import. So instead we "manually" move the shallow boundary
-	# to HEAD, and then get rid of all objects beyond it.
-	echo $head >$gitdir/$epoch/shallow
-	$git gc --prune=all --quiet
-    done
-}
+	if [[ -d $DB/gmail.com ]]; then
+		echo "-------------------------"
+		echo "Syncing $DB/gmail.com"
+		gmi sync -C $DB/gmail.com -s
+	fi
 
-initialize()
-{
-    local gitdir=$base/git/$1
-    local epoch=$(ls -v $gitdir/ 2>/dev/null | tail -n1)
-    local url=$(getvar $base/sources $1 url)
-    local since=$(getvar $base/sources $1 since)
+	if [[ -d $DB/suse.com ]]; then
+		echo "-------------------------"
+		echo "Syncing $DB/suse.com"
+		gmi sync -C $DB/suse.com -s
+	fi
 
-    epoch=${epoch:--1}
-    since=${since:-3 months ago}
-
-    echo "$1: initialize ($url)" >&2
-
-    # Try to fetch newer epochs until there are no more.
-    while git clone --mirror $url/$(($epoch + 1)) $gitdir/$(($epoch + 1)) 2>/dev/null; do
-	epoch=$(($epoch + 1))
-
-	echo "  epoch$epoch: initial import" >&2
-	#if ! git --git-dir=$gitdir/$epoch fetch --quiet \
-	#     --shallow-since="$since" 2>/dev/null; then
-	#    if [ $epoch -eq 0 ]; then
-	#	# retry without separate git fetch, e.g. linuxppc-dev
-	#	rm -rf "${gitdir:?}/$epoch"
-	#	if ! git clone --mirror --shallow-since="$since" "$url/0" "$gitdir/0"; then
-	#	    echo "    failed cloning repo $url"
-	#	    continue
-	#	fi
-	#    else
-	#	echo "    no messages in range." >&2
-	#	continue
-	#    fi
-	#fi
-
-	import $1 $gitdir/$epoch master init
-    done
-
-    if [ $epoch -lt 0 ]; then
-	echo "  WARN: no epochs found." >&2
-	return 1
-    fi
-}
-
-sources=$(grep -e '^\[.*\]$' <$base/sources | tr -d '[]')
-
-for source in $sources; do
-    if ! initialize $source; then
-	continue
-    fi
-
-    sync $source
-done
-
+	deactivate
+fi
