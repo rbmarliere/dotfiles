@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# these are not managed by gauteh/lieer and need to be tagged according to the maildir folders
+DOMAINS=(marliere.net/all kernel.org)
+
+for DOMAIN in "${DOMAINS[@]}"; do
+	DOMAIN_PATH=~/mail/$DOMAIN
+	find "$DOMAIN_PATH" -type d -name cur | while read -r CURDIR; do
+		DIR=$(dirname "$CURDIR")
+		FOLDER=${DIR#$DOMAIN_PATH/}
+		[[ $FOLDER == "lkml" ]] && FOLDER="linux-kernel"
+		notmuch tag +"$FOLDER" -- "folder:$DOMAIN/$FOLDER and tag:new"
+	done
+done
