@@ -1,0 +1,47 @@
+IMAPAccount marliere.net
+Host mail.marliere.net
+Port 143
+User ricardo@marliere.net
+PassCmd "pass marliere.net"
+
+IMAPStore remote
+Account marliere.net
+
+MaildirStore local
+SubFolders Verbatim
+# The trailing "/" is important
+Path ~/mail/marliere.net/all/
+Inbox ~/mail/marliere.net/all/inbox
+
+MaildirStore trash
+SubFolders Verbatim
+# The trailing "/" is important
+Path ~/mail/marliere.net/trash/
+Inbox ~/mail/marliere.net/trash/inbox
+
+Channel all
+Far :remote:
+Near :local:
+Patterns * !archive !spam !sent !INBOX !drafts !important
+Create Both
+Remove Both
+#Sync Pull New ReNew Push Flags
+Sync Pull New Upgrade
+Expunge None
+
+Channel sync
+Far :remote:
+Near :local:
+Create Both
+Remove Both
+Patterns archive spam sent INBOX drafts important trash
+Sync All
+Expunge Both
+
+Channel trash
+Far :remote:
+Near :trash:
+Patterns * !archive !spam !sent !INBOX !drafts !important !trash
+Create Both
+Remove Both
+Expunge Both

@@ -143,6 +143,7 @@ mail:
 	$(SUDO) $(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/mail)
 	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O $$HOME/.local/bin/oauth2.py
 	chmod +x $$HOME/.local/bin/oauth2.py
+	# TODO: clone gauteh/lieer
 
 .PHONY: clean
 clean:

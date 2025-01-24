@@ -1,0 +1,99 @@
+[ksummit]
+url=http://lore.kernel.org/ksummit
+since=50 years ago
+
+[lkml]
+url=http://lore.kernel.org/lkml
+since=50 years ago
+
+[linux-mm]
+url=http://lore.kernel.org/linux-mm
+since=50 years ago
+
+[linux-fsdevel]
+url=http://lore.kernel.org/linux-fsdevel
+since=50 years ago
+
+[linux-doc]
+url=http://lore.kernel.org/linux-doc
+since=50 years ago
+
+[linux-kernel-mentees]
+url=http://lore.kernel.org/linux-kernel-mentees
+since=50 years ago
+
+[linux-kselftest]
+url=http://lore.kernel.org/linux-kselftest
+since=50 years ago
+
+[linux-media]
+url=http://lore.kernel.org/linux-media
+since=50 years ago
+
+[linux-mm]
+url=http://lore.kernel.org/linux-mm
+since=50 years ago
+
+[linux-next]
+url=http://lore.kernel.org/linux-next
+since=50 years ago
+
+[linux-perf-users]
+url=http://lore.kernel.org/linux-perf-users
+since=50 years ago
+
+[linux-riscv]
+url=http://lore.kernel.org/linux-riscv
+since=50 years ago
+
+[linux-staging]
+url=http://lore.kernel.org/linux-staging
+since=50 years ago
+
+[linux-trace-devel]
+url=http://lore.kernel.org/linux-trace-devel
+since=50 years ago
+
+[linux-trace-kernel]
+url=http://lore.kernel.org/linux-trace-kernel
+since=50 years ago
+
+[linux-trace-users]
+url=http://lore.kernel.org/linux-trace-users
+since=50 years ago
+
+[linux-usb]
+url=http://lore.kernel.org/linux-usb
+since=50 years ago
+
+[ltp]
+url=http://lore.kernel.org/ltp
+since=50 years ago
+
+[rust-for-linux]
+url=http://lore.kernel.org/rust-for-linux
+since=50 years ago
+
+[netdev]
+url=http://lore.kernel.org/netdev
+since=50 years ago
+
+[stable]
+url=http://lore.kernel.org/stable
+since=50 years ago
+
+[tech-board-discuss]
+url=http://lore.kernel.org/tech-board-discuss
+since=50 years ago
+
+[linux-api]
+url=http://lore.kernel.org/linux-api
+since=50 years ago
+
+[u-boot]
+url=http://lore.kernel.org/u-boot
+since=50 years ago
+
+[rcu]
+url=http://lore.kernel.org/rcu
+since=50 years ago
