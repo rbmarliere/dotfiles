@@ -4,6 +4,7 @@ set -euo pipefail
 
 ARCH=x86_64
 RUN=.
+ROOT=
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
@@ -27,6 +28,10 @@ while [[ $# -gt 0 ]]; do
 		RUN="$2"
 		shift 2
 		;;
+	-R|--root)
+		ROOT="$2"
+		shift 2
+		;;
 	*)
 		break
 		;;
@@ -38,4 +43,9 @@ if [[ $ARCH != "x86_64" ]]; then
 	EXTRA="--arch $ARCH --force-9p"
 fi
 
-sudo \vng --run $RUN --root "$ROOTS/$ARCH/sid/" $EXTRA "$@"
+if [[ -z $ROOT ]]; then
+	ROOT="$ROOTS/$ARCH/sid/"
+fi
+
+echo sudo vng --run $RUN --root $ROOT $EXTRA "$@"
+sudo vng --run $RUN --root $ROOT $EXTRA "$@"
