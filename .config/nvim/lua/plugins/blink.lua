@@ -51,7 +51,7 @@ return {
 					opts = {
 						search_paths = {
 							vim.fn.stdpath("config") .. "/snippets",
-							"snippets", -- relative path, per-project
+							".snippets", -- relative path, per-project
 						},
 					},
 				},
