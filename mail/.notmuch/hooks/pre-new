@@ -9,6 +9,8 @@ die() {
 	exit 1
 }
 
+export GIT_HTTP_LOW_SPEED_LIMIT=1000
+export GIT_HTTP_LOW_SPEED_TIME=10
 DB=$(notmuch config get database.path)
 META=$DB/.notmuch
 
@@ -30,7 +32,7 @@ import() {
 	local GIT="git --git-dir=$2"
 
 	# Make sure the Maildir exists
-	mkdir -p $DB/kernel.org/$1/tmp -p $DB/kernel.org/$1/new $DB/kernel.org/$1/cur
+	mkdir -p $DB/kernel.org/$1/{tmp,new,cur}
 
 	# Extract the message from each commit in the range and store it
 	# in the Maildir for notmuch to consume.
@@ -56,7 +58,10 @@ sync() {
 		local HEAD=$($GIT rev-list -n1 master)
 
 		echo "  epoch$EPOCH: syncing" >&2
-		$GIT fetch --quiet
+		if ! $GIT fetch --quiet; then
+		    echo "  epoch$EPOCH: fetch failed, aborting $1..." >&2
+		    return
+		fi
 		#import $1 $GITDIR/$EPOCH $HEAD..master init
 		import $1 $GITDIR/$EPOCH $HEAD..master new
 
@@ -93,20 +98,20 @@ initialize() {
 	fi
 }
 
-if [[ -d $DB/kernel.org ]]; then
-	echo "-------------------------"
-	echo "Syncing $DB/kernel.org"
-	BASE=$META/.lore
-	[[ -d $DB && -d $META ]] || die "Please run 'notmuch setup' first."
-	mkdir -p $BASE
-	SOURCES=$(grep -e '^\[.*\]$' <$BASE/sources | tr -d '[]')
-	for SOURCE in $SOURCES; do
-		if ! initialize $SOURCE; then
-			continue
-		fi
-		sync $SOURCE
-	done
-fi
+# if [[ -d $DB/kernel.org ]]; then
+# 	echo "-------------------------"
+# 	echo "Syncing $DB/kernel.org"
+# 	BASE=$META/.lore
+# 	[[ -d $DB && -d $META ]] || die "Please run 'notmuch setup' first."
+# 	mkdir -p $BASE
+# 	SOURCES=$(grep -e '^\[.*\]$' <$BASE/sources | tr -d '[]')
+# 	for SOURCE in $SOURCES; do
+# 		if ! initialize $SOURCE; then
+# 			continue
+# 		fi
+# 		sync $SOURCE
+# 	done
+# fi
 
 if [[ -f ~/.mbsyncrc && -d $DB/marliere.net ]] && type mbsync &>/dev/null; then
 	echo "-------------------------"
