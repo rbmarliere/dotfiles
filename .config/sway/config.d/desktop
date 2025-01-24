@@ -55,4 +55,5 @@ exec env TERM=$term /usr/bin/tmux new-session -d "~/.config/tmux/plugins/tmux-re
 exec ~/.local/bin/sway.autostart
 
 bindsym $mod+shift+n exec ~/.local/bin/notes
+bindsym $mod+shift+m exec ~/.local/bin/mail
 bindsym $mod+t exec swaymsg "[class=Todoist]" focus

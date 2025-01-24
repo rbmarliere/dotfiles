@@ -10,15 +10,9 @@ if ! $TMUX list-sessions 2>/dev/null; then
 	$TMUX set-option -wg automatic-rename off
 	$TMUX set-option -g set-titles off
 
-	i=1
-	while IFS= read -r acc; do
-		acc_file=${acc/private\///}
-		$TMUX new-window -t "mail:$i" -n "$acc_file"
-		$TMUX send-keys "neomutt -P $acc; exec bash" C-m
-		((i++))
-	done < ~/.config/neomutt/accounts/enabled
-
-	$TMUX kill-pane -t mail:0
+	$TMUX send-keys "journalctl --user -xefu notmuch; exec bash" C-m
+	$TMUX new-window -t "mail:1" -n "aerc"
+	$TMUX send-keys "aerc; exec bash" C-m
 fi
 
 $TMUX attach -t mail

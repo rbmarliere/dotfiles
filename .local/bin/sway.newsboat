@@ -7,9 +7,10 @@ sleep 1
 
 TMUX="tmux -L newsboat"
 if ! $TMUX list-sessions 2>/dev/null; then
-	$TMUX new-session -d -s news "vi ~/.config/newsboat/urls"
+	$TMUX new-session -d -s news
+	$TMUX send-keys "vi ~/.config/newsboat/urls; exec bash" C-m
 	$TMUX new-window -t "news:1"
-	$TMUX send-keys "newsboat" C-m
+	$TMUX send-keys "newsboat; exec bash" C-m
 fi
 
 $TMUX attach -t news

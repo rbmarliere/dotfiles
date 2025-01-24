@@ -1,0 +1,17 @@
+# vim: ft=conf
+
+all = folder:"foobar"
+all = path:"foobar/**"
+archive = tag:archive and folder:"foobar"
+attachment = tag:attachment and folder:"foobar"
+drafts = tag:drafts and folder:"foobar"
+encrypted = tag:encrypted and folder:"foobar"
+flagged = tag:flagged and folder:"foobar"
+important = tag:important and folder:"foobar"
+inbox = tag:inbox and not tag:spam and folder:"foobar"
+replied = tag:replied and folder:"foobar"
+sent = tag:sent and folder:"foobar"
+signed = tag:signed and folder:"foobar"
+spam = tag:spam and folder:"foobar"
+trash = tag:trash and folder:"foobar"
+unread = tag:unread and folder:"foobar"

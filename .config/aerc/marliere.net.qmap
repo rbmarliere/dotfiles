@@ -1,0 +1,41 @@
+# vim: ft=conf
+
+all = path:"marliere.net/all/**"
+attachment = tag:attachment and path:"marliere.net/all/**"
+encrypted = tag:encrypted and path:"marliere.net/all/**"
+flagged = tag:flagged and path:"marliere.net/all/**"
+important = tag:important and path:"marliere.net/all/**"
+inbox = tag:inbox and path:"marliere.net/all/**"
+replied = tag:replied and path:"marliere.net/all/**"
+signed = tag:signed and path:"marliere.net/all/**"
+spam = tag:spam and path:"marliere.net/all/**"
+trash = tag:trash and path:"marliere.net/all/**"
+unread = tag:unread and path:"marliere.net/all/**"
+
+debian-announce = tag:debian-announce
+debian-bugs = tag:debian-bugs
+debian-devel = tag:debian-devel
+debian-devel-announce = tag:debian-devel-announce
+debian-devel-portuguese = tag:debian-devel-portuguese
+debian-news = tag:debian-news
+debian-news-portuguese = tag:debian-news-portuguese
+debian-policy = tag:debian-policy
+debian-project = tag:debian-project
+debian-vote = tag:debian-vote
+neomutt-devel-neomutt = tag:neomutt-devel-neomutt
+neomutt-users-neomutt = tag:neomutt-users-neomutt
+oss-security = tag:oss-security
+oss-security-help = tag:oss-security-help
+rjarry/aerc-devel = tag:rjarry/aerc-devel
+rjarry/aerc-discuss = tag:rjarry/aerc-discuss
+sircmpwn/sr = tag:sircmpwn/sr
+
+git = tag:git
+kernelci = tag:kernelci
+kernelnewbies = tag:kernelnewbies
+ksummit = tag:ksummit
+linux-kernel = tag:linux-kernel
+linux-kernel-mentees = tag:linux-kernel-mentees
+ltp = tag:ltp
+tech-board-discuss = tag:tech-board-discuss
+u-boot = tag:u-boot

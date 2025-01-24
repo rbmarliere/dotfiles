@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Aerc
+Exec=foot -H bash -l -c "sway.aerc"
+Type=Application

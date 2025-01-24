@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if ! swaymsg "[app_id=mail] focus"; then
+    foot -a mail bash -l -c "$HOME/.local/bin/sway.aerc"
+fi
