@@ -1,0 +1,12 @@
+[Unit]
+Description=Mailbox synchronization service
+ConditionPathExists=%h/mail/.notmuch
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=notmuch new
+
+[Install]
+WantedBy=default.target

@@ -1,4 +1,5 @@
 .deps
+.config/systemd/user
 .git
 .gitmodules
 LICENSE.txt

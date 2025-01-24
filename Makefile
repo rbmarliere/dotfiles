@@ -1,17 +1,19 @@
 DIR = \
-	$$HOME/mail/.cache/neomutt.msg \
 	$$HOME/.cache/nvim/bkp \
 	$$HOME/.cache/nvim/swp \
 	$$HOME/.cache/nvim/und \
 	$$HOME/.cache/vim/bkp \
 	$$HOME/.cache/vim/swp \
 	$$HOME/.cache/vim/und \
+	$$HOME/.config/systemd/user \
 	$$HOME/.local/bin \
-	$$HOME/.local/share/applications
+	$$HOME/.local/share/applications \
+	$$HOME/mail/.notmuch/.lore \
+	$$HOME/mail/.notmuch/hooks \
+	$$HOME/src/extra
 
 FILES = \
 	$$HOME/.bash_eternal_history \
-	$$HOME/.config/neomutt/aliases \
 	$$HOME/.config/nvim/lua/config/priv.lua
 
 ifeq (, $(shell which systemctl 2>/dev/null))
@@ -67,6 +69,8 @@ dev:
 	$(SUDO) update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 40
 ifeq ($(DISTRO),debian)
 	$(SUDO) update-alternatives --config vi
+else
+	sudo ln -sf /usr/bin/nvim /usr/bin/vi
 endif
 
 	ln -sf $$HOME/.config/tmux/plugins.conf $$HOME/.config/tmux/autoload
@@ -143,7 +147,18 @@ mail:
 	$(SUDO) $(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/mail)
 	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O $$HOME/.local/bin/oauth2.py
 	chmod +x $$HOME/.local/bin/oauth2.py
-	# TODO: clone gauteh/lieer
+
+	@if [ ! -d $$HOME/src/extra/lieer ]; then \
+		$$HOME/.local/bin/clone git@github.com:gauteh/lieer.git $$HOME/src/extra/lieer; \
+		python3 -m venv $$HOME/src/extra/lieer/master/venv; \
+		source $$HOME/src/extra/lieer/master/venv/bin/activate; \
+		python3 -m pip install $$HOME/src/extra/lieer/master; \
+	fi
+
+	cp .config/systemd/user/* $$HOME/.config/systemd/user
+	systemctl --user enable notmuch
+	systemctl --user enable notmuch.timer
+	systemctl --user start notmuch.timer
 
 .PHONY: clean
 clean:
