@@ -75,6 +75,8 @@
 	defaultBranch = "main"
 
 [sendemail]
+	annotate = yes
+	multiEdit = false  # https://github.com/tpope/vim-fugitive/issues/2352
 	smtpuser =
 	smtpserver = "/usr/bin/msmtp"
 	smtpencryption = tls

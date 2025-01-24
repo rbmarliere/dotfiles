@@ -38,6 +38,7 @@ return {
 			{ "<Leader>gsR", ":G set-pushRemote rbmarliere" },
 			{ "<Leader>gsO", ":G set-origin origin" },
 			{ "<Leader>gsU", ":G branch -u main" },
+			{ "<Leader>gse", ":G send-email --cover-letter" },
 		},
 	},
 }
