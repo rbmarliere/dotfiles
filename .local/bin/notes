@@ -1,9 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-
-if swaymsg -t get_tree | grep -q '"app_id": "notes"'; then
-    swaymsg "[app_id=notes] focus"
-else
+if ! swaymsg "[app_id=notes] focus"; then
     foot -a notes bash -l -c "$HOME/.local/bin/sway.notes"
 fi
