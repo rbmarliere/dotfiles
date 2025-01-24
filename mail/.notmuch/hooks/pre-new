@@ -113,7 +113,7 @@ initialize() {
 # 	done
 # fi
 
-if [[ -f ~/.mbsyncrc && -d $DB/marliere.net ]] && type mbsync &>/dev/null; then
+if [[ -d $DB/marliere.net ]] && type mbsync &>/dev/null; then
 	echo "-------------------------"
 	echo "Syncing $DB/marliere.net"
 	mbsync -V sync
