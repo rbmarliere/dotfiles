@@ -25,6 +25,7 @@ return {
 			},
 		},
 		disable_frontmatter = true,
+		new_notes_location = "notes_subdir",
 		notes_subdir = "inbox",
 		daily_notes = {
 			folder = "journal/",
@@ -33,7 +34,7 @@ return {
 		},
 		completion = {
 			nvim_cmp = true,
-			min_chars = 2,
+			min_chars = 0,
 		},
 		note_id_func = function(title)
 			local suffix = ""
