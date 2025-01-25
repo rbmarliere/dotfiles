@@ -107,8 +107,9 @@ ifeq ($(DISTRO),suse)
 	$(SUDO) zypper install --from packman ffmpeg gstreamer-plugins-{good,bad,ugly,libav} libavcodec vlc-codecs
 	# nvidia
 	# $(SUDO) zypper install nvidia-drivers-G06
-	# firefox reading profile
+	# firefox custom profiles
 	sed 's/^Name=.*/Name=Firefox (Reading)/; s/^Exec=.*/Exec=firefox %u -P reading/' /usr/share/applications/firefox.desktop > $$HOME/.local/share/applications/firefox-reading.desktop
+	sed 's/^Name=.*/Name=Firefox (Music)/; s/^Exec=.*/Exec=firefox %u -P music/' /usr/share/applications/firefox.desktop > $$HOME/.local/share/applications/firefox-music.desktop
 endif
 
 .PHONY: autologin

@@ -23,8 +23,7 @@ i3-toolwait --waitfor notes -- foot -a notes -H bash -l -c "sway.notes"
 
 swaymsg workspace 8
 i3-toolwait -- firefox -P reading
-i3-toolwait --waitfor pad -- foot -a pad
-swaymsg '[app_id="pad"]' resize grow width 500px
+i3-toolwait -- firefox -P music
 
 swaymsg workspace 7
 i3-toolwait firefox
