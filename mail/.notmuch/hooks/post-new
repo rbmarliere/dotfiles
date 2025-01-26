@@ -2,15 +2,41 @@
 
 set -euo pipefail
 
-# these are not managed by gauteh/lieer and need to be tagged according to the maildir folders
+echo "-------------------------"
+echo "POST-NEW"
+
+# these are not managed by gauteh/lieer and need to be tagged
 DOMAINS=(marliere.net/all kernel.org)
 
+# tag messages according to the maildir folder name
 for DOMAIN in "${DOMAINS[@]}"; do
 	DOMAIN_PATH=~/mail/$DOMAIN
 	find "$DOMAIN_PATH" -type d -name cur | while read -r CURDIR; do
 		DIR=$(dirname "$CURDIR")
 		FOLDER=${DIR#$DOMAIN_PATH/}
-		[[ $FOLDER == "lkml" ]] && FOLDER="linux-kernel"
+		if [[ $FOLDER == "archive" ]]; then
+			continue
+		fi
+		if [[ $FOLDER == "lkml" ]]; then
+			FOLDER="linux-kernel"
+		fi
 		notmuch tag +"$FOLDER" -- "folder:$DOMAIN/$FOLDER and tag:new"
 	done
 done
+
+# tag messages according to the list-id header
+# this is an alternative to the following dovecot sieve (which puts msg in a different folder):
+# `if header :regex "list-id" "([^@~ ]+)" { \ set :lower "listname" "${1}"; \ fileinto :create "${listname}"; }`
+notmuch search --output=messages "folder:marliere.net/all/inbox" | while read -r MESSAGE_ID; do
+	LIST_ID=$(notmuch show --format=raw "$MESSAGE_ID" | grep -i "^List-Id:" | head -n1 | sed -E 's/.*<~?([^>.]+)[.>].*/\1/' | tr '[:upper:]' '[:lower:]' || true)
+	if [[ -n "$LIST_ID" ]]; then
+		notmuch tag +"$LIST_ID" -- "$MESSAGE_ID"
+	fi
+done
+
+notmuch tag --batch <<EOF
+# remove inbox tag if message not sent to me
+-inbox -- tag:new and tag:inbox and not (to:rbm@suse.com or to:ricardo.marliere@suse.com or to:rbmarliere@gmail.com or to:ricardo@marliere.net)
+# remove new tag
+-new -- tag:new
+EOF

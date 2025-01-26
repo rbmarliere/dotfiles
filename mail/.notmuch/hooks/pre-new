@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# adapted from https://github.com/wkz/notmuch-lore
+# lore.k.o things adapted from https://github.com/wkz/notmuch-lore
+# pre-sync and maildir_mv from https://jasoncarloscox.com/creations/sync-mail
 
 set -e
 
@@ -59,8 +60,8 @@ sync() {
 
 		echo "  epoch$EPOCH: syncing" >&2
 		if ! $GIT fetch --quiet; then
-		    echo "  epoch$EPOCH: fetch failed, aborting $1..." >&2
-		    return
+			echo "  epoch$EPOCH: fetch failed, aborting $1..." >&2
+			return
 		fi
 		#import $1 $GITDIR/$EPOCH $HEAD..master init
 		import $1 $GITDIR/$EPOCH $HEAD..master new
@@ -98,6 +99,9 @@ initialize() {
 	fi
 }
 
+echo "-------------------------"
+echo "PRE-NEW"
+
 # if [[ -d $DB/kernel.org ]]; then
 # 	echo "-------------------------"
 # 	echo "Syncing $DB/kernel.org"
@@ -113,12 +117,82 @@ initialize() {
 # 	done
 # fi
 
+
+maildir_mv() {
+	src_path="$1"
+	dst_maildir="$2"
+	[ -f "$src_path" ] || return 0
+
+	# rename the file to remove the U=<uid> and prevent mbsync errors
+	subdir="$(basename "$(dirname "$src_path")")"
+	file="$(basename "$src_path")"
+	id="${file%%,*}"
+	id="${id%%:*}"
+	flags="${file##*,}"
+
+	if [ "$subdir" = cur ] || [ -n "$flags" ]; then
+		new_file="$id:2,$flags"
+	else
+		new_file="$id"
+	fi
+
+	mv "$src_path" ~/mail/"$dst_maildir/$subdir/$new_file"
+}
+
+maildir_mvs() {
+	while read -r file; do
+		maildir_mv "$file" "$1"
+	done
+}
+
+
 if [[ -d $DB/marliere.net ]] && type mbsync &>/dev/null; then
 	echo "-------------------------"
-	echo "Syncing $DB/marliere.net"
-	mbsync -V sync
+	echo "PRE-SYNC $DB/marliere.net"
+	# marliere.net pre-sync will keep labels in sync with maildir folders
+	# imap folders: archive  drafts  important  inbox  sent  spam  trash
+	# if tagged inbox, important, spam, or trash but not in corresponding folder, move it
+	# inbox
+	notmuch search --output=files not tag:new \
+		and path:"marliere.net/all/**" \
+		and tag:inbox and not "folder:marliere.net/all/inbox" |
+		grep marliere.net |
+		maildir_mvs "marliere.net/all/inbox"
+	# important (only move if not in inbox)
+	notmuch search --output=files not tag:new \
+		and path:"marliere.net/all/**" \
+		and tag:important and not tag:inbox and not "folder:marliere.net/all/important" |
+		grep marliere.net |
+		maildir_mvs "marliere.net/all/important"
+	# spam
+	notmuch search --output=files not tag:new \
+		and path:"marliere.net/all/**" \
+		and tag:spam and not tag:inbox and not tag:trash and not tag:important and not folder:"marliere.net/all/spam" |
+		grep marliere.net |
+		maildir_mvs "marliere.net/all/spam"
+	# trash
+	notmuch search --output=files not tag:new \
+		and path:"marliere.net/all/**" \
+		and tag:trash and not tag:inbox and not folder:"marliere.net/all/trash" |
+		grep marliere.net |
+		maildir_mvs "marliere.net/all/trash"
+	# if in inbox, important, spam, or trash but missing corresponding tag, move to archive
+	notmuch search --output=files not tag:new \
+		and path:"marliere.net/all/**" \
+		and not folder:"marliere.net/all/archive" \
+		and "(folder:marliere.net/all/inbox and not tag:inbox)" \
+		or "(folder:marliere.net/all/important and not tag:important)" \
+		or "(folder:marliere.net/all/spam and not tag:spam)" \
+		or "(folder:marliere.net/all/trash and not tag:trash)" |
+		grep marliere.net |
+		maildir_mvs "marliere.net/all/archive"
+
+	echo "SYNC $DB/marliere.net"
 	mbsync -V trash
+	echo "-------------------------"
 	mbsync -V all
+	echo "-------------------------"
+	mbsync -V spam
 	echo $DB/marliere.net/trash/**/{cur,new}/* | xargs rm -f
 fi
 
@@ -127,13 +201,13 @@ if [[ -f ~/src/extra/lieer/master/venv/bin/activate ]]; then
 
 	if [[ -d $DB/gmail.com ]]; then
 		echo "-------------------------"
-		echo "Syncing $DB/gmail.com"
+		echo "SYNC $DB/gmail.com"
 		gmi sync -C $DB/gmail.com -s
 	fi
 
 	if [[ -d $DB/suse.com ]]; then
 		echo "-------------------------"
-		echo "Syncing $DB/suse.com"
+		echo "SYNC $DB/suse.com"
 		gmi sync -C $DB/suse.com -s
 	fi
 

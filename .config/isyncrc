@@ -19,29 +19,31 @@ SubFolders Verbatim
 Path ~/mail/marliere.net/trash/
 Inbox ~/mail/marliere.net/trash/inbox
 
+# NOTE: when debugging, you might want to rm -rf ~/.local/state/isync/
+
 Channel all
 Far :remote:
 Near :local:
-Patterns * !archive !spam !sent !INBOX !drafts !important
+# archive  drafts  important  inbox  sent  spam  trash
+Patterns * !archive !important !spam
 Create Both
 Remove Both
-#Sync Pull New ReNew Push Flags
 Sync Pull New Upgrade
 Expunge None
 
-Channel sync
+Channel spam
 Far :remote:
 Near :local:
+Patterns spam
 Create Both
 Remove Both
-Patterns archive spam sent INBOX drafts important trash
 Sync All
 Expunge Both
 
 Channel trash
 Far :remote:
 Near :trash:
-Patterns * !archive !spam !sent !INBOX !drafts !important !trash
+Patterns * !spam
 Create Both
 Remove Both
 Expunge Both
