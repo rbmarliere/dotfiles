@@ -39,6 +39,15 @@ return {
 			{ "<Leader>gsO", ":G set-origin origin" },
 			{ "<Leader>gsU", ":G branch -u main" },
 			{ "<Leader>gse", ":G send-email --cover-letter" },
+			{ "<Leader>gsc", ":read !git show-commit " },
 		},
+		config = function()
+			-- vim.api.nvim_create_autocmd("User", {
+			-- 	pattern = "FugitiveIndex",
+			-- 	callback = function()
+			-- 		vim.keymap.set("n", "cc", ":Git commit -s<CR>", { buffer = true })
+			-- 	end,
+			-- })
+		end,
 	},
 }

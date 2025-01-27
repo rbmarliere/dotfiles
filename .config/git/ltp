@@ -1,8 +1,0 @@
-# vim: set filetype=gitconfig:
-
-[user]
-	name = Ricardo B. Marliere
-	email = rbm@suse.com
-
-[commit]
-	template = ~/.config/git/templates/ltp

@@ -1,6 +1,3 @@
-[submodule ".diff-so-fancy"]
-	path = .deps/diff-so-fancy
-	url = https://github.com/so-fancy/diff-so-fancy.git
 [submodule ".deps/tpm"]
 	path = .deps/tpm
 	url = https://github.com/tmux-plugins/tpm.git

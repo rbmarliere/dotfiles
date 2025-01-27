@@ -45,7 +45,6 @@
 	review = "!f() { local c=${1:-HEAD}; git difftool -y \"$c\"~1 \"$c\"; }; f"
 	series-review = "!f() { local c=$1; for i in $(git log --format='%H' \"$c\"~1.. | tac); do git show-pager \"$i\"; git review \"$i\"; read -p \"Continue (Yn)? \" -n 1 -r; if [[ $REPLY =~ [Nn]$ ]]; then break; fi; done; }; f"
 
-
 [rerere]
 	enabled = true
 
@@ -91,7 +90,6 @@
 
 [core]
 	abbrev = 12
-	pager = diff-so-fancy | less --tabs=8 -RF
 
 [checkout]
 	defaultRemote = origin
@@ -103,26 +101,8 @@
 [advice]
 	detachedHead = false
 
-[interactive]
-	diffFilter = diff-so-fancy --patch
-
 [color]
 	ui = true
-
-[color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
-
-[color "diff"]
-	meta = 11
-	frag = magenta bold
-	func = 146 bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
 
 [includeIf "gitdir:/"]
 	path = ~/src/.git/config
