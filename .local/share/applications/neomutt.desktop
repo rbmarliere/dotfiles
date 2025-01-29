@@ -1,4 +1,0 @@
-[Desktop Entry]
-Name=Neomutt
-Exec=foot -H bash -l -c "sway.neomutt"
-Type=Application
