@@ -1,34 +1,34 @@
 #!/bin/bash
 
 swaymsg workspace 2
-i3-toolwait discord
-i3-toolwait --waitfor org.telegram.desktop telegram-desktop
+i3_toolwait --waitfor discord discord
+i3_toolwait --waitfor org.telegram.desktop telegram-desktop
 
 swaymsg workspace 1
-i3-toolwait --waitfor org.gnome.Evolution evolution
-i3-toolwait --waitfor slack flatpak run com.slack.Slack
+i3_toolwait --waitfor org.gnome.Evolution evolution
+i3_toolwait --waitfor slack flatpak run com.slack.Slack
 swaymsg '[class="Slack"]' resize grow width 500px
 
 swaymsg "workspace 5; layout tabbed"
-i3-toolwait foot
+i3_toolwait foot
 
 swaymsg "workspace 6; layout tabbed"
-i3-toolwait foot
+i3_toolwait foot
 
 swaymsg "workspace 4; layout tabbed"
-i3-toolwait -- foot -H bash -l -c "sway.newsboat"
-i3-toolwait -- foot -H bash -l -c "sway.weechat"
-i3-toolwait --waitfor mail -- foot -a mail -H bash -l -c "sway.aerc"
-i3-toolwait --waitfor notes -- foot -a notes -H bash -l -c "sway.notes"
+i3_toolwait -- foot -H bash -l -c "sway.newsboat"
+i3_toolwait -- foot -H bash -l -c "sway.weechat"
+i3_toolwait --waitfor mail -- foot -a mail -H bash -l -c "aerc"
+i3_toolwait --waitfor notes -- foot -a notes -H bash -l -c "sway.notes"
 
 swaymsg workspace 8
-i3-toolwait -- firefox -P reading
-i3-toolwait -- firefox -P music
+i3_toolwait -- firefox -P reading
+i3_toolwait -- firefox -P music
 
 swaymsg workspace 7
-i3-toolwait firefox
-i3-toolwait --waitfor todoist flatpak run com.todoist.Todoist
+i3_toolwait firefox
+i3_toolwait --waitfor todoist flatpak run com.todoist.Todoist
 swaymsg '[class="Todoist"]' resize shrink width 500px
 
-i3-toolwait nautilus
+i3_toolwait --waitfor org.gnome.Nautilus nautilus
 swaymsg '[app_id="org.gnome.Nautilus"]' move to scratchpad

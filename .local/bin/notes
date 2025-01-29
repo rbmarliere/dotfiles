@@ -1,5 +1,0 @@
-#!/bin/bash
-
-if ! swaymsg "[app_id=notes] focus"; then
-    foot -a notes bash -l -c "$HOME/.local/bin/sway.notes"
-fi

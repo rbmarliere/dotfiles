@@ -9,9 +9,9 @@ host=$2
 get_access_token() {
 	{ IFS= read -r tokenline && IFS= read -r expireline; } < \
 	<(oauth2.py --user=$user \
-	--client_id=$(pass neomutt/$host/client_id) \
-	--client_secret=$(pass neomutt/$host/client_secret) \
-	--refresh_token=$(pass neomutt/$host/refresh_token))
+	--client_id=$(pass mail/$host/client_id) \
+	--client_secret=$(pass mail/$host/client_secret) \
+	--refresh_token=$(pass mail/$host/refresh_token))
 
 	token=${tokenline#Access Token: }
 	expire=${expireline#Access Token Expiration Seconds: }

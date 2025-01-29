@@ -73,8 +73,8 @@ exec_always blueman-applet
 exec_always bash -c 'if [ -f ~/Pictures/bg ]; then swaymsg output "*" bg ~/Pictures/bg fill; else swaymsg output "*" bg "#000000" solid_color; fi'
 
 exec gpg-connect-agent reloadagent /bye
-exec ~/.local/bin/notification-mon
-exec ~/.local/bin/inactive_windows_transparency.py
+exec ~/.local/bin/notification_mon
+exec ~/.local/bin/inactive_windows_transparency
 # exec gnome-keyring-daemon --start --components=secrets
 
 # https://github.com/swaywm/sway/issues/5732#issuecomment-1583336383

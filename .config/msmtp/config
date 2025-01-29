@@ -24,7 +24,7 @@ port 465
 tls_starttls off
 user rbmarliere@gmail.com
 auth oauthbearer
-passwordeval /home/rbmarliere/.local/bin/oauth_wrapper.sh rbmarliere gmail.com
+passwordeval /home/rbmarliere/.local/bin/oauth_wrapper rbmarliere gmail.com
 
 account suse.com
 from rbm@suse.com
@@ -36,6 +36,6 @@ port 465
 tls_starttls off
 user rbm@suse.com
 auth oauthbearer
-passwordeval /home/rbmarliere/.local/bin/oauth_wrapper.sh ricardo.marliere suse.com
+passwordeval /home/rbmarliere/.local/bin/oauth_wrapper ricardo.marliere suse.com
 
 account default : marliere.net
