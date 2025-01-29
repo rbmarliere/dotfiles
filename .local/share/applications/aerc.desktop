@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Aerc
-Exec=foot -H bash -l -c "sway.aerc"
+Exec=foot -a mail -H bash -l -c "aerc"
 Type=Application
