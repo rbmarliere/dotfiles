@@ -60,7 +60,8 @@
 	"network": {
 		"interval": 5,
 		"format-wifi": "  {essid} ({signalStrength}%)",
-		"format-ethernet": "  {ifname}: {ipaddr}/{cidr}",
+		//"format-ethernet": "  {ifname}: {ipaddr}/{cidr}",
+		"format-ethernet": "  {ipaddr}",
 		"format-disconnected": "⚠  Disconnected",
 		"tooltip-format": "{ifname}: {ipaddr}",
 		"on-click": "nm-connection-editor",
