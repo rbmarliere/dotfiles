@@ -2,7 +2,7 @@
 
 # imap folders: archive  drafts  important  inbox  sent  spam  trash
 archive = path:"marliere.net/all/**"
-drafts = tag:drafts and path:"marliere.net/all/**"
+drafts = tag:drafts
 important = tag:important and path:"marliere.net/all/**"
 inbox = tag:inbox and path:"marliere.net/all/**"
 sent = tag:sent and path:"marliere.net/all/**"
@@ -11,10 +11,10 @@ trash = tag:trash and path:"marliere.net/all/**"
 
 #attachment = tag:attachment and path:"marliere.net/all/**"
 #encrypted = tag:encrypted and path:"marliere.net/all/**"
-flagged = tag:flagged and path:"marliere.net/all/**"
-replied = tag:replied and path:"marliere.net/all/**"
+flagged = tag:flagged
+#replied = tag:replied and path:"marliere.net/all/**"
 #signed = tag:signed and path:"marliere.net/all/**"
-unread = tag:unread and path:"marliere.net/all/**"
+#unread = tag:unread and path:"marliere.net/all/**"
 
 debian-announce = tag:debian-announce
 debian-bugs = tag:debian-bugs

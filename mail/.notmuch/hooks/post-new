@@ -20,7 +20,7 @@ for DOMAIN in "${DOMAINS[@]}"; do
 		if [[ $FOLDER == "lkml" ]]; then
 			FOLDER="linux-kernel"
 		fi
-		notmuch tag +"$FOLDER" -- "folder:$DOMAIN/$FOLDER and tag:new"
+		notmuch tag +"$FOLDER" -- "folder:$DOMAIN/$FOLDER"
 	done
 done
 
