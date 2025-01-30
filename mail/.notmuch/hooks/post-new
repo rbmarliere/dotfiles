@@ -27,7 +27,7 @@ done
 # tag messages according to the list-id header
 # this is an alternative to the following dovecot sieve (which puts msg in a different folder):
 # `if header :regex "list-id" "([^@~ ]+)" { \ set :lower "listname" "${1}"; \ fileinto :create "${listname}"; }`
-notmuch search --output=messages "folder:marliere.net/all/inbox" | while read -r MESSAGE_ID; do
+notmuch search --output=messages "tag:new" | while read -r MESSAGE_ID; do
 	LIST_ID=$(notmuch show --format=raw "$MESSAGE_ID" | grep -i "^List-Id:" | head -n1 | sed -E 's/.*<~?([^>.]+)[.>].*/\1/' | tr '[:upper:]' '[:lower:]' || true)
 	if [[ -n "$LIST_ID" ]]; then
 		notmuch tag +"$LIST_ID" -- "$MESSAGE_ID"
