@@ -27,7 +27,7 @@ path=/home/rbmarliere/mail/
 # address to which the original email was addressed.
 #
 [user]
-name=Ricardo B. Marliere
+name=Ricardo B. Marlière
 primary_email=ricardo@marliere.net
 other_email=rbmarliere@gmail.com;ricardo.marliere@suse.com;rbm@suse.com
 # Configuration for "notmuch new"

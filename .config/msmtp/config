@@ -6,7 +6,7 @@ auth on
 
 account marliere.net
 from ricardo@marliere.net
-from_full_name Ricardo B. Marliere
+from_full_name Ricardo B. Marlière
 set_from_header on
 allow_from_override off
 host mail.marliere.net
@@ -16,7 +16,7 @@ passwordeval "pass marliere.net"
 
 account gmail.com
 from rbmarliere@gmail.com
-from_full_name Ricardo B. Marliere
+from_full_name Ricardo B. Marlière
 set_from_header on
 allow_from_override off
 host smtp.gmail.com
@@ -28,7 +28,7 @@ passwordeval /home/rbmarliere/.local/bin/oauth_wrapper rbmarliere gmail.com
 
 account suse.com
 from rbm@suse.com
-from_full_name Ricardo B. Marliere
+from_full_name Ricardo B. Marlière
 set_from_header on
 allow_from_override off
 host smtp.gmail.com
