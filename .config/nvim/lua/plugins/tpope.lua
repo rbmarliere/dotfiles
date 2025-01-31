@@ -22,6 +22,7 @@ return {
 					vim.g.fugitive_cgit_domains = { "https://git.kernel.org" }
 				end,
 			},
+			"tommcdo/vim-fugitive-blame-ext",
 		},
 		keys = {
 			{ "<Leader>gg", ":tab Git<CR>:tabm 0<CR>" },
