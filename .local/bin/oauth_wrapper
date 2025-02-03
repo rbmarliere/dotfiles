@@ -17,16 +17,16 @@ get_access_token() {
 	expire=${expireline#Access Token Expiration Seconds: }
 }
 
-token="$(pass neomutt/$host/token || echo 0)"
-expire="$(pass neomutt/$host/token_expiration || echo 0)"
+token="$(pass mail/$host/token || echo 0)"
+expire="$(pass mail/$host/token_expiration || echo 0)"
 now=$(date +%s)
 
 if [[ $token && $expire && $now -lt $((expire - 60)) ]]; then
 	echo $token
 else
 	get_access_token
-	echo $token | pass insert -ef neomutt/$host/token
+	echo $token | pass insert -ef mail/$host/token
 	expire=$((now + expire))
-	echo $expire | pass insert -ef neomutt/$host/token_expiration
+	echo $expire | pass insert -ef mail/$host/token_expiration
 	echo $token
 fi

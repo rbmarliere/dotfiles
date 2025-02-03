@@ -36,7 +36,7 @@ done
 
 notmuch tag --batch <<EOF
 # remove inbox tag if message not sent to me
--inbox -- tag:new and tag:inbox and not (to:rbm@suse.com or to:ricardo.marliere@suse.com or to:rbmarliere@gmail.com or to:ricardo@marliere.net)
+-inbox -- tag:new and tag:inbox and not (to:rbm@opensuse.org or to:rbm@suse.com or to:ricardo.marliere@suse.com or to:rbmarliere@gmail.com or to:ricardo@marliere.net)
 # remove new tag
 -new -- tag:new
 EOF

@@ -38,4 +38,16 @@ user rbm@suse.com
 auth oauthbearer
 passwordeval /home/rbmarliere/.local/bin/oauth_wrapper ricardo.marliere suse.com
 
+account opensuse.org
+from rbm@opensuse.org
+from_full_name Ricardo B. Marlière
+set_from_header on
+allow_from_override off
+host smtp.gmail.com
+port 465
+tls_starttls off
+user rbmarliere@gmail.com
+auth oauthbearer
+passwordeval /home/rbmarliere/.local/bin/oauth_wrapper rbmarliere gmail.com
+
 account default : marliere.net

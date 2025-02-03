@@ -1,0 +1,5 @@
+# vim: set filetype=gitconfig:
+
+[user]
+	name = Ricardo B. Marlière
+	email = rbm@opensuse.org
