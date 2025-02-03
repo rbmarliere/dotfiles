@@ -3,7 +3,8 @@ return {
 	version = "*", -- recommended, use latest release instead of latest commit
 	ft = "markdown",
 	enabled = function()
-		return vim.fn.isdirectory(vim.fn.expand("~/notes")) == 1
+		local notes_dir = vim.fn.expand("~/notes")
+		return vim.fn.isdirectory(notes_dir) == 1 and vim.fn.getcwd() == notes_dir
 	end,
 	dependencies = {
 		"nvim-lua/plenary.nvim",
