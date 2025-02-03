@@ -38,7 +38,7 @@ workspace 6 output $out2
 set $out3 "Samsung Electric Company LC34G55T H4ZT500316"
 output $out3 pos 3640 0
 # only needed for nouveau
-output $out3 mode --custom 3440x1440@99.982Hz
+#output $out3 mode --custom 3440x1440@99.982Hz
 workspace 7 output $out3
 workspace 8 output $out3
 workspace 9 output $out3

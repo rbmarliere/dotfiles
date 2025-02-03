@@ -129,6 +129,7 @@ nouveau:
 ifeq ($(DISTRO),suse)
 	# $(SUDO) mv /etc/zypp/services.d/NVIDIA.service /etc/zypp/services.d/NVIDIA.service.bak
 	# $(SUDO) zypper rm $$(zypper se -i | grep nvidia | awk '{print $$3}') || true
+	$(SUDO) zypper rm openSUSE-repos-Tumbleweed-NVIDIA
 	$(SUDO) zypper ms -d NVIDIA
 	$(SUDO) zypper mr -d $$(zypper lr | awk -F '|' '{IGNORECASE=1} /nvidia/ {print $$2}') || true
 	$(SUDO) zypper in kernel-firmware-nvidia kernel-firmware-nvidia-gspx-G06-cuda

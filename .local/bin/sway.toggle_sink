@@ -4,7 +4,7 @@ set -euo pipefail
 
 # pactl list short sinks
 S1="alsa_output.usb-Focusrite_Scarlett_2i4_USB-00.pro-output-0"
-S2="alsa_output.pci-0000_10_00.6.analog-stereo"
+S2="alsa_output.usb-Generic_USB_Audio-00.HiFi__Speaker__sink"
 
 CUR=$(pactl get-default-sink)
 
