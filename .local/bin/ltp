@@ -1,19 +1,192 @@
 #!/bin/bash
 
-set -euo pipefail
+configure() {
+	set -euo pipefail
+	local KDIR=${1:?missing kernel directory}
+	make autotools
+	./configure --with-linux-dir="$KDIR"
+}
 
-KDIR=${1:?missing kernel directory}
-ROOT=${2:?missing root filesystem}
+build() {
+	set -euo pipefail
+	local KDIR=${1:?missing kernel directory}
+	local TARGET=all
 
-make autotools
-./configure --with-linux-dir="$KDIR"
-bear --append -- make -j"$(nproc)" all # -C testcases/...
-sudo make -j"$(nproc)" DESTDIR="$ROOT" install
-sudo vng --run "$KDIR" --rw --root "$ROOT"
-# must do `vng -k` before building so it appends its min config
+	local TEST_FILE_DIR=${2:-""}
+	if [[ $TEST_FILE_DIR != "" ]]; then
+		TARGET="-C $TEST_FILE_DIR $3"
+	fi
 
-# /opt/ltp/kirk --run-command $CMD
+	sudo chown "$(whoami)" -R .
+	git submodule update --init --recursive
 
-# metadata:
-# cd metadata && make
-# xdg-open ../docparse/metadata.html
+	if [[ ! -f ./configure && ! -f ./include/config.h ]]; then
+		configure "$KDIR"
+	fi
+
+	bear --append -- make -j"$(nproc)" $TARGET
+}
+
+metadata() {
+	pushd metadata
+	if ! sudo zypper search --installed-only asciidoc; then
+		echo "install asciidoc first and re-configure" >&2
+		exit 1
+	fi
+	make -j"$(nproc)"
+	popd
+	xdg-open docparse/metadata.html
+}
+
+install() {
+	set -euo pipefail
+	local ROOT=${1:?missing root filesystem}
+
+	local TEST_FILE_DIR=${2:-""}
+	if [[ $TEST_FILE_DIR != "" && -d $ROOT/opt/ltp/testcases/bin && -f $ROOT/opt/ltp/kirk ]]; then
+		sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin"
+	else
+		set +e
+		if ! sudo make -j"$(nproc)" DESTDIR="$ROOT" install; then
+			echo "installation failed, try a full build first" >&2
+			exit 1
+		fi
+	fi
+}
+
+kirk() {
+	set -euo pipefail
+	local KDIR=${1:?missing kernel directory}
+	local ROOT=${2:?missing root filesystem}
+	shift 2
+
+	if [[ ! -f "$ROOT/opt/ltp/kirk" ]]; then
+		echo "$ROOT/opt/ltp/kirk not found, try installing first" >&2
+		exit 1
+	fi
+
+	if [[ ! -f "$KDIR/vmlinux" ]]; then
+		pushd "$KDIR"
+		vng -k
+		vng -b
+		popd
+	fi
+
+	sudo vng --run "$KDIR" --rw --root "$ROOT" --exec "/opt/ltp/kirk $*"
+}
+
+run() {
+	set -euo pipefail
+	local FILE=${1:?missing test file}
+	shift
+
+	if [[ ! -f $FILE ]]; then
+		help run
+		exit 1
+	fi
+
+	local KDIR=
+	local ROOT=
+	local TEST_ARGS=()
+	local TEST_FILE_PATH
+	local TEST_FILE_NAME
+	local TEST_FILE_DIR
+	local TEST_NAME
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--)
+			shift
+			TEST_ARGS=("$@")
+			break
+			;;
+		*)
+			if [[ -z $KDIR ]]; then
+				KDIR=$1
+			elif [[ -z $ROOT ]]; then
+				ROOT=$1
+			else
+				echo "unexpected argument: $1" >&2
+				exit 1
+			fi
+			;;
+		esac
+		shift
+	done
+
+	KDIR=${KDIR:-$LINUX/current}
+	ROOT=${ROOT:-$ROOTS/x86_64/sid}
+	TEST_FILE_PATH=$(realpath "$FILE")
+	TEST_FILE_NAME=$(basename "$TEST_FILE_PATH")
+	TEST_FILE_DIR=$(dirname "$TEST_FILE_PATH")
+	TEST_NAME=${TEST_FILE_NAME%.*}
+
+	if [[ ! -f "$KDIR/vmlinux" ]]; then
+		pushd "$KDIR"
+		vng -k
+		vng -b
+		popd
+	fi
+
+	build "$KDIR" "$TEST_FILE_DIR" "$TEST_NAME"
+	install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"
+	#kirk "$KDIR" "ROOT" --run-command "$TEST_NAME"
+	sudo vng --run "$KDIR" --rw --root "$ROOT" -- "/opt/ltp/testcases/bin/$TEST_NAME" "${TEST_ARGS[@]}"
+}
+
+help() {
+	case $1 in
+	build)
+		echo "usage: $0 build <kernel source directory> [<testcase dir> <test>]"
+		;;
+	install)
+		echo "usage: $0 install <destination root filesystem>"
+		;;
+	kirk)
+		echo "usage: $0 kirk <kernel source directory> <destination root filesystem> <kirk arguments>"
+		;;
+	run)
+		echo "usage: $0 run <test_file.c> [<kernel source directory> [<destination root filesystem>]] [-- <additional arguments to the test>]"
+		echo
+		echo "This command builds test_file.c, installs and run it with sane defaults."
+		;;
+	*)
+		echo "usage: $0 <command> [arguments]"
+		echo
+		echo "commands:"
+		echo "    build"
+		echo "    install"
+		echo "    kirk"
+		echo "    run"
+		echo
+		echo "use $0 help <command> for more information about a command"
+		;;
+	esac
+}
+
+if [[ $# -eq 0 ]]; then
+	help
+fi
+
+case $1 in
+help)
+	shift
+	help "$@"
+	;;
+build)
+	shift
+	build "$@"
+	;;
+metadata)
+	shift
+	metadata "$@"
+	;;
+install)
+	shift
+	install "$@"
+	;;
+run)
+	shift
+	run "$@"
+	;;
+esac
