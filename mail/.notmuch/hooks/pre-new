@@ -144,7 +144,6 @@ maildir_mvs() {
 	done
 }
 
-
 if [[ -d $DB/marliere.net ]] && type mbsync &>/dev/null; then
 	echo "-------------------------"
 	echo "PRE-SYNC $DB/marliere.net"
@@ -178,12 +177,12 @@ if [[ -d $DB/marliere.net ]] && type mbsync &>/dev/null; then
 	# if in inbox, important, spam, or trash but missing corresponding tag, move to archive
 	notmuch search --output=files not tag:new \
 		and path:"marliere.net/all/**" \
-		and not folder:"marliere.net/all/archive" \
 		and "(folder:marliere.net/all/inbox and not tag:inbox)" \
 		or "(folder:marliere.net/all/important and not tag:important)" \
 		or "(folder:marliere.net/all/spam and not tag:spam)" \
 		or "(folder:marliere.net/all/trash and not tag:trash)" |
 		grep marliere.net |
+		grep -v archive |
 		maildir_mvs "marliere.net/all/archive"
 
 	echo "SYNC $DB/marliere.net"
