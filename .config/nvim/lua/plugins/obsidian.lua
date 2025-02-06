@@ -3,7 +3,7 @@ return {
 	version = "*", -- recommended, use latest release instead of latest commit
 	ft = "markdown",
 	enabled = function()
-		local notes_dir = vim.fn.expand("~/notes")
+		local notes_dir = vim.uv.fs_realpath(vim.fn.expand("~/notes"))
 		return vim.fn.isdirectory(notes_dir) == 1 and vim.fn.getcwd() == notes_dir
 	end,
 	dependencies = {
