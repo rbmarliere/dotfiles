@@ -1,8 +1,9 @@
 #!/bin/bash
 
 swaymsg workspace 2
-i3_toolwait --waitfor discord discord
+i3_toolwait --waitfor discord flatpak run com.discordapp.Discord
 i3_toolwait --waitfor org.telegram.desktop telegram-desktop
+#i3-toolwait --waitfor org.telegram.desktop flatpak run org.telegram.desktop
 
 swaymsg workspace 1
 i3_toolwait --waitfor org.gnome.Evolution evolution
