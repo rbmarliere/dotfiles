@@ -1,11 +1,15 @@
 {
-  "Ricardo": {
-    "prefix": "Ricardo",
+  "rbm marliere.net": {
+    "prefix": "rbm marliere.net",
     "body": "Ricardo B. Marlière <ricardo@marliere.net>"
   },
-  "RBM": {
-    "prefix": "RBM",
+  "rbm suse.com": {
+    "prefix": "rbm suse.com",
     "body": "Ricardo B. Marlière <rbm@suse.com>"
+  },
+  "rbm opensuse.org": {
+    "prefix": "rbm opensuse.org",
+    "body": "Ricardo B. Marlière <rbm@opensuse.org>"
   },
   "shebang": {
     "prefix": "shebang",
