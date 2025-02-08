@@ -5,14 +5,45 @@ set -euo pipefail
 LAST_BEEP=0
 
 # play a sound whenever a dbus notification arrives
-dbus-monitor "interface='org.freedesktop.Notifications'" |
+dbus-monitor \
+	"interface='org.freedesktop.Notifications'" \
+	"interface='org.freedesktop.portal.Notification'" |
 	while read -r line; do
 		if echo "$line" | grep -q "member=Notify"; then
+			echo "$line"
 			CURR=$(date +%s)
-                        # only one beep per 5 seconds
+			# only one beep per 5 seconds
 			if ((CURR - LAST_BEEP >= 5)); then
 				pw-play /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
-                                LAST_BEEP=$CURR
+				LAST_BEEP=$CURR
+			fi
+		elif echo "$line" | grep -q "member=AddNotification"; then
+			# Collect notification details
+			TITLE=""
+			BODY=""
+
+			while read -r subline; do
+				# Extract title
+				if echo "$subline" | grep -q 'string "title"'; then
+					read -r title_line
+					TITLE=$(echo "$title_line" | sed -n 's/.*variant.*string "\(.*\)"/\1/p')
+				fi
+
+				# Extract body
+				if echo "$subline" | grep -q 'string "body"'; then
+					read -r body_line
+					BODY=$(echo "$body_line" | sed -n 's/.*variant.*string "\(.*\)"/\1/p')
+				fi
+
+				# End parsing when array closes
+				if echo "$subline" | grep -q '\]'; then
+					break
+				fi
+			done
+
+			# Send notification if title and body are set
+			if [[ -n "$TITLE" && -n "$BODY" ]]; then
+				notify-send "$TITLE" "$BODY"
 			fi
 		fi
 	done
