@@ -16,6 +16,7 @@ gstreamer1.0-plugins-libav
 gstreamer1.0-plugins-ugly
 heif-gdk-pixbuf
 heif-thumbnailer
+helvum
 jq
 libheif-plugin-ffmpegdec
 libnotify-bin
@@ -29,6 +30,8 @@ network-manager-openvpn
 ntp
 pavucontrol
 pinentry-gnome3
+pipewire-alsa
+pipewire-jack
 policykit-1-gnome
 python3-i3ipc
 seahorse

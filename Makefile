@@ -101,7 +101,7 @@ ifeq ($(DISTRO),suse)
 	$(SUDO) systemctl enable avahi-daemon
 	# $(SUDO) systemctl disable firewalld
 	# multimedia
-	$(SUDO) zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/ openSUSE_Tumbleweed/ packman
+	$(SUDO) zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman || true
 	$(SUDO) zypper refresh
 	$(SUDO) zypper dup --from packman --allow-vendor-change
 	$(SUDO) zypper install --from packman ffmpeg gstreamer-plugins-{good,bad,ugly,libav} libavcodec vlc-codecs

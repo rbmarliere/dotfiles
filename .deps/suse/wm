@@ -20,11 +20,12 @@ grim
 gstreamer-plugins-bad
 gstreamer-plugins-libav
 gstreamer-plugins-ugly
+helvum
 jq
 libheif-ffmpeg
 libnotify-tools
 libqt5-qtwayland
-libsixel-tools
+libsixel-utils
 loupe
 mako
 mozilla-openh264
@@ -32,6 +33,8 @@ nautilus
 ntp
 pavucontrol
 pinentry-gnome3
+pipewire-alsa
+pipewire-jack
 polkit-gnome
 python3-i3ipc
 seahorse
