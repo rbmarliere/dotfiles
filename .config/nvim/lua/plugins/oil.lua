@@ -14,16 +14,18 @@ return {
 			--   ["<CR>"] = "actions.select",
 			--   ["<C-s>"] = { "actions.select", opts = { vertical = true } },
 			--   ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+			["<C-h>"] = false,
 			--   ["<C-t>"] = { "actions.select", opts = { tab = true } },
 			["<M-P>"] = { "actions.preview", opts = { horizontal = true, split = "belowright" } },
-			["<C-p>"] = {
-				callback = function()
-					local count = vim.v.count1
-					vim.cmd("normal! " .. count .. "k")
-				end,
-			},
+			["<C-p>"] = false, -- {
+			-- callback = function()
+			-- 	local count = vim.v.count1
+			-- 	vim.cmd("normal! " .. count .. "k")
+			-- end,
+			-- },
 			--   ["<C-c>"] = { "actions.close", mode = "n" },
 			--   ["<C-l>"] = "actions.refresh",
+			["<C-l>"] = false,
 			--   ["-"] = { "actions.parent", mode = "n" },
 			--   ["_"] = { "actions.open_cwd", mode = "n" },
 			--   ["`"] = { "actions.cd", mode = "n" },
