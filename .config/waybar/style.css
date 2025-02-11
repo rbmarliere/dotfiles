@@ -1,17 +1,17 @@
 * {
-	border: none;
-	color: white;
-	border-radius: 0;
-	min-height: 0;
-	margin: 0;
-	padding: 0;
+  border: none;
+  color: white;
+  border-radius: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
 }
 
 #waybar {
-	background: #323232;
-	color: white;
-	font-family: TerminessNerdFont;
-	font-size: 14;
+  background: #323232;
+  color: white;
+  font-family: TerminessNerdFont;
+  font-size: 14;
 }
 
 #backlight,
@@ -22,91 +22,91 @@
 #language,
 #pulseaudio,
 #clock {
-	background-color: #323232;
-	color: white;
-	padding-left: 7px;
-	padding-right: 7px;
+  background-color: #323232;
+  color: white;
+  padding-left: 7px;
+  padding-right: 7px;
 }
 
 #battery {
-	animation-timing-function: linear;
-	animation-iteration-count: infinite;
-	animation-direction: alternate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 #battery.warning {
-	color: orange;
+  color: orange;
 }
 
 #battery.critical {
-	color: red;
+  color: red;
 }
 
 #battery.warning.discharging {
-	animation-name: blink-warning;
-	animation-duration: 3s;
+  animation-name: blink-warning;
+  animation-duration: 3s;
 }
 
 #battery.critical.discharging {
-	animation-name: blink-critical;
-	animation-duration: 2s;
+  animation-name: blink-critical;
+  animation-duration: 2s;
 }
 
 #cpu.warning {
-	color: orange;
+  color: orange;
 }
 
 #cpu.critical {
-	color: red;
+  color: red;
 }
 
 #memory {
-	animation-timing-function: linear;
-	animation-iteration-count: infinite;
-	animation-direction: alternate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 #memory.warning {
-	color: #ff5f1f;
+  color: #ff5f1f;
 }
 
 #memory.critical {
-	color: red;
-	animation-name: blink-critical;
-	animation-duration: 2s;
+  color: red;
+  animation-name: blink-critical;
+  animation-duration: 2s;
 }
 
 #mode {
-	background: #323232;
-	border-top: 2px solid white;
-	padding-bottom: 2px;
+  background: #323232;
+  border-top: 2px solid white;
+  padding-bottom: 2px;
 }
 
 #network.disconnected {
-	color: orange;
+  color: orange;
 }
 
 #workspaces button {
-	border-top: 2px solid transparent;
-	padding-bottom: 2px;
-	padding-left: 10px;
-	padding-right: 10px;
-	color: #323232;
+  border-top: 2px solid transparent;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #323232;
 }
 
 #workspaces button.focused {
-	border-color: #6c782e;
-	color: white;
-	background-color: #6c782e;
+  border-color: #6c782e;
+  color: white;
+  background-color: #6c782e;
 }
 
 #workspaces button.urgent {
-	border-color: #ff5f1f;
-	color: #ff5f1f;
+  border-color: #ff5f1f;
+  color: #ff5f1f;
 }
 
 tooltip {
-	background: #323232;
+  background: #323232;
 }
 
 #tray menu {

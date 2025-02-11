@@ -82,5 +82,4 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-bindsym $mod+alt+n exec makoctl restore
-bindsym $mod+shift+alt+n exec makoctl dismiss -a
+bindsym $mod+alt+n exec swaync-client -t -sw

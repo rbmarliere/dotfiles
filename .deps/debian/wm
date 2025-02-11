@@ -22,7 +22,6 @@ libheif-plugin-ffmpegdec
 libnotify-bin
 libsixel-bin
 loupe
-mako-notifier
 nautilus
 network-manager
 network-manager-gnome
@@ -38,6 +37,7 @@ seahorse
 slurp
 sshfs
 sway
+sway-notification-center
 swayidle
 swaylock
 systemd-resolved

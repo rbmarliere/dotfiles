@@ -1,6 +1,7 @@
 NetworkManager
 NetworkManager-applet
 NetworkManager-applet-openvpn
+SwayNotificationCenter
 adwaita-icon-theme
 avahi
 blueman
@@ -27,7 +28,6 @@ libnotify-tools
 libqt5-qtwayland
 libsixel-utils
 loupe
-mako
 mozilla-openh264
 nautilus
 ntp

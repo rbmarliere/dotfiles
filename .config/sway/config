@@ -44,6 +44,8 @@ client.focused $lgreen $lgreen $darkgrey #2e9ef4 #285577
 client.focused_inactive $green $green #000000 #484e50 #5f676a
 client.unfocused $green $green #000000 #292d2e #222222
 
+no_focus [app_id=swaync]
+for_window [app_id=swaync] border none, focus prev, move position 100% 0%
 for_window [app_id="blueman-manager"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="nm-connection-editor"] floating enable, resize set 1000 height 60 ppt
 for_window [app_id="org.gnome.Nautilus"] floating enable, resize set 1500 height 80 ppt, move container to scratchpad, scratchpad show
@@ -68,6 +70,7 @@ bar {
 	swaybar_command waybar
 }
 
+exec swaync
 exec_always nm-applet --indicator
 exec_always blueman-applet
 exec_always bash -c 'if [ -f ~/Pictures/bg ]; then swaymsg output "*" bg ~/Pictures/bg fill; else swaymsg output "*" bg "#000000" solid_color; fi'
