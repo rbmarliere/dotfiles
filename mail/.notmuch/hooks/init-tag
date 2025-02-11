@@ -1,0 +1,92 @@
+#!/bin/bash
+
+set -euo pipefail
+
+FOLDERS=(
+	"git"
+	"kernelci"
+	"kernelnewbies"
+	"ksummit"
+	"linux-api"
+	"linux-doc"
+	"linux-fsdevel"
+	"linux-kbuild"
+	"linux-kernel-mentees"
+	"linux-kselftest"
+	"linux-media"
+	"linux-mm"
+	"linux-next"
+	"linux-perf-users"
+	"linux-riscv"
+	"linux-staging"
+	"linux-trace-devel"
+	"linux-trace-kernel"
+	"linux-trace-users"
+	"linux-usb"
+	"lkml"
+	"ltp"
+	"netdev"
+	"rcu"
+	"rust-for-linux"
+	"smatch"
+	"stable"
+	"tech-board-discuss"
+	"u-boot"
+)
+
+TAGS=(
+	"kernel/git"
+	"linux/kernelci"
+	"kernelnewbies/kernelnewbies"
+	"linux/ksummit"
+	"kernel/linux-api"
+	"kernel/linux-doc"
+	"kernel/linux-fsdevel"
+	"kernel/linux-kbuild"
+	"linux/linux-kernel-mentees"
+	"kernel/linux-kselftest"
+	"kernel/linux-media"
+	"kvack/linux-mm"
+	"kernel/linux-next"
+	"kernel/linux-perf-users"
+	"infradead/linux-riscv"
+	"linux/linux-staging"
+	"kernel/linux-trace-devel"
+	"kernel/linux-trace-kernel"
+	"kernel/linux-trace-users"
+	"linux/linux-usb"
+	"kernel/linux-kernel"
+	"linux/ltp"
+	"kernel/netdev"
+	"kernel/rcu"
+	"kernel/rust-for-linux"
+	"kernel/smatch"
+	"kernel/stable"
+	"linux/tech-board-discuss"
+	"denx/u-boot"
+)
+
+CLEAR=
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	--clear | -c)
+		CLEAR=--remove-all
+		;;
+	*)
+		break
+		;;
+	esac
+	shift
+done
+
+if [[ -n $CLEAR ]]; then
+	set -x
+	notmuch tag $CLEAR -- folder:"kernel.org/*"
+	set +x
+fi
+
+for ((i = 0; i < ${#FOLDERS[@]}; i++)); do
+	set -x
+	notmuch tag +"${TAGS[i]}" -- folder:"kernel.org/${FOLDERS[i]}"
+	set +x
+done

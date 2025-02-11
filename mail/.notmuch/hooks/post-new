@@ -5,33 +5,88 @@ set -euo pipefail
 echo "-------------------------"
 echo "POST-NEW"
 
-# these are not managed by gauteh/lieer and need to be tagged
-DOMAINS=(marliere.net/all kernel.org)
-
-# tag messages according to the maildir folder name
-for DOMAIN in "${DOMAINS[@]}"; do
-	DOMAIN_PATH=~/mail/$DOMAIN
-	find "$DOMAIN_PATH" -type d -name cur | while read -r CURDIR; do
-		DIR=$(dirname "$CURDIR")
-		FOLDER=${DIR#$DOMAIN_PATH/}
-		if [[ $FOLDER == "archive" ]]; then
-			continue
-		fi
-		if [[ $FOLDER == "lkml" ]]; then
-			FOLDER="linux-kernel"
-		fi
-		notmuch tag +"$FOLDER" -- "folder:$DOMAIN/$FOLDER"
-	done
+FILTER=tag:new
+CLEAR=
+VERBOSE=0
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	-f|--filter)
+		FILTER="$2"
+		shift
+		;;
+	-c|--clear)
+		CLEAR=--remove-all
+		;;
+	-v|--verbose)
+		VERBOSE=1
+		;;
+	esac
+	shift
 done
 
-# tag messages according to the list-id header
-# this is an alternative to the following dovecot sieve (which puts msg in a different folder):
-# `if header :regex "list-id" "([^@~ ]+)" { \ set :lower "listname" "${1}"; \ fileinto :create "${listname}"; }`
-notmuch search --output=messages "tag:new" | while read -r MESSAGE_ID; do
-	LIST_ID=$(notmuch show --format=raw "$MESSAGE_ID" | grep -i "^List-Id:" | head -n1 | sed -E 's/.*<~?([^>.]+)[.>].*/\1/' | tr '[:upper:]' '[:lower:]' || true)
-	if [[ -n "$LIST_ID" ]]; then
-		notmuch tag +"$LIST_ID" -- "$MESSAGE_ID"
+TOTAL=$(notmuch count "$FILTER")
+i=0
+
+# tag all new messages according to the list-id header
+notmuch search --output=messages "$FILTER" | while read -r MESSAGE_ID; do
+	if [[ $VERBOSE -gt 0 ]]; then
+		echo $((++i)) / "$TOTAL"
+		echo "$MESSAGE_ID"
 	fi
+
+	MESSAGE=$(notmuch show --entire-thread=false --body=false --format=json "$MESSAGE_ID")
+	LIST_ID=$(echo "$MESSAGE" | sed 's/"[Ll]ist-[Ii][Dd]"/"list-id"/g' | jq -r '.. | objects | select(has("headers")) | .headers."list-id"')
+
+	if [[ $LIST_ID == "null" ]]; then
+		[[ -n $CLEAR ]] && notmuch tag $CLEAR -- "$MESSAGE_ID"
+		continue
+	fi
+
+	[[ $VERBOSE -gt 0 ]] && echo "$LIST_ID"
+
+	NEW_TAG=$(
+		echo "$LIST_ID" |
+			awk -F ' ' '{
+				if ($2 ~ "github")
+					# List-ID: some/project <project.some.github.com>
+					# -> github
+					print "github"
+				else if ($2 ~ "gitlab")
+					# List-ID: some/project <MR.project.some.gitlab.provider.com>
+					# -> gitlab
+					print "gitlab"
+				else if ($1 ~ "/")
+					# List-ID: project/foo <foo.org>
+					# -> project/foo
+					print $1;
+				else {
+					# remove "<" and ">" characters from last section $NF
+					gsub(/[<>]/, "", $NF);
+					# split remaining by "." character
+					split($NF, a, ".");
+					if (length(a) < 2)
+						# List-ID: foolist <foo>
+						# -> foo.org
+						print $NF;
+					else if (length(a) == 2)
+						# List-ID: foolist <foo.org>
+						# -> foo
+						print a[1];
+					else if (a[length(a)] ~ "br")
+						# List-ID: foolist <foo.brazilian.project.com.br>
+						# -> project/foo
+						print a[length(a)-2] "/" a[1]
+					else
+						# List-ID: foolist <foo.awesome.project.org>
+						# -> project/foo
+						print a[length(a)-1] "/" a[1]
+				}
+			}'
+	)
+
+	[[ $VERBOSE -gt 0 ]] && set -x
+	notmuch tag $CLEAR +"$NEW_TAG" -- "$MESSAGE_ID"
+	set +x
 done
 
 notmuch tag --batch <<EOF

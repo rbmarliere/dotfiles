@@ -1,6 +1,7 @@
 # .notmuch-config - Configuration file for the notmuch mail system
 #
 # For more information about notmuch, see https://notmuchmail.org
+
 # Database configuration
 #
 # The only value supported here is 'path' which should be the top-level
@@ -11,6 +12,7 @@
 #
 [database]
 path=/home/rbmarliere/mail/
+
 # User configuration
 #
 # Here is where you can let notmuch know how you would like to be
@@ -30,6 +32,7 @@ path=/home/rbmarliere/mail/
 name=Ricardo B. Marlière
 primary_email=ricardo@marliere.net
 other_email=rbmarliere@gmail.com;ricardo.marliere@suse.com;rbm@suse.com
+
 # Configuration for "notmuch new"
 #
 # The following options are supported here:
@@ -47,6 +50,7 @@ other_email=rbmarliere@gmail.com;ricardo.marliere@suse.com;rbm@suse.com
 [new]
 tags=new
 ignore=/.*[.](json|lock|bak)$/
+
 # Search configuration
 #
 # The following option is supported here:
@@ -58,6 +62,7 @@ ignore=/.*[.](json|lock|bak)$/
 #
 [search]
 #exclude_tags=spam
+
 # Maildir compatibility configuration
 #
 # The following option is supported here:
@@ -84,3 +89,6 @@ synchronize_flags=true
 
 [index]
 header.List=List-Id
+
+[show]
+extra_headers=list-id
