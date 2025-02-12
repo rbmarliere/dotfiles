@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+# this script tags all new messages according to the list-id header of the message
+
 echo "-------------------------"
 echo "POST-NEW"
 
@@ -27,16 +29,29 @@ done
 TOTAL=$(notmuch count "$FILTER")
 i=0
 
-# tag all new messages according to the list-id header
+# some spammy lists should not be tagged
+IGNORE=(
+	"^eventim"
+	"^mailin"
+	"^mcsv"
+	"^minhaclaro"
+	"^sparkpostmail"
+	"^xt"
+	"^xxpnp"
+)
+
+# grab all new (or user defined $FILTER) messages and parse them individually
 notmuch search --output=messages "$FILTER" | while read -r MESSAGE_ID; do
 	if [[ $VERBOSE -gt 0 ]]; then
 		echo $((++i)) / "$TOTAL"
 		echo "$MESSAGE_ID"
 	fi
 
+	# grab the message headers
 	MESSAGE=$(notmuch show --entire-thread=false --body=false --format=json "$MESSAGE_ID")
 	LIST_ID=$(echo "$MESSAGE" | sed 's/"[Ll]ist-[Ii][Dd]"/"list-id"/g' | jq -r '.. | objects | select(has("headers")) | .headers."list-id"')
 
+	# continue if there is no List-Id header present
 	if [[ $LIST_ID == "null" ]]; then
 		[[ -n $CLEAR ]] && notmuch tag $CLEAR -- "$MESSAGE_ID"
 		continue
@@ -44,6 +59,7 @@ notmuch search --output=messages "$FILTER" | while read -r MESSAGE_ID; do
 
 	[[ $VERBOSE -gt 0 ]] && echo "$LIST_ID"
 
+	# parse the List-Id header
 	NEW_TAG=$(
 		echo "$LIST_ID" |
 			awk -F ' ' '{
@@ -84,11 +100,21 @@ notmuch search --output=messages "$FILTER" | while read -r MESSAGE_ID; do
 			}'
 	)
 
+	# check against the hard-coded patterns to be ignored
+	for PATTERN in "${IGNORE[@]}"; do
+		if [[ $NEW_TAG =~ $PATTERN ]]; then
+			[[ $VERBOSE -gt 0 ]] && echo "$NEW_TAG is found in IGNORE list ($PATTERN)"
+			continue
+		fi
+	done
+
+	# tag the messages, optionally removing all previous tags
 	[[ $VERBOSE -gt 0 ]] && set -x
 	notmuch tag $CLEAR +"$NEW_TAG" -- "$MESSAGE_ID"
 	set +x
 done
 
+# finish with some special logic around my own addresses
 notmuch tag --batch <<EOF
 # remove inbox tag if message not sent to me
 -inbox -- tag:new and tag:inbox and not (to:rbm@opensuse.org or to:rbm@suse.com or to:ricardo.marliere@suse.com or to:rbmarliere@gmail.com or to:ricardo@marliere.net)
