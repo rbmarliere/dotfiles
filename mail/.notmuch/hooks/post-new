@@ -31,13 +31,13 @@ i=0
 
 # some spammy lists should not be tagged
 IGNORE=(
-	"^eventim"
-	"^mailin"
-	"^mcsv"
-	"^minhaclaro"
+	"^eventim/.*"
+	"^mailin/.*"
+	"^mcsv/.*"
+	"minhaclaro"
 	"^sparkpostmail"
-	"^xt"
-	"^xxpnp"
+	"^xt/.*"
+	"^xxpnp/.*"
 )
 
 # grab all new (or user defined $FILTER) messages and parse them individually
