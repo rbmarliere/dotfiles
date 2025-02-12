@@ -16,44 +16,37 @@ flagged = tag:flagged
 #signed = tag:signed and path:"marliere.net/all/**"
 #unread = tag:unread and path:"marliere.net/all/**"
 
+debian-announce = tag:debian/debian-announce
+debian-bugs = tag:debian/debian-bugs
+debian-devel = tag:debian/debian-devel
+debian-devel-announce = tag:debian/debian-devel-announce
+debian-devel-portuguese = tag:debian/debian-devel-portuguese
+debian-news = tag:debian/debian-news
+debian-news-portuguese = tag:debian/debian-news-portuguese
+debian-policy = tag:debian/debian-policy
+debian-project = tag:debian/debian-project
+debian-vote = tag:debian/debian-vote
+git = tag:kernel/git
+git-24 = tag:kernel/git and date:2024
+git-25 = tag:kernel/git and date:2025
 github = tag:github
 gitlab = tag:gitlab
-
-debian/debian-announce = tag:debian/debian-announce
-debian/debian-bugs = tag:debian/debian-bugs
-debian/debian-devel = tag:debian/debian-devel
-debian/debian-devel-announce = tag:debian/debian-devel-announce
-debian/debian-devel-portuguese = tag:debian/debian-devel-portuguese
-debian/debian-news = tag:debian/debian-news
-debian/debian-news-portuguese = tag:debian/debian-news-portuguese
-debian/debian-policy = tag:debian/debian-policy
-debian/debian-project = tag:debian/debian-project
-debian/debian-vote = tag:debian/debian-vote
-
+kernelci = tag:linux/kernelci
+kernelnewbies = tag:kernelnewbies
+ksummit = tag:linux/ksummit
+linux-kernel = tag:kernel/linux-kernel
+linux-kernel-24 = tag:kernel/linux-kernel and date:2024
+linux-kernel-25 = tag:kernel/linux-kernel and date:2025
+linux-kernel-mentees = tag:linux/linux-kernel-mentees
+ltp = tag:linux/ltp
 neomutt-devel-neomutt = tag:neomutt-devel-neomutt
 neomutt-users-neomutt = tag:neomutt-users-neomutt
-
-openwall/oss-security = tag:openwall/oss-security
-openwall/oss-security-help = tag:openwall/oss-security-help
-~rjarry/aerc-devel = tag:~rjarry/aerc-devel
-~rjarry/aerc-discuss = tag:~rjarry/aerc-discuss
-~sircmpwn/sr = tag:~sircmpwn/sr
-
-linux/kernelci = tag:linux/kernelci
-kernelnewbies/kernelnewbies = tag:kernelnewbies/kernelnewbies
-linux/ksummit = tag:linux/ksummit
-linux/linux-kernel-mentees = tag:linux/linux-kernel-mentees
-linux/ltp = tag:linux/ltp
-linux/tech-board-discuss = tag:linux/tech-board-discuss
-
-kernel/git = tag:kernel/git
-kernel/git-24 = tag:kernel/git and date:2024
-kernel/git-25 = tag:kernel/git and date:2025
-
-denx/u-boot = tag:denx/u-boot
-denx/u-boot-24 = tag:denx/u-boot and date:2024
-denx/u-boot-25 = tag:denx/u-boot and date:2025
-
-kernel/linux-kernel = tag:kernel/linux-kernel
-kernel/linux-kernel-24 = tag:kernel/linux-kernel and date:2024
-kernel/linux-kernel-25 = tag:kernel/linux-kernel and date:2025
+oss-security = tag:openwall/oss-security
+oss-security-help = tag:openwall/oss-security-help
+rjarry/aerc-devel = tag:~rjarry/aerc-devel
+rjarry/aerc-discuss = tag:~rjarry/aerc-discuss
+sircmpwn/sr = tag:~sircmpwn/sr
+tech-board-discuss = tag:linux/tech-board-discuss
+u-boot = tag:denx/u-boot
+u-boot-24 = tag:denx/u-boot and date:2024
+u-boot-25 = tag:denx/u-boot and date:2025

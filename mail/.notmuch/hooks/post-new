@@ -100,6 +100,10 @@ notmuch search --output=messages "$FILTER" | while read -r MESSAGE_ID; do
 			}'
 	)
 
+	# if final parse output is foo/foo then make it foo
+	IFS='/' read -r a b <<< "$NEW_TAG"
+	[[ $a == "$b" ]] && NEW_TAG="$a"
+
 	# check against the hard-coded patterns to be ignored
 	for PATTERN in "${IGNORE[@]}"; do
 		if [[ $NEW_TAG =~ $PATTERN ]]; then
