@@ -57,4 +57,4 @@ exec ~/.local/bin/sway.autostart
 
 bindsym $mod+shift+n exec ~/.local/bin/sway.launcher notes sway.notes
 bindsym $mod+shift+m exec ~/.local/bin/sway.launcher mail aerc
-bindsym $mod+t exec swaymsg "[class=Todoist]" focus
+bindsym $mod+t exec swaymsg [class=Todoist] focus

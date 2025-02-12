@@ -2,6 +2,6 @@
 
 set -euo pipefail
 
-if ! swaymsg "[app_id=$1] focus"; then
+if ! swaymsg [app_id="$1"] focus; then
     foot -a "$1" bash -l -c "$2"
 fi

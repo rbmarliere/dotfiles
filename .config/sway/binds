@@ -82,4 +82,4 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-bindsym $mod+alt+n exec swaync-client -t -sw
+bindsym $mod+alt+n exec swaync-client -t -sw && sleep .1 && swaymsg [app_id=swaync] focus
