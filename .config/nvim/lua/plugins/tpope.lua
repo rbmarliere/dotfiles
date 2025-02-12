@@ -23,6 +23,7 @@ return {
 				end,
 			},
 			"tommcdo/vim-fugitive-blame-ext",
+			"rbong/vim-flog",
 		},
 		keys = {
 			{ "<Leader>gg", ":tab Git<CR>:tabm 0<CR>" },
