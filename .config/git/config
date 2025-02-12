@@ -66,6 +66,11 @@
 
 [pull]
 	ff = only
+	rebase = true
+
+[rebase]
+	autoSquash = true
+	autoStash = true
 
 [bash]
 	showDirtyState = true
