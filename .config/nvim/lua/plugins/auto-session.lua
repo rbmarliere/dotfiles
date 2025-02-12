@@ -10,7 +10,7 @@ return {
 			local cmd = "git rev-parse --is-inside-work-tree"
 			return vim.fn.system(cmd) == "true\n"
 		end,
-		continue_restore_on_error = false,
+		-- continue_restore_on_error = false,
 		cwd_change_handling = true,
 		save_extra_cmds = {
 			-- https://github.com/rmagatti/auto-session/issues/173

@@ -114,7 +114,8 @@ end, { nargs = "*" })
 
 -- https://b4.docs.kernel.org/en/latest/contributor/overview.html
 local opts = { noremap = true }
-vim.keymap.set("n", "<Leader>bn", ":!b4 prep --enroll<CR>", opts)
+vim.keymap.set("n", "<Leader>bn", ":!b4 prep --enroll", opts)
 vim.keymap.set("n", "<Leader>be", edit_b4_cover, { noremap = true, silent = true, desc = "!b4 prep --edit-cover" })
 vim.keymap.set("n", "<Leader>bc", ":!b4 prep --auto-to-cc<CR>:!b4 trailers --update<CR>:!b4 prep --check<CR>", opts)
 vim.keymap.set("n", "<Leader>bs", ":B4Send --reflect", opts)
+vim.keymap.set("n", "<Leader>ba", ":!b4 shazam ", opts)

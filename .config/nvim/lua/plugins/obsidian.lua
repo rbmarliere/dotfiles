@@ -2,7 +2,7 @@ return {
 	"epwalsh/obsidian.nvim",
 	version = "*", -- recommended, use latest release instead of latest commit
 	ft = "markdown",
-	enabled = function()
+	cond = function()
 		local notes_dir = vim.uv.fs_realpath(vim.fn.expand("~/notes"))
 		return vim.fn.isdirectory(notes_dir) == 1 and vim.fn.getcwd() == notes_dir
 	end,

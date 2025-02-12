@@ -131,7 +131,9 @@ run() {
 	build "$KDIR" "$TEST_FILE_DIR" "$TEST_NAME"
 	install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"
 	#kirk "$KDIR" "ROOT" --run-command "$TEST_NAME"
+	set -x
 	sudo vng --run "$KDIR" --rw --root "$ROOT" -- "/opt/ltp/testcases/bin/$TEST_NAME" "${TEST_ARGS[@]}"
+	set +x
 }
 
 help() {

@@ -28,4 +28,3 @@ git submodule update --init --recursive
 git set-origin "$REMOTE"
 
 popd
-popd

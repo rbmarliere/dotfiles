@@ -49,5 +49,16 @@ return {
 				end
 			end,
 		})
+
+-- 		vim.api.nvim_create_autocmd("DirChanged", {
+-- 			callback = function()
+-- 				print("DirChanged triggered at", vim.uv.now())
+-- 			end,
+-- 		})
+-- 		vim.api.nvim_create_autocmd("DirChangedPre", {
+-- 			callback = function()
+-- 				print("DirChangedPre triggered at", vim.uv.now())
+-- 			end,
+-- 		})
 	end,
 }

@@ -41,6 +41,7 @@ return {
 			{ "<Leader>gsU", ":G branch -u main" },
 			{ "<Leader>gse", ":G send-email --cover-letter" },
 			{ "<Leader>gsc", ":read !git show-commit " },
+			{ "<Leader>gS", ":G amende -s<CR>" },
 		},
 		config = function()
 			-- vim.api.nvim_create_autocmd("User", {
