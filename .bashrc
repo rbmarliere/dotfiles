@@ -6,6 +6,12 @@ if [ -f "$BASH_PREEXEC" ]; then
 	source "$BASH_PREEXEC"
 fi
 
+FZF_TAB_COMPLETION="$(dirname "$(readlink -f $BASH_SOURCE)")/.deps/fzf-tab-completion/bash/fzf-bash-completion.sh"
+if [ -f "$FZF_TAB_COMPLETION" ]; then
+	source "$FZF_TAB_COMPLETION"
+	bind -x '"\t": fzf_bash_completion'
+fi
+
 if [ -f /usr/share/bash-completion/bash_completion ]; then
 	source /usr/share/bash-completion/bash_completion
 	if [ -f /usr/share/bash-completion/completions/git ]; then

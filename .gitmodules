@@ -4,3 +4,6 @@
 [submodule ".deps/bash-preexec"]
 	path = .deps/bash-preexec
 	url = https://github.com/rcaloras/bash-preexec.git
+[submodule ".deps/fzf-tab-completion"]
+	path = .deps/fzf-tab-completion
+	url = git@github.com:lincheney/fzf-tab-completion.git
