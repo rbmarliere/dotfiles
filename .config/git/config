@@ -31,6 +31,7 @@
 	r = !git l --graph
 	ra = !git r --all
 	re = remote
+	reu = remote update
 	rb = rebase
 	rc = rebase --continue
 	ri = rebase --interactive
