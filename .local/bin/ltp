@@ -1,14 +1,14 @@
 #!/bin/bash
 
+set -euo pipefail
+
 configure() {
-	set -euo pipefail
 	local KDIR=${1:?missing kernel directory}
 	make autotools
 	./configure --with-linux-dir="$KDIR"
 }
 
 build() {
-	set -euo pipefail
 	local KDIR=${1:?missing kernel directory}
 	local TARGET=all
 
@@ -24,10 +24,15 @@ build() {
 		configure "$KDIR"
 	fi
 
-	bear --append -- make -j"$(nproc)" $TARGET
+	bear --append -- make -j"$(nproc)" "$TARGET"
 }
 
 metadata() {
+	if [[ ! -f ./configure && ! -f ./include/config.h ]]; then
+		local KDIR=${1:?missing kernel directory}
+		configure "$KDIR"
+	fi
+
 	pushd metadata
 	if ! sudo zypper search --installed-only asciidoc; then
 		echo "install asciidoc first and re-configure" >&2
@@ -35,11 +40,11 @@ metadata() {
 	fi
 	make -j"$(nproc)"
 	popd
+
 	xdg-open docparse/metadata.html
 }
 
 install() {
-	set -euo pipefail
 	local ROOT=${1:?missing root filesystem}
 
 	local TEST_FILE_DIR=${2:-""}
@@ -55,7 +60,6 @@ install() {
 }
 
 kirk() {
-	set -euo pipefail
 	local KDIR=${1:?missing kernel directory}
 	local ROOT=${2:?missing root filesystem}
 	shift 2
@@ -76,7 +80,6 @@ kirk() {
 }
 
 run() {
-	set -euo pipefail
 	local FILE=${1:?missing test file}
 	shift
 
@@ -137,9 +140,16 @@ run() {
 }
 
 help() {
+	set +u
 	case $1 in
+	configure)
+		echo "usage: $0 configure <kernel source directory>"
+		;;
 	build)
 		echo "usage: $0 build <kernel source directory> [<testcase dir> <test>]"
+		;;
+	metadata)
+		echo "usage: $0 metadata [<kernel source directory>]"
 		;;
 	install)
 		echo "usage: $0 install <destination root filesystem>"
@@ -174,6 +184,10 @@ case $1 in
 help)
 	shift
 	help "$@"
+	;;
+configure)
+	shift
+	configure "$@"
 	;;
 build)
 	shift
