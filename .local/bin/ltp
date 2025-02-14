@@ -1,6 +1,20 @@
 #!/bin/bash
 
 set -euo pipefail
+# set -x
+
+VERBOSE=0
+CLEAR=0
+
+_die() {
+	echo "ERROR: $1" >&2
+	exit 1
+}
+
+_preflight() {
+	[[ $(git rev-parse --is-inside-work-tree) = "true" ]] || _die "refusing to run outside worktree"
+	git remote -v | grep -q "linux-test-project/ltp" || _die "refusing to run outside LTP repository"
+}
 
 configure() {
 	local KDIR=${1:?missing kernel directory}
@@ -24,7 +38,7 @@ build() {
 		configure "$KDIR"
 	fi
 
-	bear --append -- make -j"$(nproc)" "$TARGET"
+	bear --append -- make -j"$(nproc)" $TARGET
 }
 
 metadata() {
@@ -34,10 +48,8 @@ metadata() {
 	fi
 
 	pushd metadata
-	if ! sudo zypper search --installed-only asciidoc; then
-		echo "install asciidoc first and re-configure" >&2
-		exit 1
-	fi
+	sudo zypper search --installed-only asciidoc || _die "install asciidoc first and re-configure"
+
 	make -j"$(nproc)"
 	popd
 
@@ -51,23 +63,17 @@ install() {
 	if [[ $TEST_FILE_DIR != "" && -d $ROOT/opt/ltp/testcases/bin && -f $ROOT/opt/ltp/kirk ]]; then
 		sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin"
 	else
-		set +e
-		if ! sudo make -j"$(nproc)" DESTDIR="$ROOT" install; then
-			echo "installation failed, try a full build first" >&2
-			exit 1
-		fi
+		sudo make -j"$(nproc)" DESTDIR="$ROOT" install || _die "installation failed, try a full build first"
 	fi
 }
 
-kirk() {
+vng-run() {
+	VERBOSE_OPT=
+	[[ $VERBOSE -gt 0 ]] && VERBOSE_OPT=-v
+
 	local KDIR=${1:?missing kernel directory}
 	local ROOT=${2:?missing root filesystem}
 	shift 2
-
-	if [[ ! -f "$ROOT/opt/ltp/kirk" ]]; then
-		echo "$ROOT/opt/ltp/kirk not found, try installing first" >&2
-		exit 1
-	fi
 
 	if [[ ! -f "$KDIR/vmlinux" ]]; then
 		pushd "$KDIR"
@@ -76,17 +82,16 @@ kirk() {
 		popd
 	fi
 
-	sudo vng --run "$KDIR" --rw --root "$ROOT" --exec "/opt/ltp/kirk $*"
+	set -x
+	sudo vng --run "$KDIR" --root "$ROOT" $VERBOSE_OPT --exec "$*"
+	set +x
 }
 
 run() {
 	local FILE=${1:?missing test file}
 	shift
 
-	if [[ ! -f $FILE ]]; then
-		help run
-		exit 1
-	fi
+	[[ -f $FILE ]] || _die "file $FILE not found"
 
 	local KDIR=
 	local ROOT=
@@ -109,8 +114,7 @@ run() {
 			elif [[ -z $ROOT ]]; then
 				ROOT=$1
 			else
-				echo "unexpected argument: $1" >&2
-				exit 1
+				_die "unexpected argument: $1"
 			fi
 			;;
 		esac
@@ -124,23 +128,14 @@ run() {
 	TEST_FILE_DIR=$(dirname "$TEST_FILE_PATH")
 	TEST_NAME=${TEST_FILE_NAME%.*}
 
-	if [[ ! -f "$KDIR/vmlinux" ]]; then
-		pushd "$KDIR"
-		vng -k
-		vng -b
-		popd
-	fi
-
 	build "$KDIR" "$TEST_FILE_DIR" "$TEST_NAME"
 	install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"
-	#kirk "$KDIR" "ROOT" --run-command "$TEST_NAME"
-	set -x
-	sudo vng --run "$KDIR" --rw --root "$ROOT" -- "/opt/ltp/testcases/bin/$TEST_NAME" "${TEST_ARGS[@]}"
-	set +x
+	vng-run "$KDIR" "$ROOT" "/opt/ltp/testcases/bin/$TEST_NAME" "${TEST_ARGS[@]}"
 }
 
 help() {
 	set +u
+	echo
 	case $1 in
 	configure)
 		echo "usage: $0 configure <kernel source directory>"
@@ -154,8 +149,8 @@ help() {
 	install)
 		echo "usage: $0 install <destination root filesystem>"
 		;;
-	kirk)
-		echo "usage: $0 kirk <kernel source directory> <destination root filesystem> <kirk arguments>"
+	vng-run)
+		echo "usage: $0 vng-run <kernel source directory> <destination root filesystem> <command>"
 		;;
 	run)
 		echo "usage: $0 run <test_file.c> [<kernel source directory> [<destination root filesystem>]] [-- <additional arguments to the test>]"
@@ -163,46 +158,84 @@ help() {
 		echo "This command builds test_file.c, installs and run it with sane defaults."
 		;;
 	*)
-		echo "usage: $0 <command> [arguments]"
+		echo "usage: $0 [global options] <command> [arguments]"
+		echo
+		echo "global options:"
+		echo "    -v	--verbose		Increase verbosity"
+		echo "    -c	--clear			Clear all builds"
 		echo
 		echo "commands:"
+		echo "    configure"
 		echo "    build"
+		echo "    metadata"
 		echo "    install"
-		echo "    kirk"
+		echo "    vng-run"
 		echo "    run"
 		echo
 		echo "use $0 help <command> for more information about a command"
 		;;
 	esac
+	echo
 }
 
 if [[ $# -eq 0 ]]; then
 	help
 fi
 
-case $1 in
-help)
-	shift
-	help "$@"
-	;;
-configure)
-	shift
-	configure "$@"
-	;;
-build)
-	shift
-	build "$@"
-	;;
-metadata)
-	shift
-	metadata "$@"
-	;;
-install)
-	shift
-	install "$@"
-	;;
-run)
-	shift
-	run "$@"
-	;;
-esac
+while [[ $# -gt 0 ]]; do
+	case $1 in
+	-v|--verbose)
+		shift
+		VERBOSE=1
+		;;
+	-c|--clear)
+		shift
+		CLEAR=1
+		;;
+	help)
+		shift
+		help "$@"
+		break
+		;;
+	configure)
+		shift
+		_preflight
+		configure "$@"
+		break
+		;;
+	build)
+		shift
+		_preflight
+		build "$@"
+		break
+		;;
+	metadata)
+		shift
+		_preflight
+		metadata "$@"
+		break
+		;;
+	install)
+		shift
+		_preflight
+		install "$@"
+		break
+		;;
+	vng-run)
+		shift
+		_preflight
+		vng-run "$@"
+		break
+		;;
+	run)
+		shift
+		_preflight
+		run "$@"
+		break
+		;;
+	*)
+		help
+		break
+		;;
+	esac
+done
