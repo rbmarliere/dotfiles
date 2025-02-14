@@ -16,10 +16,6 @@ FILES = \
 	$$HOME/.bash_eternal_history \
 	$$HOME/.config/nvim/lua/config/priv.lua
 
-ifeq (, $(shell which systemctl 2>/dev/null))
-  $(error "Systemd is required")
-endif
-
 ifeq ($(shell id -u), 0)
 	SUDO :=
 else
@@ -38,10 +34,12 @@ endif
 
 DEPS_DIR := .deps/$(DISTRO)
 
-.PHONY: all
+REQUIRE_SYSTEMD = @if ! command -v systemctl &> /dev/null; then echo "systemd is required for $@ target"; exit 1; fi
+
+PHONY := all
 all: base links
 
-.PHONY: links
+PHONY += links
 links:
 	mkdir -p $(DIR)
 	@if [ -e $$HOME/.bashrc ] && [ ! -L $$HOME/.bashrc ]; then \
@@ -50,7 +48,7 @@ links:
 	stow --verbose --restow --target=$$HOME .
 	touch $(FILES)
 
-.PHONY: base
+PHONY += base
 base:
 	git submodule update --init --recursive
 	$(SUDO) $(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/base)
@@ -59,9 +57,11 @@ base:
 ifeq ($(DISTRO),debian)
 	$(SUDO) update-alternatives --config editor
 	$(SUDO) update-alternatives --config vi
+else
+	sudo ln -sf /usr/bin/vim /usr/bin/vi
 endif
 
-.PHONY: dev
+PHONY += dev
 dev:
 	$(SUDO) $(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/dev)
 
@@ -83,17 +83,16 @@ endif
 	cd $$HOME/.local/share/nvim/mason/packages/prettier && npm install --save-dev prettier-plugin-go-template
 
 
-.PHONY: flatpak
+PHONY += flatpak
 flatpak:
 	- $(SUDO) $(INSTALL_CMD) flatpak
 	- flatpak install flathub $$(tr "\n" " " < $(DEPS_DIR)/flatpak)
 
-.PHONY: wm
+PHONY += wm
 wm: flatpak
+	$(REQUIRE_SYSTEMD)
 	$(SUDO) $(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/wm)
 	fc-cache
-
-
 ifeq ($(DISTRO),suse)
 	$(SUDO) ln -sf /usr/share/terminfo/f/foot-extra /usr/share/terminfo/f/foot
 	# printer
@@ -112,19 +111,21 @@ ifeq ($(DISTRO),suse)
 	sed 's/^Name=.*/Name=Firefox (Music)/; s/^Exec=.*/Exec=firefox %u -P music/' /usr/share/applications/firefox.desktop > $$HOME/.local/share/applications/firefox-music.desktop
 endif
 
-.PHONY: autologin
+PHONY += autologin
 autologin:
+	$(REQUIRE_SYSTEMD)
+	# https://wiki.archlinux.org/title/Getty#Automatic_login_to_virtual_console
 	$(SUDO) mkdir -p /etc/systemd/system/getty@tty1.service.d
 	echo "[Service]" | $(SUDO) tee /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	echo "ExecStart=" | $(SUDO) tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	echo "ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $$(whoami) %I \$$TERM" | $(SUDO) tee -a /etc/systemd/system/getty@tty1.service.d/autologin.conf
 	$(SUDO) systemctl set-default multi-user.target
 
-.PHONY: desktop
+PHONY += desktop
 desktop: wm autologin
 	echo "include config.d/$(DISTRO)/desktop" > $$HOME/.config/sway/autoload
 
-.PHONY: nouveau
+PHONY += nouveau
 nouveau:
 ifeq ($(DISTRO),suse)
 	# $(SUDO) mv /etc/zypp/services.d/NVIDIA.service /etc/zypp/services.d/NVIDIA.service.bak
@@ -140,12 +141,13 @@ ifeq ($(DISTRO),suse)
 	$(SUDO) update-bootloader
 endif
 
-.PHONY: laptop
+PHONY += laptop
 laptop: wm autologin
 	echo "include config.d/$(DISTRO)/laptop" > $$HOME/.config/sway/autoload
 
-.PHONY: mail
+PHONY += mail
 mail:
+	$(REQUIRE_SYSTEMD)
 	$(SUDO) $(INSTALL_CMD) $$(tr "\n" " " < $(DEPS_DIR)/mail)
 	wget https://raw.githubusercontent.com/google/gmail-oauth2-tools/master/python/oauth2.py -O $$HOME/.local/bin/oauth2.py
 	chmod +x $$HOME/.local/bin/oauth2.py
@@ -162,6 +164,34 @@ mail:
 	systemctl --user enable notmuch.timer
 	systemctl --user start notmuch.timer
 
-.PHONY: clean
+PHONY += clean
 clean:
 	stow --verbose --delete --target=$$HOME .
+
+PHONY += help
+help:
+	@echo  'Basic targets:'
+	@echo  '  clean		  - Remove all links managed by stow'
+	@echo  '  all		  - Build base and links targets, usually for servers'
+	@echo  '  links		  - Install the dotfiles links in $HOME using stow'
+	@echo  '  base		  - Install base dependencies (.deps/**/base)'
+	@echo  '  dev		  - Install development dependencies (.deps/**/dev)'
+	@echo  '                    Install tmux and neovim plugins'
+	@echo  '  mail		  - Install mail dependencies (.deps/**/mail)'
+	@echo  '                    Download gmail oauth2.py helper script'
+	@echo  '                    Setup notmuch systemd service'
+	@echo  ''
+	@echo  'Device specific targets:'
+	@echo  '  desktop	  - Build wm and autologin targets'
+	@echo  '                    Include desktop sway config in .config/sway/autoload'
+	@echo  '  laptop	  - Build wm and autologin targets'
+	@echo  '                    Include laptop sway config in .config/sway/autoload'
+	@echo  ''
+	@echo  'Misc. targets:'
+	@echo  '  autologin	  - Setup autologin for the current user in tty1 using systemd'
+	@echo  '  flatpak	  - Install flatpak dependencies (.deps/**/flatpak)'
+	@echo  '  nouveau	  - Remove nvidia proprietary drivers in favor of nouveau in openSUSE'
+	@echo  '  wm		  - Build flatpak target'
+	@echo  '                    Install the window manager - sway - dependencies (.deps/**/wm)'
+
+.PHONY: $(PHONY)

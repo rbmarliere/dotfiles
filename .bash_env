@@ -1,8 +1,10 @@
 # vim: ft=sh
 
+# https://gist.github.com/mcattarinussi/834fc4b641ff4572018d0c665e5a94d3
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-export EDITOR="vi"
 export GPG_TTY=$(tty)
+
+export EDITOR="vi"
 export LESS="-R --mouse"
 export PATH="/usr/lib/ccache:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/node_modules/.bin:/var/lib/flatpak/exports/bin:$PATH"
 export PROJECTS="$HOME/src/**"
