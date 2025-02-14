@@ -26,5 +26,3 @@ fi
 pushd "$DEFAULT_BRANCH"
 git submodule update --init --recursive
 git set-origin "$REMOTE"
-
-popd

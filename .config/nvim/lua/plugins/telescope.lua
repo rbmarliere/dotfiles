@@ -1,4 +1,5 @@
-local grepprg = "rg --pcre2 --vimgrep --no-heading --smart-case --hidden --glob !.git --line-number --column --follow"
+local grepprg =
+	"rg --pcre2 --sort-files --vimgrep --no-heading --smart-case --hidden --glob !.git --line-number --column --follow"
 local grepprg_tbl = {}
 for word in grepprg:gmatch("%S+") do
 	table.insert(grepprg_tbl, word)
@@ -30,7 +31,11 @@ return {
 	},
 	config = function()
 		local telescope = require("telescope")
+		local telescope_actions = require "telescope.actions"
 		local builtin = require("telescope.builtin")
+		local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
+		local live_grep_args_actions = require("telescope-live-grep-args.actions")
+
 		local picker_config = {}
 		for b, _ in pairs(builtin) do
 			picker_config[b] = {
@@ -108,14 +113,10 @@ return {
 				live_grep_args = {
 					mappings = {
 						i = {
-							["<C-k>"] = function(prompt_bufnr)
-								require("telescope-live-grep-args.actions").quote_prompt()(prompt_bufnr)
-							end,
-							["<C-j>"] = function(prompt_bufnr)
-								require("telescope-live-grep-args.actions").quote_prompt({ postfix = " --iglob " })(
-									prompt_bufnr
-								)
-							end,
+							["<C-k>"] = live_grep_args_actions.quote_prompt(),
+							["<C-j>"] = live_grep_args_actions.quote_prompt({ postfix = " --iglob " }),
+							-- freeze the current list and start a fuzzy search in the frozen list
+							["<C-Space>"] = telescope_actions.to_fuzzy_refine,
 						},
 					},
 				},
@@ -123,13 +124,7 @@ return {
 		}
 
 		-- open grep extension pre-loaded with the selected text
-		vim.keymap.set("v", "<M-g>", function()
-			vim.cmd('normal! "vy')
-			local visual_selection = vim.fn.getreg("v"):gsub("\n", "")
-			telescope.extensions.live_grep_args.live_grep_args({
-				default_text = visual_selection,
-			})
-		end, { noremap = true, silent = true })
+		vim.keymap.set("v", "<M-g>", live_grep_args_shortcuts.grep_word_under_cursor)
 
 		telescope.setup(opts)
 		telescope.load_extension("find_pickers")
