@@ -3,7 +3,7 @@
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
-	echo "usage: clone <url> [target dir] [remote name]"
+	echo "usage: clone <url> [target dir [remote name]]"
 	exit
 fi
 
