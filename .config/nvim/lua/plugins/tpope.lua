@@ -29,8 +29,8 @@ return {
 			{ "<Leader>gg", ":tab Git<CR>:tabm 0<CR>" },
 			{ "<Leader>gb", ":Git blame<CR>:set number relativenumber<CR>" },
 			{ "<Leader>gB", ":GBrowse<CR>", mode = { "n", "v" }, desc = "Open URL at object" },
-			{ "<Leader>gl", ":Git log --oneline<CR>" },
-			{ "<Leader>gL", ":GcLog %<CR>", desc = "Add file history to quickfix" },
+			{ "<Leader>gl", ":Flog<CR>", desc = "Browse git log" },
+			{ "<Leader>gL", ":Flog -path=%<CR>", desc = "Browse file history" },
 			{ "<Leader>gD", ":Gdiffsplit!<CR>", desc = "Solve merge conflicts (use d2o and d3o)" },
 			{ "<Leader>gW", ":Gwrite!<CR>", desc = "Choose a version e.g. during conflict" },
 			{ "<Leader>ge", ":Gedit<CR>", desc = "Go to current version of object" },
@@ -51,6 +51,21 @@ return {
 			-- 		vim.keymap.set("n", "cc", ":Git commit -s<CR>", { buffer = true })
 			-- 	end,
 			-- })
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "floggraph",
+				callback = function()
+					-- Remove existing mapping if it exists
+					if vim.fn.maparg("<CR>", "n", false, true).rhs == "<Plug>(FlogVSplitCommitRight)" then
+						vim.api.nvim_buf_del_keymap(0, "n", "<CR>")
+					end
+					vim.keymap.set(
+						"n",
+						"<CR>",
+						"<Cmd>horizontal below Flogsplitcommit<CR>",
+						{ noremap = true, silent = true }
+					)
+				end,
+			})
 		end,
 	},
 }
