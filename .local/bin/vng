@@ -1,0 +1,145 @@
+#!/bin/bash
+
+set -euo pipefail
+
+HOST=$(uname -p)
+ARCH=x86_64
+RUN=.
+ROOT=
+VNG=/usr/bin/vng
+EXEC=
+VERBOSE=
+EXTRA=
+CROSS_COMPILE_OPT=
+CLEAN=
+CLEANED=
+BUILD=
+
+# openSUSE cross-compile settings to pass through
+# https://github.com/arighi/virtme-ng/blob/ee3f58a787dac6bca492c7c9e3ea235b508852e3/virtme_ng/run.py#L489
+declare -A ARCHMAP
+ARCHMAP["arm64"]="/usr/bin/aarch64-suse-linux-"
+ARCHMAP["armhf"]="/usr/bin/arm-suse-linux-gnueabi-"
+ARCHMAP["ppc64el"]="/usr/bin/powerpc64le-suse-linux-"
+ARCHMAP["s390x"]="/usr/bin/s390x-suse-linux-"
+ARCHMAP["riscv64"]="/usr/bin/riscv64-suse-linux-"
+
+usage() {
+	echo
+	echo "usage: $0 [options] [-- command to execute]"
+	echo
+	echo 'A stupid vng wrapper'
+	echo
+	echo '  -a		Target architecture (available: arm64, armhf, ppc64el, s390x, riscv64)'
+	echo '  -r		Kernel directory to run (default: .)'
+	echo '  -R		Root filesystem path (default: $ROOTS/$ARCH/sid)'
+	echo '  -b		Build kernel'
+	echo '  -c		Clean kernel'
+	echo '  -v		Increase verbosity'
+}
+
+die() {
+	echo "ERROR: $1" >&2
+	exit 1
+}
+
+setcc() {
+	CC="${ARCHMAP[$ARCH]}gcc"
+	export CC
+	if [[ ! -f $CC ]]; then
+		declare -A PKGMAP
+		GCC="14"
+		PKGMAP["arm64"]="cross-aarch64-gcc$GCC"
+		PKGMAP["armhf"]="cross-arm-gcc$GCC"
+		PKGMAP["ppc64el"]="cross-ppc64le-gcc$GCC"
+		PKGMAP["s390x"]="cross-s390x-gcc$GCC"
+		PKGMAP["riscv64"]="cross-riscv64-gcc$GCC"
+		PKGMAP["x86_64"]="gcc$GCC"
+		sudo zypper install "${PKGMAP[$ARCH]}" || die "compiler $CC not found"
+	fi
+}
+
+while getopts "ha:r:R:e:vcb" OPT; do
+	case $OPT in
+	h)
+		usage
+		exit 0
+		;;
+	a)
+		ARCH="$OPTARG"
+		[[ $ARCH != "$HOST" && -z ${ARCHMAP[$ARCH]+_} ]] && die "unsupported architecture"
+		;;
+	r) RUN="$OPTARG" ;;
+	R) ROOT="$OPTARG" ;;
+	e) EXEC=(--exec "$OPTARG") ;;
+	v) VERBOSE=1 ;;
+	c) CLEAN=1 ;;
+	b) BUILD=1 ;;
+	*)
+		usage
+		exit 1
+		;;
+	esac
+done
+shift $((OPTIND - 1))
+
+# add extra parameters in case of a foreign arch
+# set cross compiler if needed and install it if we don't have it
+if [[ $ARCH != "$HOST" ]]; then
+	setcc
+	EXTRA=(--arch "$ARCH" --force-9p)
+	CROSS_COMPILE_OPT=(--cross-compile "${ARCHMAP[$ARCH]}" "${EXTRA[@]}")
+fi
+
+# set default root filesystem
+if [[ -z $ROOT ]]; then
+	ROOT="$ROOTS/$ARCH/sid/"
+fi
+
+# if there's no default root, create one using yet another stupid wrapper (tm)
+if [[ ! -d "$ROOT" ]]; then
+	debootstrap -r "$ROOT" -a "$ARCH"
+fi
+
+# assemble vng commands
+base_cmd=("sudo" "$VNG")
+[[ -n $VERBOSE ]] && base_cmd+=("--verbose")
+clean_cmd=("${base_cmd[@]}")
+clean_cmd+=("--clean")
+run_cmd=("${base_cmd[@]}")
+run_cmd+=("--run" "$RUN" "--root" "$ROOT")
+[[ -n ${EXTRA[*]} ]] && run_cmd+=("${EXTRA[@]}")
+[[ -n ${EXEC[*]} ]] && run_cmd+=("${EXEC[@]}")
+
+if [[ -n $CLEAN ]]; then
+	pushd "$RUN"
+	"${clean_cmd[@]}" >vng.log 2>&1
+	popd
+	exit 0
+fi
+
+if [[ -n $BUILD ]]; then
+	pushd "$RUN"
+	echo "${base_cmd[@]}" --build "${CROSS_COMPILE_OPT[@]}"
+	"${base_cmd[@]}" --build "${CROSS_COMPILE_OPT[@]}" 2>>vng.log
+	popd
+	exit 0
+fi
+
+# run vng
+set +e
+echo "${run_cmd[@]}"
+"${run_cmd[@]}" 2>&1 | tee vng.log
+
+# if unsuccessful, rebuild and try again
+OUTPUT=$(cat vng.log)
+if [[ $OUTPUT =~ "try --build to build the kernel" || $OUTPUT =~ "modules may not work" ]]; then
+	pushd "$RUN"
+	echo "${clean_cmd[@]}"
+	"${clean_cmd[@]}" >>vng.log 2>&1
+	echo "${base_cmd[@]}" --build "${CROSS_COMPILE_OPT[@]}"
+	"${base_cmd[@]}" --build "${CROSS_COMPILE_OPT[@]}" 2>>vng.log
+	popd
+	echo "${run_cmd[@]}"
+	"${run_cmd[@]}"
+fi
