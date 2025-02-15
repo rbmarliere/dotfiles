@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -euo pipefail
+
+HOST=$(uname -p)
+ROOT=
+ARCH=$HOST
+DEBOOTSTRAP=/usr/sbin/debootstrap
+
+usage() {
+	echo
+	echo "usage: $0 [options]"
+	echo
+	echo "  -h		display this message"
+	echo "  -r		target path to build the root filesystem"
+	echo "  -a		target architecture (default: $HOST)"
+	echo
+}
+
+die() {
+	echo "ERROR: $1" >&2
+	exit 1
+}
+
+while getopts "hr:a:" OPT; do
+	case $OPT in
+	h)
+		usage
+		exit 0
+		;;
+	r) ROOT="$OPTARG" ;;
+	a) ARCH="$OPTARG" ;;
+	?)
+		usage
+		exit 1
+		;;
+	esac
+done
+
+[[ -f $DEBOOTSTRAP ]] || "$DEBOOTSTRAP not found"
+[[ -n $ROOT ]] || die "no target path specified"
+
+DOTFILES=git,make,stow
+INCLUDE=--include=$DOTFILES
+
+if [[ $ARCH == "$HOST" ]]; then
+	sudo $DEBOOTSTRAP "$INCLUDE" sid "$ROOT"
+else
+	sudo $DEBOOTSTRAP --arch "$ARCH" --foreign "$INCLUDE" sid "$ROOT"
+	sudo chroot "$ROOT" bash -c "/debootstrap/debootstrap --second-stage"
+fi
+
+KSELFTESTS="build-essential flex bison libasound2-dev libcap-ng-dev libcap-dev libnuma-dev libmnl-dev pkg-config rsync libpopt-dev libssl-dev libelf-dev clang liburing-dev libfuse3-dev libfuse-dev"
+LTP="python3 python3-asyncssh python3-msgpack"
+sudo chroot "$ROOT" bash -c "apt install -y $KSELFTESTS $LTP"
+
+# networking..?
+# sudo chroot "$ROOT" bash -c "git clone https://github.com/rbmarliere/dotfiles ~/dotfiles && make -C ~/dotfiles"
