@@ -44,7 +44,7 @@ local create_groups = function()
 	vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile", "TextChanged", "InsertLeave" }, {
 		group = "TodoHighlighting",
 		callback = function()
-			vim.cmd([[syntax match TodoHighlight /\vTODO:|\vNOTE:/]])
+			vim.cmd([[syntax match TodoHighlight /\vTODO|\vNOTE/]])
 		end,
 	})
 
