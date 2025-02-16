@@ -4,41 +4,107 @@ set -euo pipefail
 # set -x
 
 VERBOSE=0
-CLEAR=0
+CLEAN=0
+ARCH=x86_64
+NPROC=$(nproc)
+BEAR=()
 
-_die() {
+# openSUSE cross-compile settings to pass through
+# https://github.com/arighi/virtme-ng/blob/ee3f58a787dac6bca492c7c9e3ea235b508852e3/virtme_ng/run.py#L489
+declare -A ARCHMAP
+ARCHMAP["arm64"]="/usr/bin/aarch64-suse-linux-"
+ARCHMAP["armhf"]="/usr/bin/arm-suse-linux-gnueabi-"
+ARCHMAP["ppc64el"]="/usr/bin/powerpc64le-suse-linux-"
+ARCHMAP["s390x"]="/usr/bin/s390x-suse-linux-"
+ARCHMAP["riscv64"]="/usr/bin/riscv64-suse-linux-"
+
+die() {
 	echo "ERROR: $1" >&2
 	exit 1
 }
 
-_preflight() {
-	[[ $(git rev-parse --is-inside-work-tree) = "true" ]] || _die "refusing to run outside worktree"
-	git remote -v | grep -q "linux-test-project/ltp" || _die "refusing to run outside LTP repository"
+setcc() {
+	if [[ $ARCH = $(uname -p) ]]; then
+		CC="/usr/bin/gcc"
+	else
+		CC="${ARCHMAP[$ARCH]}gcc"
+	fi
+	export CC
+	if [[ ! -f $CC ]]; then
+		declare -A PKGMAP
+		GCC="14"
+		PKGMAP["arm64"]="cross-aarch64-gcc$GCC"
+		PKGMAP["armhf"]="cross-arm-gcc$GCC"
+		PKGMAP["ppc64el"]="cross-ppc64le-gcc$GCC"
+		PKGMAP["s390x"]="cross-s390x-gcc$GCC"
+		PKGMAP["riscv64"]="cross-riscv64-gcc$GCC"
+		PKGMAP["x86_64"]="gcc$GCC"
+		sudo zypper install "${PKGMAP[$ARCH]}" || die "compiler $CC not found"
+	fi
+}
+
+_pre_flight() {
+	[[ $(git rev-parse --is-inside-work-tree) = "true" ]] || die "refusing to run outside a git worktree"
+	git remote -v | grep -q "linux-test-project/ltp" || die "refusing to run outside LTP repository"
+	[[ $(git rev-parse --show-toplevel) = $(pwd) ]] || die "refusing to run outside LTP repository top level dir."
+	rm build.log || true
+	rm compile_commands.json || true
+	sudo chown "$(whoami)" -R .
+	git submodule update --init --recursive
 }
 
 configure() {
 	local KDIR=${1:?missing kernel directory}
-	make autotools
-	./configure --with-linux-dir="$KDIR"
+	local HOST=
+	[[ $ARCH != $(uname -p) ]] && HOST="--host=$(basename "${CC%-gcc}")"
+
+	echo make autotools
+	echo ./configure --with-linux-dir="$KDIR" $HOST
+	if [[ $VERBOSE -gt 0 ]]; then
+		make autotools
+		./configure --with-linux-dir="$KDIR" $HOST
+	else
+		make autotools >build.log 2>&1
+		./configure --with-linux-dir="$KDIR" $HOST >>build.log 2>&1
+	fi
+}
+
+_pre_build() {
+	setcc
+	if [[ $CLEAN -gt 0 || ! -f ./include/mk/config.mk ]] || ! grep -q "CC.*:= $CC" include/mk/config.mk; then
+		# clean and re-configure also on $ARCH mismatch
+		echo vng -r "$KDIR" -c
+		vng -r "$KDIR" -c
+		echo vng -r "$KDIR" -b
+		vng -r "$KDIR" -b
+		echo make clean
+		if [[ $VERBOSE -gt 0 ]]; then
+			make clean
+		else
+			make clean >/dev/null 2>&1
+		fi
+		configure "$KDIR"
+	fi
 }
 
 build() {
-	local KDIR=${1:?missing kernel directory}
-	local TARGET=all
-
+	local KDIR=${KDIR:-$LINUX/ltp}
+	local TARGET=(all)
 	local TEST_FILE_DIR=${2:-""}
 	if [[ $TEST_FILE_DIR != "" ]]; then
-		TARGET="-C $TEST_FILE_DIR $3"
+		TARGET=(-C "$TEST_FILE_DIR" "$3")
 	fi
 
-	sudo chown "$(whoami)" -R .
-	git submodule update --init --recursive
+	_pre_build
 
-	if [[ ! -f ./configure && ! -f ./include/config.h ]]; then
-		configure "$KDIR"
+	echo "${BEAR[@]}" make -j"$NPROC" "${TARGET[@]}"
+	if [[ $VERBOSE -gt 0 ]]; then
+		"${BEAR[@]}" make -j"$NPROC" "${TARGET[@]}"
+	else
+		"${BEAR[@]}" make -j"$NPROC" "${TARGET[@]}" >>build.log 2>&1
 	fi
 
-	bear --append -- make -j"$(nproc)" $TARGET
+	return 0
 }
 
 metadata() {
@@ -48,9 +114,16 @@ metadata() {
 	fi
 
 	pushd metadata
-	sudo zypper search --installed-only asciidoc || _die "install asciidoc first and re-configure"
 
-	make -j"$(nproc)"
+	sudo zypper search --installed-only asciidoc || die "install asciidoc first and re-configure"
+
+	echo make -j"$NPROC"
+	if [[ $VERBOSE -gt 0 ]]; then
+		make -j"$NPROC"
+	else
+		make -j"$NPROC" >>build.log 2>&1
+	fi
+
 	popd
 
 	xdg-open docparse/metadata.html
@@ -58,40 +131,32 @@ metadata() {
 
 install() {
 	local ROOT=${1:?missing root filesystem}
-
 	local TEST_FILE_DIR=${2:-""}
+
+	if [[ $CLEAN -gt 0 ]]; then
+		echo sudo rm -rf "$ROOT/opt/ltp"
+		sudo rm -rf "$ROOT/opt/ltp"
+	fi
+
 	if [[ $TEST_FILE_DIR != "" && -d $ROOT/opt/ltp/testcases/bin && -f $ROOT/opt/ltp/kirk ]]; then
-		sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin"
+		echo sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin"
+		sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin" || return 1
 	else
-		sudo make -j"$(nproc)" DESTDIR="$ROOT" install || _die "installation failed, try a full build first"
-	fi
-}
-
-vng-run() {
-	VERBOSE_OPT=
-	[[ $VERBOSE -gt 0 ]] && VERBOSE_OPT=-v
-
-	local KDIR=${1:?missing kernel directory}
-	local ROOT=${2:?missing root filesystem}
-	shift 2
-
-	if [[ ! -f "$KDIR/vmlinux" ]]; then
-		pushd "$KDIR"
-		vng -k
-		vng -b
-		popd
+		echo sudo make -j"$NPROC" DESTDIR="$ROOT" install
+		if [[ $VERBOSE -gt 0 ]]; then
+			sudo make -j"$NPROC" DESTDIR="$ROOT" install || return 1
+		else
+			sudo make -j"$NPROC" DESTDIR="$ROOT" install >>build.log 2>&1 || return 1
+		fi
 	fi
 
-	set -x
-	sudo vng --run "$KDIR" --root "$ROOT" $VERBOSE_OPT --exec "$*"
-	set +x
+	return 0
 }
 
 run() {
 	local FILE=${1:?missing test file}
 	shift
-
-	[[ -f $FILE ]] || _die "file $FILE not found"
+	[[ -f $FILE ]] || die "file $FILE not found"
 
 	local KDIR=
 	local ROOT=
@@ -108,32 +173,41 @@ run() {
 			TEST_ARGS=("$@")
 			break
 			;;
-		*)
-			if [[ -z $KDIR ]]; then
-				KDIR=$1
-			elif [[ -z $ROOT ]]; then
-				ROOT=$1
-			else
-				_die "unexpected argument: $1"
-			fi
+		-r)
+			KDIR=$1
+			shift
+			;;
+		-R)
+			ROOT=$1
+			shift
 			;;
 		esac
 		shift
 	done
 
-	KDIR=${KDIR:-$LINUX/current}
-	ROOT=${ROOT:-$ROOTS/x86_64/sid}
+	KDIR=${KDIR:-$LINUX/ltp}
+	ROOT=${ROOT:-$ROOTS/$ARCH/sid}
 	TEST_FILE_PATH=$(realpath "$FILE")
 	TEST_FILE_NAME=$(basename "$TEST_FILE_PATH")
 	TEST_FILE_DIR=$(dirname "$TEST_FILE_PATH")
 	TEST_NAME=${TEST_FILE_NAME%.*}
 
 	build "$KDIR" "$TEST_FILE_DIR" "$TEST_NAME"
-	install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"
-	vng-run "$KDIR" "$ROOT" "/opt/ltp/testcases/bin/$TEST_NAME" "${TEST_ARGS[@]}"
+	if ! install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"; then
+		# trigger full build if unsuccessful partial install
+		build "$KDIR"
+		install "$ROOT"
+	fi
+
+	echo vng -a "$ARCH" -r "$KDIR" -e "/opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
+	if [[ $VERBOSE -gt 0 ]]; then
+		vng -a "$ARCH" -r "$KDIR" -v -e "/opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
+	else
+		vng -a "$ARCH" -r "$KDIR" -e "/opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
+	fi
 }
 
-help() {
+usage() {
 	set +u
 	echo
 	case $1 in
@@ -141,7 +215,10 @@ help() {
 		echo "usage: $0 configure <kernel source directory>"
 		;;
 	build)
-		echo "usage: $0 build <kernel source directory> [<testcase dir> <test>]"
+		echo "usage: $0 build [options] <kernel source directory> [<testcase dir> <test>]"
+		echo
+		echo "options:"
+		echo "    -b	--bear		Use bear to build a compile_commands.json database"
 		;;
 	metadata)
 		echo "usage: $0 metadata [<kernel source directory>]"
@@ -149,27 +226,24 @@ help() {
 	install)
 		echo "usage: $0 install <destination root filesystem>"
 		;;
-	vng-run)
-		echo "usage: $0 vng-run <kernel source directory> <destination root filesystem> <command>"
-		;;
 	run)
-		echo "usage: $0 run <test_file.c> [<kernel source directory> [<destination root filesystem>]] [-- <additional arguments to the test>]"
+		echo "usage: $0 run <test_file.c> [-r <kernel source directory>] [-R <destination root filesystem>] [-- <additional arguments to the test>]"
 		echo
 		echo "This command builds test_file.c, installs and run it with sane defaults."
 		;;
 	*)
-		echo "usage: $0 [global options] <command> [arguments]"
+		echo "usage: $0 [options] <command>"
 		echo
-		echo "global options:"
-		echo "    -v	--verbose		Increase verbosity"
-		echo "    -c	--clear			Clear all builds"
+		echo "options:"
+		echo "    -v		Increase verbosity"
+		echo "    -a		Target architecture (available: arm64, armhf, ppc64el, s390x, riscv64)"
+		echo "    -c		Clean all builds"
 		echo
 		echo "commands:"
 		echo "    configure"
 		echo "    build"
 		echo "    metadata"
 		echo "    install"
-		echo "    vng-run"
 		echo "    run"
 		echo
 		echo "use $0 help <command> for more information about a command"
@@ -179,63 +253,61 @@ help() {
 }
 
 if [[ $# -eq 0 ]]; then
-	help
+	usage
+	exit 1
 fi
 
-while [[ $# -gt 0 ]]; do
-	case $1 in
-	-v|--verbose)
-		shift
-		VERBOSE=1
-		;;
-	-c|--clear)
-		shift
-		CLEAR=1
-		;;
-	help)
-		shift
-		help "$@"
-		break
-		;;
-	configure)
-		shift
-		_preflight
-		configure "$@"
-		break
-		;;
-	build)
-		shift
-		_preflight
-		build "$@"
-		break
-		;;
-	metadata)
-		shift
-		_preflight
-		metadata "$@"
-		break
-		;;
-	install)
-		shift
-		_preflight
-		install "$@"
-		break
-		;;
-	vng-run)
-		shift
-		_preflight
-		vng-run "$@"
-		break
-		;;
-	run)
-		shift
-		_preflight
-		run "$@"
-		break
+while getopts "vca:" OPT; do
+	case "$OPT" in
+	v) VERBOSE=1 ;;
+	c) CLEAN=1 ;;
+	a)
+		ARCH="$OPTARG"
+		[[ $ARCH != "$HOST" && -z ${ARCHMAP[$ARCH]+_} ]] && die "unsupported architecture"
 		;;
 	*)
-		help
-		break
+		usage
+		exit 1
 		;;
 	esac
 done
+shift $((OPTIND - 1))
+
+SUBCMD=$1
+shift
+case "$SUBCMD" in
+help)
+	usage "$@"
+	;;
+configure)
+	_pre_flight
+	configure "$@"
+	;;
+build)
+	OPTIND=1
+	while getopts "b" OPT; do
+		case "$OPT" in
+		b) BEAR=(bear --append --) ;;
+		*)
+			usage build
+			exit 1
+			;;
+		esac
+	done
+	shift $((OPTIND - 1))
+	_pre_flight
+	build "$@"
+	;;
+metadata)
+	_pre_flight
+	metadata "$@"
+	;;
+install)
+	_pre_flight
+	install "$@"
+	;;
+run)
+	_pre_flight
+	run "$@"
+	;;
+esac
