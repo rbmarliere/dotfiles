@@ -130,8 +130,11 @@ done
 
 # finish with some special logic around my own addresses
 notmuch tag --batch <<EOF
+# add imap folders tag
++spam -- tag:new and folder:marliere.net/all/spam
++inbox -- tag:new and folder:marliere.net/all/inbox
 # remove inbox tag if message not sent to me
--inbox -- tag:new and tag:inbox and not (to:rbm@opensuse.org or to:rbm@suse.com or to:ricardo.marliere@suse.com or to:rbmarliere@gmail.com or to:ricardo@marliere.net)
+-inbox -- tag:new and tag:inbox and not (to:rbm@opensuse.org or to:rbm@suse.com or to:ricardo.marliere@suse.com or to:rbmarliere@gmail.com or to:*marliere.net)
 # remove new tag
 -new -- tag:new
 EOF
