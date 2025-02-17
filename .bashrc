@@ -2,9 +2,6 @@ if [[ $- != *i* ]]; then
 	return
 fi
 
-[[ -f $HOME/.bash_aliases ]] && source "$HOME/.bash_aliases"
-[[ -f $HOME/.bash_env ]] && source "$HOME/.bash_env"
-
 # https://gist.github.com/mcattarinussi/834fc4b641ff4572018d0c665e5a94d3
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 export GPG_TTY=$(tty)
@@ -87,3 +84,6 @@ if [[ -f /etc/profile.d/fzf-bash.sh ]]; then
 	# tumbleweed
 	source /etc/profile.d/fzf-bash.sh
 fi
+
+[[ -f $HOME/.bash_aliases ]] && source "$HOME/.bash_aliases"
+[[ -f $HOME/.bashrc.local ]] && source "$HOME/.bashrc.local"
