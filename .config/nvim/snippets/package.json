@@ -17,6 +17,10 @@
         "path": "./gitcommit.json"
       },
       {
+        "language": "gitcommit",
+        "path": "./mail.json"
+      },
+      {
         "language": "lua",
         "path": "./lua.json"
       },
