@@ -7,10 +7,11 @@ return {
 			load_on_setup = false,
 		},
 		auto_create = function()
-			local cmd = "git rev-parse --is-inside-work-tree"
-			return vim.fn.system(cmd) == "true\n"
+			local is_git = vim.fn.system("git rev-parse --is-inside-work-tree") == "true\n"
+			local is_pkg = vim.fn.getcwd():find(vim.fn.expand("~/tumbleweed")) ~= nil
+			return is_git or is_pkg
 		end,
-		-- continue_restore_on_error = false,
+		continue_restore_on_error = true,
 		cwd_change_handling = true,
 		save_extra_cmds = {
 			-- https://github.com/rmagatti/auto-session/issues/173
