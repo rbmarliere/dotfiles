@@ -87,6 +87,9 @@
 	smtpencryption = tls
 	b4-really-reflect-via = /usr/bin/msmtp
 
+[b4]
+	prep-cover-strategy = branch-description
+
 [sendemail.linux]
 	tocmd ="get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
 	cccmd ="get_maintainer.pl --nogit --nogit-fallback --norolestats --nom"
@@ -110,8 +113,15 @@
 [color]
 	ui = true
 
-[includeIf "gitdir:/"]
-	path = ~/src/.git/config
-
-[b4]
-	prep-cover-strategy = branch-description
+[includeIf "hasconfig:remote.*.url:*linux-test-project*/**"]
+	path = suse
+[includeIf "hasconfig:remote.*.url:*suse.com*/**"]
+	path = suse
+[includeIf "hasconfig:remote.*.url:*suse.de*/**"]
+	path = suse
+[includeIf "hasconfig:remote.*.url:*openSUSE*/**"]
+	path = opensuse
+[includeIf "gitdir:~/tumbleweed/"]
+	path = opensuse
+[includeIf "hasconfig:remote.*.url:*os-autoinst*/**"]
+	path = opensuse
