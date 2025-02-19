@@ -86,6 +86,7 @@
 	smtpserver = "/usr/bin/msmtp"
 	smtpencryption = tls
 	b4-really-reflect-via = /usr/bin/msmtp
+	envelopesender = auto  # automatically select msmtp account profile
 
 [b4]
 	prep-cover-strategy = branch-description
