@@ -1,0 +1,19 @@
+# see oscrc(5) man page for the full list of available options
+
+[general]
+apiurl=https://api.opensuse.org
+checkout_no_colon=1
+project_separator=/
+
+[https://api.opensuse.org]
+user=rmarliere
+realname = Ricardo B. Marlière
+email = rbm@opensuse.org
+credentials_mgr_class=osc.credentials.KeyringCredentialsManager:keyring.backends.SecretService.Keyring
+trusted_prj=openSUSE:Tumbleweed devel:libraries:c_c++
+
+[https://api.suse.de]
+user=rmarliere
+realname = Ricardo B. Marlière
+email = rbm@suse.com
+credentials_mgr_class=osc.credentials.KeyringCredentialsManager:keyring.backends.SecretService.Keyring
