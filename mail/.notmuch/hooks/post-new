@@ -59,12 +59,11 @@ notmuch search --output=messages "$FILTER" | while read -r MESSAGE_ID; do
 	LIST_ID=$(echo "$MESSAGE" | sed 's/"[Ll]ist-[Ii][Dd]"/"list-id"/g' | jq -r '.. | objects | select(has("headers")) | .headers."list-id"')
 
 	# continue if there is no List-Id header present
-	if [[ $LIST_ID == "null" ]]; then
+	if [[ $LIST_ID == "null" || -z "$LIST_ID" ]]; then
+		[[ $VERBOSE -gt 0 ]] && echo List-Id is "null"
 		[[ -n $CLEAR ]] && notmuch tag $CLEAR -- "$MESSAGE_ID"
 		continue
 	fi
-
-	[[ $VERBOSE -gt 0 ]] && echo "$LIST_ID"
 
 	# parse the List-Id header
 	NEW_TAG=$(
