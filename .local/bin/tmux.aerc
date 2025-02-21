@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -euo pipefail
+
+NAME="aerc"
+TMUX="tmux -L $NAME"
+echo -ne "\033]0;$NAME\007"
+sleep 1
+
+if ! $TMUX list-sessions 2>/dev/null; then
+	$TMUX new-session -d -s $NAME -c "$HOME/mail" "aerc; exec bash"
+	$TMUX set-option -pg allow-rename off
+	$TMUX set-option -wg automatic-rename off
+	$TMUX set-option -g set-titles off
+fi
+
+$TMUX attach -t $NAME

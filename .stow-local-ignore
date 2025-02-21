@@ -1,4 +1,5 @@
 .deps
+mail
 .config/systemd/user
 .git
 .gitmodules

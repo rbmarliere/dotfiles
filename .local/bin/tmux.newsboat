@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -euo pipefail
+
+NAME="newsboat"
+TMUX="tmux -L $NAME"
+echo -ne "\033]0;$NAME\007"
+sleep 1
+
+if ! $TMUX list-sessions 2>/dev/null; then
+	$TMUX new-session -d -s $NAME "vi ~/.config/newsboat/urls; exec bash"
+	$TMUX new-window -t "$NAME:1"
+	$TMUX send-keys "newsboat; exec bash" C-m
+fi
+
+$TMUX attach -t $NAME

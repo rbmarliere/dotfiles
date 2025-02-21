@@ -1,13 +1,1 @@
-#!/bin/bash
-
-echo -ne "\033]0;mail\007"
-
-TMUX="tmux -L mail"
-if ! $TMUX list-sessions 2>/dev/null; then
-	$TMUX new-session -d -s mail -c "$HOME/mail" "aerc"
-	$TMUX set-option -pg allow-rename off
-	$TMUX set-option -wg automatic-rename off
-	$TMUX set-option -g set-titles off
-fi
-
-$TMUX attach -t mail
+tmux.aerc

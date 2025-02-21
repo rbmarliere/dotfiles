@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -euo pipefail
+
+NAME="weechat"
+TMUX="tmux -L $NAME"
+echo -ne "\033]0;$NAME\007"
+sleep 1
+
+if ! $TMUX list-sessions 2>/dev/null; then
+	$TMUX new-session -d -s $NAME "vi ~/.local/share/weechat/logs; exec bash"
+	$TMUX new-window -t "$NAME:1"
+	$TMUX send-keys "weechat; exec bash" C-m
+fi
+
+$TMUX attach -t $NAME

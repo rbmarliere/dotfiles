@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Newsboat
-Exec=foot -H bash -l -c "sway.newsboat"
+Exec=foot -a newsboat -H bash -l -c "sway.newsboat"
 Type=Application

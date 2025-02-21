@@ -17,9 +17,9 @@ swaymsg workspace 6, layout tabbed
 i3_toolwait foot
 
 swaymsg workspace 4, layout tabbed
-i3_toolwait -- foot -H bash -l -c "sway.newsboat"
-i3_toolwait -- foot -H bash -l -c "sway.weechat"
-i3_toolwait --waitfor mail -- foot -a mail -H bash -l -c "sway.aerc"
+i3_toolwait --waitfor newsboat -- foot -a newsboat -H bash -l -c "sway.newsboat"
+i3_toolwait --waitfor weechat -- foot -a weechat -H bash -l -c "sway.weechat"
+i3_toolwait --waitfor aerc -- foot -a aerc -H bash -l -c "sway.aerc"
 i3_toolwait --waitfor notes -- foot -a notes -H bash -l -c "sway.notes"
 
 swaymsg workspace 8
@@ -32,4 +32,4 @@ i3_toolwait --waitfor todoist flatpak run com.todoist.Todoist
 swaymsg [class=Todoist] resize shrink width 500px
 
 i3_toolwait --waitfor org.gnome.Nautilus nautilus
-swaymsg '[app_id="org.gnome.Nautilus"]' move to scratchpad
+swaymsg [app_id="org.gnome.Nautilus"] move to scratchpad

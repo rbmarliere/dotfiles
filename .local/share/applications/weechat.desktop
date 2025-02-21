@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Weechat
-Exec=foot -H bash -l -c "sway.weechat"
+Exec=foot -a weechat -H bash -l -c "sway.weechat"
 Type=Application

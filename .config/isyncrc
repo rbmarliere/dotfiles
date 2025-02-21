@@ -3,6 +3,8 @@ Host mail.marliere.net
 Port 143
 User ricardo@marliere.net
 PassCmd "pass marliere.net"
+#Pass ""
+#SSLType STARTTLS
 
 IMAPStore remote
 Account marliere.net
@@ -28,6 +30,7 @@ Near :local:
 Patterns * !archive !important !spam
 Create Both
 Remove Both
+#Sync Pull New ReNew Push Flags
 Sync Pull New Upgrade
 Expunge None
 
