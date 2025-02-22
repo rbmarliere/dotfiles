@@ -39,7 +39,6 @@ return {
 		},
 		sources = {
 			default = { "obsidian", "obsidian_new", "obsidian_tags", "lazydev", "lsp", "path", "snippets", "buffer" },
-			cmdline = {},
 			providers = {
 				lazydev = {
 					name = "LazyDev",
