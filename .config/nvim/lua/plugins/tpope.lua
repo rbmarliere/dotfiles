@@ -23,7 +23,6 @@ return {
 				end,
 			},
 			"tommcdo/vim-fugitive-blame-ext",
-			"rbong/vim-flog",
 		},
 		keys = {
 			{ "<Leader>gg", ":tab Git<CR>:tabm 0<CR>" },
@@ -41,7 +40,20 @@ return {
 			{ "<Leader>gsO", ":G set-origin origin" },
 			{ "<Leader>gsU", ":G branch -u main" },
 			{ "<Leader>gse", ":G send-email --cover-letter" },
-			{ "<Leader>gsc", ":read !git show-commit " },
+			{
+				"<Leader>gsc",
+				function()
+					local sha = vim.fn.input("Commit SHA: ")
+					if sha == "" then
+						return
+					end
+					local output = vim.api.nvim_exec("silent! G show-commit " .. sha, true)
+					vim.fn.setreg("+", output)
+					print("Commit copied to clipboard!")
+				end,
+				desc = "Copy git show-commit output to clipboard",
+			},
+			{ "<Leader>gsC", ":read !git show-commit ", desc = "Insert git show-commit output to current buffer" },
 			{ "<Leader>gS", ":G amende -s<CR>" },
 		},
 		config = function()
@@ -67,5 +79,13 @@ return {
 				end,
 			})
 		end,
+	},
+	{
+		"rbong/vim-flog",
+		lazy = true,
+		cmd = { "Flog", "Flogsplit", "Floggit" },
+		dependencies = {
+			"tpope/vim-fugitive",
+		},
 	},
 }
