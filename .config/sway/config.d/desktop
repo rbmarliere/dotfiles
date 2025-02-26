@@ -55,6 +55,6 @@ for_window [app_id="evolution-alarm-notify"] floating enable
 exec env TERM=$term /usr/bin/tmux new-session -d "~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh"
 exec ~/.local/bin/sway.autostart
 
-bindsym $mod+shift+n exec ~/.local/bin/sway.launcher notes sway.notes
-bindsym $mod+shift+m exec ~/.local/bin/sway.launcher aerc sway.aerc
+bindsym $mod+Shift+n exec sway.launcher notes sway.notes
+bindsym $mod+Shift+m exec sway.launcher aerc sway.aerc
 bindsym $mod+t exec swaymsg [class=Todoist] focus

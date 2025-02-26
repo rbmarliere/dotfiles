@@ -57,7 +57,7 @@ bindsym $mod+v splitv
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle all
-bindsym $mod+f fullscreen
+bindsym $mod+Shift+f fullscreen
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 bindsym $mod+p focus parent
@@ -83,4 +83,5 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 bindsym $mod+alt+n exec swaync-client -t -sw && sleep .1 && swaymsg [app_id=swaync] focus
-bindsym $mod+shift+alt+n exec swaync-client -C
+bindsym $mod+Shift+alt+n exec swaync-client -C
+bindsym $mod+f exec $term bash -l -c "unset HISTFILE; tmux_loader"

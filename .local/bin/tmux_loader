@@ -3,7 +3,7 @@
 
 source "$HOME/.bashrc"
 
-if [ -z "$PROJECTS" ]; then
+if [[ -z $PROJECTS ]]; then
 	echo 'PROJECTS var not set'
 	exit 1
 fi
@@ -17,7 +17,7 @@ fi
 SESSION=$(basename "$(dirname "$SELECTED")")/$(basename "$SELECTED")
 SESSION=$(echo "$SESSION" | tr . _ | tr ':' _)
 
-if ! tmux has-session -t="$SESSION" 2> /dev/null; then
+if ! tmux has-session -t "$SESSION" 2>/dev/null; then
 	tmux new-session -ds "$SESSION" -c "$SELECTED"
 fi
 
