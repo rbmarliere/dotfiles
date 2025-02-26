@@ -1,9 +1,11 @@
 aerc
 isync
+jq
 libsixel-utils
 lynx
 msmtp
 notmuch
 pandoc
 password-store
+python3-lieer
 urlscan
