@@ -33,7 +33,7 @@ local function write_branch_description(branch, content)
 	return success
 end
 
-local function edit_b4_cover()
+local function edit_cover()
 	local branch = get_current_branch()
 	if branch == nil then
 		vim.api.nvim_err_writeln("Not in a git repository")
@@ -74,9 +74,8 @@ local function edit_b4_cover()
 		end,
 	})
 end
-vim.api.nvim_create_user_command("B4EditCover", edit_b4_cover, {})
 
-local function send_b4(args)
+local function send(args)
 	local cmd = "b4 send" .. (args and " " .. args or "")
 
 	vim.cmd("tabnew")
@@ -107,15 +106,50 @@ local function send_b4(args)
 		vim.cmd("startinsert")
 	end)
 end
-
 vim.api.nvim_create_user_command("B4Send", function(opts)
-	send_b4(opts.args)
+	send(opts.args)
 end, { nargs = "*" })
+
+local function update_trailers()
+	vim.cmd("tabnew")
+
+	local buf = vim.api.nvim_get_current_buf()
+
+	vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+	vim.api.nvim_set_option_value("swapfile", false, { buf = buf })
+
+	local term_ok, term_id = pcall(vim.fn.termopen, "b4 trailers --update", {
+		on_exit = function(job_id, exit_code, event_type)
+			if exit_code == 0 then
+				vim.api.nvim_echo({ { "b4 trailers --update completed successfully", "Normal" } }, true, {})
+			else
+				vim.api.nvim_err_writeln(string.format("b4 trailers --update failed with exit code: %d", exit_code))
+			end
+		end,
+		stderr_buffered = true,
+		stdout_buffered = true,
+	})
+
+	if not term_ok then
+		vim.api.nvim_err_writeln("Failed to open terminal: " .. vim.inspect(term_id))
+		return
+	end
+
+	vim.schedule(function()
+		vim.cmd("startinsert")
+	end)
+end
+vim.api.nvim_create_user_command("B4UpdateTrailers", update_trailers, {})
 
 -- https://b4.docs.kernel.org/en/latest/contributor/overview.html
 local opts = { noremap = true }
-vim.keymap.set("n", "<Leader>bn", ":!b4 prep --enroll", opts)
-vim.keymap.set("n", "<Leader>be", edit_b4_cover, { noremap = true, silent = true, desc = "!b4 prep --edit-cover" })
-vim.keymap.set("n", "<Leader>bc", ":!b4 prep --auto-to-cc<CR>:!b4 trailers --update<CR>:!b4 prep --check<CR>", opts)
+opts.desc = "b4 prep --enroll"
+vim.keymap.set("n", "<Leader>bn", ":!b4 prep --enroll<CR>", opts)
+opts.desc = "b4 prep --edit-cover"
+vim.keymap.set("n", "<Leader>be", edit_cover, opts)
+opts.desc = "b4 prep --auto-to-cc; b4 trailers --update; b4 prep --check"
+vim.keymap.set("n", "<Leader>bc", ":!b4 prep --auto-to-cc<CR>:B4UpdateTrailers<CR>:!b4 prep --check<CR>", opts)
+opts.desc = "b4 send --reflect"
 vim.keymap.set("n", "<Leader>bs", ":B4Send --reflect", opts)
+opts.desc = "b4 shazam"
 vim.keymap.set("n", "<Leader>ba", ":!b4 shazam ", opts)
