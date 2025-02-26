@@ -11,7 +11,7 @@
 # configured here named ".notmuch".
 #
 [database]
-path=/home/rbmarliere/mail/
+path=/mnt/md0/mail
 
 # User configuration
 #
