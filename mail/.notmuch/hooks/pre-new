@@ -196,18 +196,16 @@ fi
 
 if [[ -f ~/src/extra/lieer/master/venv/bin/activate ]]; then
 	source ~/src/extra/lieer/master/venv/bin/activate || die 'could not activate lieer venv'
+fi
 
-	if [[ -d $DB/gmail.com ]]; then
-		echo "-------------------------"
-		echo "SYNC $DB/gmail.com"
-		gmi sync -C $DB/gmail.com -s
-	fi
+if [[ -d $DB/gmail.com ]] && type gmi &> /dev/null; then
+	echo "-------------------------"
+	echo "SYNC $DB/gmail.com"
+	gmi sync -C $DB/gmail.com -s
+fi
 
-	if [[ -d $DB/suse.com ]]; then
-		echo "-------------------------"
-		echo "SYNC $DB/suse.com"
-		gmi sync -C $DB/suse.com -s
-	fi
-
-	deactivate
+if [[ -d $DB/suse.com ]] && type gmi &> /dev/null; then
+	echo "-------------------------"
+	echo "SYNC $DB/suse.com"
+	gmi sync -C $DB/suse.com -s
 fi
