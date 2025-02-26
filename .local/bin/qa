@@ -340,6 +340,21 @@ qa-stop-job() {
 	qa api -X POST jobs/"$JOB_ID"/cancel
 }
 
+qa-get-job-incidents() {
+	local JOB_ID=${1:?usage: qa-get-job-incidents JOB_ID}
+	qa-get-job "$JOB_ID" | jq -r '
+		.job.settings
+		| to_entries
+		| map(select(.VAR | endswith("_ISSUES")))
+		| .[] | "\(.VAR) \(.value)"' 2>/dev/null | while read -r VAR ISSUES_LIST; do
+		echo "$VAR"
+		IFS=',' read -ra ISSUES <<<"$ISSUES_LIST"
+		for ISSUE in "${ISSUES[@]}"; do
+			curl -s "http://dashboard.qam.suse.de/api/incidents/$ISSUE" | jq --arg ISSUE "$ISSUE" -r '.rr_number as $RR_NUMBER | .packages[] | "    \($ISSUE):\($RR_NUMBER) \(.)"' 2>/dev/null || echo "    $ISSUE: 404"
+		done
+	done
+}
+
 qa-stop-build() {
 	local URL=${1:?usage: qa-stop-build URL}
 	local JOBS
