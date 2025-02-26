@@ -86,31 +86,15 @@ qa-load-templates() {
 
 qa-dump-templates() {
 	_set_host
-
-	local GROUP=$1
-	shift
-
-	if [[ -z $GROUP ]]; then
-		echo "usage: qa-dump GROUP"
-		return 1
-	fi
-
-	_qa openqa-dump-templates $HOST_OPT --group "$GROUP" --json "$@"
+	local GROUP_ID=${1:?usage: qa-dump-templates GROUP_ID}
+	_qa openqa-dump-templates $HOST_OPT --group "$GROUP_ID" --json "$@"
 }
 
 qa-post-schedule() {
 	_host_check || return
-
-	GID=$1
-	shift
-	TEMPLATE=$1
-	shift
-	if [[ -z $GID || -z $TEMPLATE ]]; then
-		echo "usage: qa-post-schedule GID FILE"
-		return 1
-	fi
-
-	qa api -X POST job_templates_scheduling/"$GID" schema=JobTemplates-01.yaml --param-file template="$TEMPLATE"
+	GROUP_ID=${1:?usage: qa-post-schedule GROUP_ID FILE}
+	TEMPLATE=${2:?usage: qa-post-schedule GROUP_ID FILE}
+	qa api -X POST job_templates_scheduling/"$GROUP_ID" schema=JobTemplates-01.yaml --param-file template="$TEMPLATE"
 }
 
 qa-post() {
@@ -304,20 +288,20 @@ qa-clone-build() {
 	local CLONE_CUR=0
 	local CUR=1
 	[[ -n $NO_CONFIRM ]] && SKIP_CONFIRMATION=1
-	for ID in "${JOBS[@]}"; do
-		echo "ID=$ID :: $CUR/${#JOBS[@]}"
+	for JOB_ID in "${JOBS[@]}"; do
+		echo "JOB_ID=$JOB_ID :: $CUR/${#JOBS[@]}"
 		if [[ $CLONE_ALL -ne 1 ]]; then
-			STATUS=$(qa api jobs/"$ID" | jq -r '.job.result')
+			STATUS=$(qa api jobs/"$JOB_ID" | jq -r '.job.result')
 			[[ $STATUS == "failed" && $CLONE_FAILED ]] && CLONE_CUR=1
 			[[ $STATUS == "skipped" && $CLONE_SKIPPED ]] && CLONE_CUR=1
 		fi
 		if [[ $CLONE_ALL -eq 1 || $CLONE_CUR -eq 1 ]]; then
-			echo "cloning $ID..."
+			echo "cloning $JOB_ID..."
 			if [[ $WITHIN_INSTANCE -eq 1 ]]; then
-				qa-clone-job -w "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
+				qa-clone-job -w "${QA_CLONE_OPT[@]}" "$JOB_ID" "${QA_CLONE_ARG[@]}" $GROUP
 			else
-				ID=${URL//overview*/$ID}
-				qa-clone-job "${QA_CLONE_OPT[@]}" "$ID" "${QA_CLONE_ARG[@]}" $GROUP
+				JOB_ID=${URL//overview*/$JOB_ID}
+				qa-clone-job "${QA_CLONE_OPT[@]}" "$JOB_ID" "${QA_CLONE_ARG[@]}" $GROUP
 			fi
 		fi
 		CLONE_CUR=0
@@ -332,27 +316,18 @@ qa-clone-build() {
 }
 
 qa-get-job() {
-	local ID=$1
-	shift
-	if [[ -z $ID ]]; then
-		echo "usage: qa-get-job ID"
-		return 1
-	fi
-	qa api jobs/"$ID"
+	local JOB_ID=${1:?usage: qa-get-job JOB_ID}
+	qa api jobs/"$JOB_ID"
 }
 
 qa-restart-job() {
-	local ID=$1
+	local JOB_ID=${1:?usage: qa-restart-job [-s] JOB_ID}
 	shift
-	if [[ -z $ID ]]; then
-		echo "usage: qa-restart-job ID"
-		return 1
-	fi
 	local SKIP_PARENTS=
 	if [[ $1 == -s ]]; then
 		SKIP_PARENTS=skip_parents=1
 	fi
-	qa api -X POST jobs/"$ID"/restart "$SKIP_PARENTS"
+	qa api -X POST jobs/"$JOB_ID"/restart "$SKIP_PARENTS"
 }
 
 qa-start-job() {
@@ -361,49 +336,33 @@ qa-start-job() {
 }
 
 qa-stop-job() {
-	local ID=$1
-	shift
-	if [[ -z $ID ]]; then
-		echo "usage: qa-stop-job ID"
-		return 1
-	fi
-	qa api -X POST jobs/"$ID"/cancel
+	local JOB_ID=${1:?usage qa-stop-job JOB_ID}
+	qa api -X POST jobs/"$JOB_ID"/cancel
 }
 
 qa-stop-build() {
-	local URL=$1
-	shift
-	if [[ -z $URL ]]; then
-		echo "usage: qa-stop-build URL"
-		return 1
-	fi
-
+	local URL=${1:?usage: qa-stop-build URL}
 	local JOBS
 	mapfile -t JOBS < <(_qa-get-build-jobs "$URL")
 	echo "found ${#JOBS[@]} jobs"
 
 	SKIP_CONFIRMATION=1
 	I=1
-	for ID in "${JOBS[@]}"; do
-		echo "stopping ID=$ID... :: $CUR/${#JOBS[@]}"
-		qa-stop-job "$ID"
+	for JOB_ID in "${JOBS[@]}"; do
+		echo "stopping JOB_ID=$JOB_ID... :: $CUR/${#JOBS[@]}"
+		qa-stop-job "$JOB_ID"
 		((I++))
 	done
 	SKIP_CONFIRMATION=0
 }
 
 qa-delete-job() {
-	local ID=$1
-	shift
-	if [[ -z $ID ]]; then
-		echo "usage: qa-delete-job ID"
+	local JOB_ID=${1:?usage: qa-delete-job JOB_ID}
+	if [[ ! "$JOB_ID" =~ ^-?[0-9]+$ ]]; then
+		echo "error: JOB_ID should be a number" >&2
 		return 1
 	fi
-	if [[ ! "$ID" =~ ^-?[0-9]+$ ]]; then
-		echo "error: ID should be a number" >&2
-		return 1
-	fi
-	qa api -X DELETE jobs/"$ID"
+	qa api -X DELETE jobs/"$JOB_ID"
 }
 
 qa-update-needles() {
