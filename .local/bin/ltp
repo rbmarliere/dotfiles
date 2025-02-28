@@ -73,10 +73,10 @@ _pre_build() {
 	setcc
 	if [[ $CLEAN -gt 0 || ! -f ./include/mk/config.mk ]] || ! grep -q "CC.*:= $CC" include/mk/config.mk; then
 		# clean and re-configure also on $ARCH mismatch
-		echo vng -r "$KDIR" -c
-		vng -r "$KDIR" -c
-		echo vng -r "$KDIR" -b
-		vng -r "$KDIR" -b
+		# echo vng -r "$KDIR" -c
+		# vng -r "$KDIR" -c
+		# echo vng -r "$KDIR" -b
+		# vng -r "$KDIR" -b
 		echo make clean
 		if [[ $VERBOSE -gt 0 ]]; then
 			make clean
@@ -192,18 +192,23 @@ run() {
 	TEST_FILE_DIR=$(dirname "$TEST_FILE_PATH")
 	TEST_NAME=${TEST_FILE_NAME%.*}
 
-	build "$KDIR" "$TEST_FILE_DIR" "$TEST_NAME"
-	if ! install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"; then
-		# trigger full build if unsuccessful partial install
+	if [[ $TEST_FILE_NAME =~ .sh$ && ! -f $ROOT/opt/ltp/testcases/bin/tst_test.sh ]]; then
 		build "$KDIR"
 		install "$ROOT"
+	else
+		build "$KDIR" "$TEST_FILE_DIR" "$TEST_NAME"
+		if ! install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"; then
+			# trigger full build if unsuccessful partial install
+			build "$KDIR"
+			install "$ROOT"
+		fi
 	fi
 
-	echo vng -a "$ARCH" -r "$KDIR" -e "/opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
+	echo vng -a "$ARCH" -r "$KDIR" -e "LTPROOT='/opt/ltp' PATH=\"/opt/ltp/testcases/bin:\$PATH\" /opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
 	if [[ $VERBOSE -gt 0 ]]; then
-		vng -a "$ARCH" -r "$KDIR" -v -e "/opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
+		vng -v -a "$ARCH" -r "$KDIR" -e "LTPROOT='/opt/ltp' PATH=\"/opt/ltp/testcases/bin:\$PATH\" /opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
 	else
-		vng -a "$ARCH" -r "$KDIR" -e "/opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
+		vng -a "$ARCH" -r "$KDIR" -e "LTPROOT='/opt/ltp' PATH=\"/opt/ltp/testcases/bin:\$PATH\" /opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
 	fi
 }
 
