@@ -8,14 +8,14 @@ set vi-cmd-mode-string \1\e[33;1m\2> \1\e[0m\2
 "\eOF": end-of-line
 "\C-p": history-search-backward
 "\C-n": history-search-forward
-"\C-f": "\C-e\C-uunset HISTFILE;tmux_loader\n"
+"\C-f": "\C-e\C-utmux_loader\n"
 
 set keymap vi-command
 "\eOH": beginning-of-line
 "\eOF": end-of-line
 "\C-p": history-search-backward
 "\C-n": history-search-forward
-"\C-f": "ddiunset HISTFILE;tmux_loader\n"
+"\C-f": "dditmux_loader\n"
 
 $if gdb
 set editing-mode emacs

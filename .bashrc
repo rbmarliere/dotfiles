@@ -12,12 +12,14 @@ export PATH="/usr/lib/ccache:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOM
 export PROJECTS="$HOME/src/**"
 export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:/home/$(whoami)/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
 
-# https://stackoverflow.com/questions/9457233/unlimited-bash-history
+export HISTCONTROL="ignoreboth"
+export HISTIGNORE="tmux_loader:ls:la:history:pwd:htop:bg:fg:clear"
 export HISTFILE="$HOME/.bash_eternal_history"
 export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="%F %T "
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+shopt -s cmdhist
 shopt -s histappend
 
 PS0='\[\e]0;$HOSTNAME\a\]'$PS0
