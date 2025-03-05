@@ -1,5 +1,5 @@
 return {
-	"epwalsh/obsidian.nvim",
+	"obsidian-nvim/obsidian.nvim",
 	version = "*", -- recommended, use latest release instead of latest commit
 	ft = "markdown",
 	cond = function()
@@ -34,7 +34,7 @@ return {
 			date_format = "%Y/%m-%B/%Y-%m-%d-%A",
 		},
 		completion = {
-			nvim_cmp = true,
+			blink = true,
 			min_chars = 0,
 		},
 		note_id_func = function(title)
