@@ -80,10 +80,10 @@ exec ~/.local/bin/notification_mon
 exec ~/.local/bin/inactive_windows_transparency
 # exec gnome-keyring-daemon --start --components=secrets
 
-# https://github.com/swaywm/sway/issues/5732#issuecomment-1583336383
-exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+# https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
+exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
 exec hash dbus-update-activation-environment 2>/dev/null && \
-     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+     dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
 
 include autoload
 include private

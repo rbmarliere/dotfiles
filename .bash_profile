@@ -1,6 +1,6 @@
 if [ "$(tty)" = "/dev/tty1" ]; then
 	export XDG_SESSION_TYPE=wayland
-	# export XDG_SESSION_DESKTOP=sway
+	# export XDG_CURRENT_DESKTOP=GNOME
 	export XDG_CURRENT_DESKTOP=sway
 	export MOZ_ENABLE_WAYLAND=1
 
@@ -13,8 +13,8 @@ if [ "$(tty)" = "/dev/tty1" ]; then
 	export NO_AT_BRIDGE=1
 	export QT_QPA_PLATFORMTHEME=qt5ct
 
-	# export GTK_USE_PORTAL=0
-	# export XDG_CURRENT_DESKTOP=GNOME
+	# https://github.com/swaywm/sway/wiki#gtk-applications-take-20-seconds-to-start
+	export GTK_USE_PORTAL=0
 
 	unsupported_gpu=""
 	if grep -qE "^nvidia" /proc/modules; then
@@ -23,7 +23,7 @@ if [ "$(tty)" = "/dev/tty1" ]; then
 	fi
 
 	systemctl --user start sway-session.target
-	systemd-cat --identifier=sway sway $unsupported_gpu $@
+	systemd-cat --identifier=sway sway $unsupported_gpu "$@"
 fi
 
 source "$HOME/.bashrc"
