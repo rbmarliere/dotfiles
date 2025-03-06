@@ -6,6 +6,7 @@ HOST=$(uname -p)
 ROOT=
 ARCH=$HOST
 DEBOOTSTRAP=/usr/sbin/debootstrap
+DPKG=/usr/bin/dpkg
 
 usage() {
 	echo
@@ -38,6 +39,7 @@ while getopts "hr:a:" OPT; do
 done
 
 [[ -f $DEBOOTSTRAP ]] || "$DEBOOTSTRAP not found"
+[[ -f $DPKG ]] || "$DPKG not found"
 [[ -n $ROOT ]] || die "no target path specified"
 
 DOTFILES=git,make,stow
