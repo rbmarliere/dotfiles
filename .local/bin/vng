@@ -97,7 +97,7 @@ if [[ -z $ROOT ]]; then
 fi
 
 # if there's no default root, create one using yet another stupid wrapper (tm)
-if [[ ! -d "$ROOT" ]]; then
+if [[ ! -d "$ROOT" || ! -f "$ROOT/bin/sh" ]]; then
 	debootstrap -r "$ROOT" -a "$ARCH"
 fi
 
