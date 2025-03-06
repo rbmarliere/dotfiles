@@ -22,8 +22,9 @@ if [ "$(tty)" = "/dev/tty1" ]; then
 		unsupported_gpu="--unsupported-gpu"
 	fi
 
-	systemctl --user start sway-session.target
-	systemd-cat --identifier=sway sway $unsupported_gpu "$@"
+	# systemctl --user start sway-session.target
+	# systemd-cat --identifier=sway sway $unsupported_gpu "$@"
+	exec sway $unsupported_gpu "$@"
 fi
 
 source "$HOME/.bashrc"
