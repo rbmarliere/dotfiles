@@ -53,6 +53,13 @@ _pre_flight() {
 	git submodule update --init --recursive
 }
 
+prep() {
+	# https://github.com/linux-test-project/ltp/blob/master/ci/tumbleweed.sh
+	local LTP_DEPS=(autoconf automake clang findutils gcc git gzip iproute2 make kernel-default-devel keyutils-devel libacl-devel libaio-devel libcap-devel libmnl-devel libnuma-devel libopenssl-devel libselinux-devel libtirpc-devel linux-glibc-devel lsb-release pkg-config)
+	local DEPS=(make Bear llvm bison flex virtme debootstrap dpkg asciidoc)
+	sudo zypper install -y "${LTP_DEPS[@]}" "${DEPS[@]}"
+}
+
 configure() {
 	local KDIR=${1:?missing kernel directory}
 	local HOST=
@@ -217,6 +224,9 @@ usage() {
 	set +u
 	echo
 	case $1 in
+	prep)
+		echo "usage: $0 prep"
+		;;
 	configure)
 		echo "usage: $0 configure <kernel source directory>"
 		;;
@@ -284,6 +294,9 @@ shift
 case "$SUBCMD" in
 help)
 	usage "$@"
+	;;
+prep)
+	prep
 	;;
 configure)
 	_pre_flight
