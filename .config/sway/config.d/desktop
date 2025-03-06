@@ -2,18 +2,6 @@
 
 set $resH 286px
 
-set $first exclam
-set $second parenleft
-set $third bracketleft
-set $fourth braceleft
-set $fifth ampersand
-set $sixth asterisk
-set $seventh braceright
-set $eighth bracketright
-set $ninth parenright
-set $tenth plus
-set $eleventh minus
-
 seat seat0 hide_cursor 2000
 
 bindsym $mod+Shift+r exec swaymsg resize set width 1400 px height 1400 px
