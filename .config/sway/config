@@ -59,9 +59,8 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_type="dialog"] floating enable
 
 input type:keyboard {
-	xkb_layout us(altgr-intl)
-	xkb_options caps:swapescape
 	# man 7 xkeyboard-config
+	xkb_layout us(altgr-intl)
 	repeat_delay 250
 	repeat_rate 45
 }

@@ -1,3 +1,4 @@
+// Inspired by https://github.com/ThePrimeagen/keyboards
 // Defaults in /usr/share/X11/xkb/symbols/us (Debian)
 // To get the keycode:
 //	$ xev -event keyboard (from x11-utils Debian pkg)

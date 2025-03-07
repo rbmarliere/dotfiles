@@ -31,11 +31,10 @@ workspace 7 output $out3
 workspace 8 output $out3
 workspace 9 output $out3
 
-input type:keyboard {
-	xkb_layout rbm,us(altgr-intl)
-	xkb_options caps:shiftlock
-	# inspired by https://github.com/ThePrimeagen/keyboards
-}
+# input type:keyboard {
+# 	xkb_layout rbm,us(altgr-intl)
+# 	xkb_options caps:shiftlock
+# }
 
 for_window [app_id=swaync] move to output $out2, border none, move position 0 ppt 0 ppt
 for_window [app_id="evolution-alarm-notify"] floating enable
