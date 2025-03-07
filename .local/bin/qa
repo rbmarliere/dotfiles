@@ -447,7 +447,7 @@ qa-sql() {
 
 qa-vnc() {
 	LOCAL_PORT=6000
-	REMOTE_PORT=5991
+	REMOTE_PORT=5900 # 5900+id which you can get from hovering the job's Assigned worker: (i.e. no need to pause the test)
 	REMOTE_HOST=$TARGET
 	WORKER=localhost
 
