@@ -1,1 +1,8 @@
-tmux.aerc
+#!/bin/bash
+
+set -euo pipefail
+
+echo -ne "\033]0;aerc\007"
+sleep 1
+
+ssh server -t 'tmux -L aerc attach'
