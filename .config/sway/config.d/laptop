@@ -1,6 +1,12 @@
 # vim: ft=swayconfig
 
 bindsym $mod+Ctrl+l exec swaylock -f -c 000000 -i $bg
+bindsym $mod+Alt+Shift+l exec killall swayidle
+bindsym $mod+Alt+l \
+exec swayidle -w \
+	timeout 30 'swaylock -f -c 000000 -i $bg' \
+	timeout 60 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -f -c 000000 -i $bg'
 
 exec swayidle -w \
 	timeout 30 'swaylock -f -c 000000 -i $bg' \
