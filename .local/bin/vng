@@ -12,7 +12,6 @@ VERBOSE=
 EXTRA=
 CROSS_COMPILE_OPT=
 CLEAN=
-CLEANED=
 BUILD=
 
 # openSUSE cross-compile settings to pass through
@@ -26,16 +25,18 @@ ARCHMAP["riscv64"]="/usr/bin/riscv64-suse-linux-"
 
 usage() {
 	echo
-	echo "usage: $0 [options] [-- command to execute]"
+	echo "usage: $0 [options] -- [vng options]"
 	echo
 	echo 'A stupid vng wrapper'
 	echo
 	echo '  -a		Target architecture (available: arm64, armhf, ppc64el, s390x, riscv64)'
 	echo '  -r		Kernel directory to run (default: .)'
 	echo '  -R		Root filesystem path (default: $ROOTS/$ARCH/sid)'
-	echo '  -b		Build kernel'
-	echo '  -c		Clean kernel'
+	echo '  -e		Command to execute within the virtualized environment'
 	echo '  -v		Increase verbosity'
+	echo '  -c		Clean kernel'
+	echo '  -b		Build kernel'
+	echo
 }
 
 die() {
@@ -107,7 +108,7 @@ base_cmd=("sudo" "$VNG")
 clean_cmd=("${base_cmd[@]}")
 clean_cmd+=("--clean")
 run_cmd=("${base_cmd[@]}")
-run_cmd+=("--run" "$RUN" "--root" "$ROOT")
+run_cmd+=("--run" "$RUN" "--root" "$ROOT" "$@")
 [[ -n ${EXTRA[*]} ]] && run_cmd+=("${EXTRA[@]}")
 [[ -n ${EXEC[*]} ]] && run_cmd+=("${EXEC[@]}")
 
