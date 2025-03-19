@@ -47,9 +47,11 @@ return {
 				snippets = {
 					opts = {
 						search_paths = {
-							vim.fn.stdpath("config") .. "/snippets",
+							-- all projects:
+							vim.fn.stdpath("config") .. "/snippets/all",
 							-- per project:
 							vim.fn.system("git rev-parse --path-format=absolute --show-toplevel 2>/dev/null || git rev-parse --path-format=absolute --git-common-dir"):gsub("\n", "") .. "/snippets",
+							-- relative to cwd:
 							"snippets",
 							".snippets",
 						},
