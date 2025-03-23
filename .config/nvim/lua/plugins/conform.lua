@@ -18,6 +18,7 @@ return {
 			lsp_format = "fallback",
 		},
 		formatters_by_ft = {
+			c = { "clang-format" },
 			css = { "prettier" },
 			go = { "goimports", "gofmt" },
 			gohtmltmpl = { "prettier" },

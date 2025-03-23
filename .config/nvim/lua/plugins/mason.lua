@@ -131,6 +131,7 @@ return {
 				ensure_installed = {
 					"bash-language-server",
 					"black",
+					"clang-format",
 					"clangd",
 					"codelldb",
 					"codespell",
