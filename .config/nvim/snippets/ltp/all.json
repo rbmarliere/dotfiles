@@ -1,8 +1,10 @@
 {
-    "Copyright": {
-        "prefix": "Copyright",
-        "body": [
-            "Copyright (c) 2025 SUSE LLC Ricardo B. Marlière <rbm@suse.com>"
-        ]
-    }
+  "Copyright": {
+    "prefix": "Copyright",
+    "body": ["Copyright (c) 2025 SUSE LLC Ricardo B. Marlière <rbm@suse.com>"]
+  },
+  "License": {
+    "prefix": "License",
+    "body": ["// SPDX-License-Identifier: GPL-2.0-or-later"]
+  }
 }
