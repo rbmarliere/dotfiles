@@ -15,6 +15,7 @@ INTERCEPT_BUILD=()
 declare -A ARCHMAP
 ARCHMAP["arm64"]="/usr/bin/aarch64-suse-linux-"
 ARCHMAP["armhf"]="/usr/bin/arm-suse-linux-gnueabi-"
+ARCHMAP["i386"]=
 ARCHMAP["ppc64el"]="/usr/bin/powerpc64le-suse-linux-"
 ARCHMAP["s390x"]="/usr/bin/s390x-suse-linux-"
 ARCHMAP["riscv64"]="/usr/bin/riscv64-suse-linux-"
@@ -24,16 +25,20 @@ die() {
 	exit 1
 }
 
-setcc() {
-	if [[ $ARCH = $(uname -p) ]]; then
+_setcc() {
+	if [[ $ARCH = x86_64 || $ARCH = i386 ]]; then
 		CC="/usr/bin/gcc"
 	else
 		CC="${ARCHMAP[$ARCH]}gcc"
 	fi
 	export CC
+	GCC="14"
+	if [[ $ARCH = i386 && ! -d /usr/lib64/gcc/x86_64-suse-linux/$GCC/32 ]]; then
+		sudo zypper install gcc$GCC-32bit || die "compiler $CC not found"
+		return
+	fi
 	if [[ ! -f $CC ]]; then
 		declare -A PKGMAP
-		GCC="14"
 		PKGMAP["arm64"]="cross-aarch64-gcc$GCC"
 		PKGMAP["armhf"]="cross-arm-gcc$GCC"
 		PKGMAP["ppc64el"]="cross-ppc64le-gcc$GCC"
@@ -52,33 +57,6 @@ _pre_flight() {
 	[[ $CLEAN -gt 0 ]] && { rm compile_commands.json 2>/dev/null || true; }
 	sudo chown "$(whoami)" -R .
 	git submodule update --init --recursive
-}
-
-prep() {
-	# https://github.com/linux-test-project/ltp/blob/master/ci/tumbleweed.sh
-	local LTP_DEPS=(autoconf automake clang findutils gcc git gzip iproute2 make kernel-default-devel keyutils-devel libacl-devel libaio-devel libcap-devel libmnl-devel libnuma-devel libopenssl-devel libselinux-devel libtirpc-devel linux-glibc-devel lsb-release pkg-config)
-	local DEPS=(make Bear llvm bison flex virtme debootstrap dpkg asciidoc)
-	sudo zypper install -y "${LTP_DEPS[@]}" "${DEPS[@]}"
-}
-
-configure() {
-	local KDIR=${1:?missing kernel directory}
-	local HOST=
-	[[ $ARCH != $(uname -p) ]] && HOST="--host=$(basename "${CC%-gcc}")"
-
-	echo make autotools
-	echo ./configure --with-linux-dir="$KDIR" $HOST
-	if [[ $VERBOSE -gt 0 ]]; then
-		make autotools
-		./configure --with-linux-dir="$KDIR" $HOST
-	else
-		make autotools >build.log 2>&1
-		./configure --with-linux-dir="$KDIR" $HOST >>build.log 2>&1
-	fi
-}
-
-_pre_build() {
-	setcc
 	if [[ $CLEAN -gt 0 ]]; then
 		echo git clean -fdx
 		if [[ $VERBOSE -gt 0 ]]; then
@@ -87,19 +65,41 @@ _pre_build() {
 			git clean -fdx >/dev/null 2>&1
 		fi
 	fi
-	if [[ ! -f ./include/mk/config.mk ]] || ! grep -q "CC.*:= $CC" include/mk/config.mk; then
-		# clean and re-configure also on $ARCH mismatch
-		# echo vng -r "$KDIR" -c
-		# vng -r "$KDIR" -c
-		# echo vng -r "$KDIR" -b
-		# vng -r "$KDIR" -b
-		echo make clean
-		if [[ $VERBOSE -gt 0 ]]; then
-			make clean
-		else
-			make clean >/dev/null 2>&1
-		fi
-		configure "$KDIR"
+}
+
+prep() {
+	# https://github.com/linux-test-project/ltp/blob/master/ci/tumbleweed.sh
+	local LTP_DEPS=(autoconf automake clang clang-tools findutils gcc gcc-32bit git gzip iproute2 make kernel-default-devel keyutils-devel lsb-release pkgconf-pkg-config linux-glibc-devel libacl-devel libacl-devel-32bit libaio-devel libaio-devel-32bit libcap-devel libcap-ng0-32bit libmnl-devel libmnl0-32bit libnuma-devel libnuma1-32bit libopenssl-3-devel libopenssl-3-devel-32bit libselinux-devel libselinux1-32bit libtirpc-devel libtirpc3-32bit)
+	local DEPS=(make Bear llvm bison flex virtme debootstrap dpkg asciidoc)
+	sudo zypper install -y "${LTP_DEPS[@]}" "${DEPS[@]}"
+}
+
+configure() {
+	local KDIR=${1:?missing kernel directory}
+	local ARGV=(--with-linux-dir="$KDIR")
+	local CFLAGS=
+	local LDFLAGS=
+
+	_setcc
+
+	[[ $ARCH != x86_64 && $ARCH != i386 ]] && ARGV+=("--host=$(basename "${CC%-gcc}")")
+	if [[ $ARCH = i386 ]]; then
+		export CFLAGS="-m32"
+		export LDFLAGS="-m32"
+		# workaround for tumbleweed...
+		[[ ! -f /usr/lib/libtirpc.so ]] && sudo ln -s /usr/lib/libtirpc.so.3 /usr/lib/libtirpc.so
+		[[ ! -f /usr/lib/libmnl.so ]] && sudo ln -s /usr/lib/libmnl.so.0 /usr/lib/libmnl.so
+
+	fi
+
+	echo make autotools
+	echo CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" ./configure "${ARGV[@]}"
+	if [[ $VERBOSE -gt 0 ]]; then
+		make autotools
+		./configure "${ARGV[@]}"
+	else
+		make autotools >build.log 2>&1
+		./configure "${ARGV[@]}" >>build.log 2>&1
 	fi
 }
 
@@ -111,7 +111,18 @@ build() {
 		TARGET=(-C "$TEST_FILE_DIR" "$3")
 	fi
 
-	_pre_build
+	_setcc
+
+	if [[ ! -f ./include/mk/config.mk ]] || ! grep -q "CC.*:= $CC" include/mk/config.mk; then
+		# clean and re-configure also on $ARCH mismatch
+		echo make clean
+		if [[ $VERBOSE -gt 0 ]]; then
+			make clean
+		else
+			make clean >/dev/null 2>&1
+		fi
+		configure "$KDIR"
+	fi
 
 	echo "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}"
 	if [[ $VERBOSE -gt 0 ]]; then
@@ -261,7 +272,7 @@ usage() {
 		echo
 		echo "options:"
 		echo "    -v		Increase verbosity"
-		echo "    -a		Target architecture (available: arm64, armhf, ppc64el, s390x, riscv64)"
+		echo "    -a		Target architecture (available: arm64, armhf, i386 ppc64el, s390x, riscv64)"
 		echo "    -c		Clean all builds"
 		echo
 		echo "commands:"

@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-HOST=$(uname -p)
 ARCH=x86_64
 RUN=.
 ROOT=
@@ -19,6 +18,7 @@ BUILD=
 declare -A ARCHMAP
 ARCHMAP["arm64"]="/usr/bin/aarch64-suse-linux-"
 ARCHMAP["armhf"]="/usr/bin/arm-suse-linux-gnueabi-"
+ARCHMAP["i386"]=
 ARCHMAP["ppc64el"]="/usr/bin/powerpc64le-suse-linux-"
 ARCHMAP["s390x"]="/usr/bin/s390x-suse-linux-"
 ARCHMAP["riscv64"]="/usr/bin/riscv64-suse-linux-"
@@ -68,7 +68,7 @@ while getopts "ha:r:R:e:vcb" OPT; do
 		;;
 	a)
 		ARCH="$OPTARG"
-		[[ $ARCH != "$HOST" && -z ${ARCHMAP[$ARCH]+_} ]] && die "unsupported architecture"
+		[[ $ARCH != x86_64 && -z ${ARCHMAP[$ARCH]+_} ]] && die "unsupported architecture"
 		;;
 	r) RUN="$OPTARG" ;;
 	R) ROOT="$OPTARG" ;;
@@ -86,7 +86,7 @@ shift $((OPTIND - 1))
 
 # add extra parameters in case of a foreign arch
 # set cross compiler if needed and install it if we don't have it
-if [[ $ARCH != "$HOST" ]]; then
+if [[ $ARCH != x86_64 && $ARCH != i386 ]]; then
 	setcc
 	EXTRA=(--arch "$ARCH" --force-9p)
 	CROSS_COMPILE_OPT=(--cross-compile "${ARCHMAP[$ARCH]}" "${EXTRA[@]}")
