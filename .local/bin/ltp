@@ -8,6 +8,7 @@ CLEAN=0
 ARCH=x86_64
 NPROC=$(nproc)
 BEAR=()
+INTERCEPT_BUILD=()
 
 # openSUSE cross-compile settings to pass through
 # https://github.com/arighi/virtme-ng/blob/ee3f58a787dac6bca492c7c9e3ea235b508852e3/virtme_ng/run.py#L489
@@ -105,11 +106,11 @@ build() {
 
 	_pre_build
 
-	echo "${BEAR[@]}" make -j"$NPROC" "${TARGET[@]}"
+	echo "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}"
 	if [[ $VERBOSE -gt 0 ]]; then
-		"${BEAR[@]}" make -j"$NPROC" "${TARGET[@]}"
+		"${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}"
 	else
-		"${BEAR[@]}" make -j"$NPROC" "${TARGET[@]}" >>build.log 2>&1
+		"${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}" >>build.log 2>&1
 	fi
 
 	return 0
@@ -231,10 +232,11 @@ usage() {
 		echo "usage: $0 configure <kernel source directory>"
 		;;
 	build)
-		echo "usage: $0 build [options] <kernel source directory> [<testcase dir> <test>]"
+		echo "usage: $0 build [-b|-i] <kernel source directory> [<testcase dir> <test>]"
 		echo
 		echo "options:"
 		echo "    -b	--bear		Use bear to build a compile_commands.json database"
+		echo "    -i	--intercept	Use intercept-build to build a compile_commands.json database"
 		;;
 	metadata)
 		echo "usage: $0 metadata [<kernel source directory>]"
@@ -304,9 +306,22 @@ configure)
 	;;
 build)
 	OPTIND=1
-	while getopts "b" OPT; do
+	while getopts "bi" OPT; do
 		case "$OPT" in
-		b) BEAR=(bear --append --) ;;
+		b)
+			if [[ -n "${INTERCEPT_BUILD[*]}" ]]; then
+				echo "Error: -b and -i are mutually exclusive." >&2
+				exit 1
+			fi
+			BEAR=(bear --append --)
+			;;
+		i)
+			if [[ -n "${BEAR[*]}" ]]; then
+				echo "Error: -b and -i are mutually exclusive." >&2
+				exit 1
+			fi
+			INTERCEPT_BUILD=(intercept-build)
+			;;
 		*)
 			usage build
 			exit 1
