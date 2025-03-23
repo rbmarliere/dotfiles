@@ -48,8 +48,8 @@ _pre_flight() {
 	[[ $(git rev-parse --is-inside-work-tree) = "true" ]] || die "refusing to run outside a git worktree"
 	git remote -v | grep -q "linux-test-project/ltp" || die "refusing to run outside LTP repository"
 	[[ $(git rev-parse --show-toplevel) = $(pwd) ]] || die "refusing to run outside LTP repository top level dir."
-	rm build.log || true
-	[[ $CLEAN -gt 0 ]] && { rm compile_commands.json || true; }
+	rm build.log 2>/dev/null || true
+	[[ $CLEAN -gt 0 ]] && { rm compile_commands.json 2>/dev/null || true; }
 	sudo chown "$(whoami)" -R .
 	git submodule update --init --recursive
 }
@@ -79,7 +79,14 @@ configure() {
 
 _pre_build() {
 	setcc
-	[[ $CLEAN -gt 0 ]] && git clean -fdx
+	if [[ $CLEAN -gt 0 ]]; then
+		echo git clean -fdx
+		if [[ $VERBOSE -gt 0 ]]; then
+			git clean -fdx
+		else
+			git clean -fdx >/dev/null 2>&1
+		fi
+	fi
 	if [[ ! -f ./include/mk/config.mk ]] || ! grep -q "CC.*:= $CC" include/mk/config.mk; then
 		# clean and re-configure also on $ARCH mismatch
 		# echo vng -r "$KDIR" -c
