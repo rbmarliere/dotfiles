@@ -28,6 +28,7 @@ return {
 			["<C-l>"] = false,
 			--   ["-"] = { "actions.parent", mode = "n" },
 			--   ["_"] = { "actions.open_cwd", mode = "n" },
+			["_"] = false,
 			--   ["`"] = { "actions.cd", mode = "n" },
 			--   ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 			--   ["gs"] = { "actions.change_sort", mode = "n" },
