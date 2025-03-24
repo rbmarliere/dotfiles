@@ -25,6 +25,21 @@ die() {
 	exit 1
 }
 
+log_output() {
+	echo "$@"
+	{
+		echo
+		echo "$@"
+		echo
+	} | tee -a build.log >>error.log
+	if [[ $VERBOSE -gt 0 ]]; then
+		# keep output in the terminal
+		"$@" 2>&1 | tee -a build.log | tee >(tee -a error.log >&2)
+	else
+		"$@" >>build.log 2> >(tee -a error.log >>build.log)
+	fi
+}
+
 _setcc() {
 	if [[ $ARCH = x86_64 || $ARCH = i386 ]]; then
 		CC="/usr/bin/gcc"
@@ -53,18 +68,11 @@ _pre_flight() {
 	[[ $(git rev-parse --is-inside-work-tree) = "true" ]] || die "refusing to run outside a git worktree"
 	git remote -v | grep -q "linux-test-project/ltp" || die "refusing to run outside LTP repository"
 	[[ $(git rev-parse --show-toplevel) = $(pwd) ]] || die "refusing to run outside LTP repository top level dir."
-	rm build.log 2>/dev/null || true
+	rm ./*.log 2>/dev/null || true
 	[[ $CLEAN -gt 0 ]] && { rm compile_commands.json 2>/dev/null || true; }
 	sudo chown "$(whoami)" -R .
 	git submodule update --init --recursive
-	if [[ $CLEAN -gt 0 ]]; then
-		echo git clean -fdx
-		if [[ $VERBOSE -gt 0 ]]; then
-			git clean -fdx
-		else
-			git clean -fdx >/dev/null 2>&1
-		fi
-	fi
+	[[ $CLEAN -gt 0 ]] && log_output make clean
 }
 
 prep() {
@@ -92,15 +100,8 @@ configure() {
 
 	fi
 
-	echo make autotools
-	echo CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" ./configure "${ARGV[@]}"
-	if [[ $VERBOSE -gt 0 ]]; then
-		make autotools
-		./configure "${ARGV[@]}"
-	else
-		make autotools >build.log 2>&1
-		./configure "${ARGV[@]}" >>build.log 2>&1
-	fi
+	log_output make autotools
+	log_output ./configure "${ARGV[@]}"
 }
 
 build() {
@@ -114,22 +115,12 @@ build() {
 	_setcc
 
 	if [[ ! -f ./include/mk/config.mk ]] || ! grep -q "CC.*:= $CC" include/mk/config.mk; then
-		# clean and re-configure also on $ARCH mismatch
-		echo make clean
-		if [[ $VERBOSE -gt 0 ]]; then
-			make clean
-		else
-			make clean >/dev/null 2>&1
-		fi
+		# clean and re-configure also on ARCH mismatch
+		log_output make clean
 		configure "$KDIR"
 	fi
 
-	echo "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}"
-	if [[ $VERBOSE -gt 0 ]]; then
-		"${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}"
-	else
-		"${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}" >>build.log 2>&1
-	fi
+	log_output "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}"
 
 	return 0
 }
@@ -144,12 +135,7 @@ metadata() {
 
 	sudo zypper search --installed-only asciidoc || die "install asciidoc first and re-configure"
 
-	echo make -j"$NPROC"
-	if [[ $VERBOSE -gt 0 ]]; then
-		make -j"$NPROC"
-	else
-		make -j"$NPROC" >>build.log 2>&1
-	fi
+	log_output make -j"$NPROC"
 
 	popd
 
@@ -169,22 +155,14 @@ install() {
 		echo sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin"
 		sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin" || return 1
 	else
-		echo sudo make -j"$NPROC" DESTDIR="$ROOT" install
-		if [[ $VERBOSE -gt 0 ]]; then
-			sudo make -j"$NPROC" DESTDIR="$ROOT" install || return 1
-		else
-			sudo make -j"$NPROC" DESTDIR="$ROOT" install >>build.log 2>&1 || return 1
-		fi
+		log_output sudo make -j"$NPROC" DESTDIR="$ROOT" install || return 1
 	fi
 
 	return 0
 }
 
 run() {
-	local FILE=${1:?missing test file}
-	shift
-	[[ -f $FILE ]] || die "file $FILE not found"
-
+	local VERBOSITY=
 	local KDIR=
 	local ROOT=
 	local TEST_ARGS=()
@@ -192,6 +170,9 @@ run() {
 	local TEST_FILE_NAME
 	local TEST_FILE_DIR
 	local TEST_NAME
+	local FILE=${1:?missing test file}
+	shift
+	[[ -f $FILE ]] || die "file $FILE not found"
 
 	while [[ $# -gt 0 ]]; do
 		case "$1" in
@@ -226,17 +207,15 @@ run() {
 		build "$KDIR" "$TEST_FILE_DIR" "$TEST_NAME"
 		if ! install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"; then
 			# trigger full build if unsuccessful partial install
+			echo triggering full build
 			build "$KDIR"
 			install "$ROOT"
 		fi
 	fi
 
 	echo vng -a "$ARCH" -r "$KDIR" -e "LTPROOT='/opt/ltp' PATH=\"/opt/ltp/testcases/bin:\$PATH\" /opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
-	if [[ $VERBOSE -gt 0 ]]; then
-		vng -v -a "$ARCH" -r "$KDIR" -e "LTPROOT='/opt/ltp' PATH=\"/opt/ltp/testcases/bin:\$PATH\" /opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
-	else
-		vng -a "$ARCH" -r "$KDIR" -e "LTPROOT='/opt/ltp' PATH=\"/opt/ltp/testcases/bin:\$PATH\" /opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
-	fi
+	[[ $VERBOSE -gt 0 ]] && VERBOSITY=-v
+	vng $VERBOSITY -a "$ARCH" -r "$KDIR" -e "LTPROOT='/opt/ltp' PATH=\"/opt/ltp/testcases/bin:\$PATH\" /opt/ltp/testcases/bin/$TEST_NAME ${TEST_ARGS[*]}"
 }
 
 usage() {
