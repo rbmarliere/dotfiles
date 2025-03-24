@@ -1,14 +1,13 @@
 #!/bin/bash
 
 set -euo pipefail
-# set -x
 
 VERBOSE=0
 CLEAN=0
 ARCH=x86_64
-NPROC=$(nproc)
 BEAR=()
 INTERCEPT_BUILD=()
+MAKE=(make "-j$(nproc)")
 
 # openSUSE cross-compile settings to pass through
 # https://github.com/arighi/virtme-ng/blob/ee3f58a787dac6bca492c7c9e3ea235b508852e3/virtme_ng/run.py#L489
@@ -31,7 +30,7 @@ log_output() {
 		echo
 		echo "$@"
 		echo
-	} | tee -a build.log >>error.log
+	} | tee -a build.log >error.log
 	if [[ $VERBOSE -gt 0 ]]; then
 		# keep output in the terminal
 		"$@" 2>&1 | tee -a build.log | tee >(tee -a error.log >&2)
@@ -69,10 +68,12 @@ _pre_flight() {
 	git remote -v | grep -q "linux-test-project/ltp" || die "refusing to run outside LTP repository"
 	[[ $(git rev-parse --show-toplevel) = $(pwd) ]] || die "refusing to run outside LTP repository top level dir."
 	rm ./*.log 2>/dev/null || true
-	[[ $CLEAN -gt 0 ]] && { rm compile_commands.json 2>/dev/null || true; }
 	sudo chown "$(whoami)" -R .
 	git submodule update --init --recursive
-	[[ $CLEAN -gt 0 ]] && log_output make clean
+	if [[ $CLEAN -gt 0 ]]; then
+		rm compile_commands.json 2>/dev/null || true
+		log_output make clean
+	fi
 }
 
 prep() {
@@ -100,7 +101,7 @@ configure() {
 
 	fi
 
-	log_output make autotools
+	log_output "${MAKE[@]}" autotools
 	log_output ./configure "${ARGV[@]}"
 }
 
@@ -115,14 +116,12 @@ build() {
 	_setcc
 
 	if [[ ! -f ./include/mk/config.mk ]] || ! grep -q "CC.*:= $CC" include/mk/config.mk; then
-		# clean and re-configure also on ARCH mismatch
+		echo 'configuring... (or re-configuring due to ARCH mismatch)'
 		log_output make clean
 		configure "$KDIR"
 	fi
 
-	log_output "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" make -j"$NPROC" "${TARGET[@]}"
-
-	return 0
+	log_output "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" "${MAKE[@]}" "${TARGET[@]}"
 }
 
 metadata() {
@@ -135,8 +134,7 @@ metadata() {
 
 	sudo zypper search --installed-only asciidoc || die "install asciidoc first and re-configure"
 
-	log_output make -j"$NPROC"
-
+	log_output "${MAKE[@]}"
 	popd
 
 	xdg-open docparse/metadata.html
@@ -155,10 +153,8 @@ install() {
 		echo sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin"
 		sudo cp "$TEST_FILE_DIR/$3" "$ROOT/opt/ltp/testcases/bin" || return 1
 	else
-		log_output sudo make -j"$NPROC" DESTDIR="$ROOT" install || return 1
+		log_output sudo make DESTDIR="$ROOT" install || return 1
 	fi
-
-	return 0
 }
 
 run() {
@@ -206,8 +202,7 @@ run() {
 	else
 		build "$KDIR" "$TEST_FILE_DIR" "$TEST_NAME"
 		if ! install "$ROOT" "$TEST_FILE_DIR" "$TEST_NAME"; then
-			# trigger full build if unsuccessful partial install
-			echo triggering full build
+			echo partial install failed, triggering full build
 			build "$KDIR"
 			install "$ROOT"
 		fi
