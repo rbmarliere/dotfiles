@@ -10,7 +10,7 @@ alias rr="source ~/.bashrc"
 alias gnome-control-center="XDG_CURRENT_DESKTOP=GNOME /usr/bin/gnome-control-center"
 alias sudo="sudo -E TMUX=$TMUX"  # avoid nvim killing sessions
 
-if type sudo >/dev/null 2>&1; then
+if which sudo >/dev/null 2>&1; then
 	alias apt="sudo apt"
 	alias blkid="sudo blkid"
 	alias cfdisk="sudo cfdisk"
