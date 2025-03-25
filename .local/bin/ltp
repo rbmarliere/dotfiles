@@ -73,14 +73,27 @@ _pre_flight() {
 	if [[ $CLEAN -gt 0 ]]; then
 		rm compile_commands.json 2>/dev/null || true
 		log_output make clean
+		# TODO might not be enough e.g. from -a i386 to -a x86_64
+		# BUT git clean -fdx is dangerous...
 	fi
 }
 
 prep() {
-	# https://github.com/linux-test-project/ltp/blob/master/ci/tumbleweed.sh
-	local LTP_DEPS=(autoconf automake clang clang-tools findutils gcc gcc-32bit git gzip iproute2 make kernel-default-devel keyutils-devel lsb-release pkgconf-pkg-config linux-glibc-devel libacl-devel libacl-devel-32bit libaio-devel libaio-devel-32bit libcap-devel libcap-ng0-32bit libmnl-devel libmnl0-32bit libnuma-devel libnuma1-32bit libopenssl-3-devel libopenssl-3-devel-32bit libselinux-devel libselinux1-32bit libtirpc-devel libtirpc3-32bit)
-	local DEPS=(make Bear llvm bison flex virtme debootstrap dpkg asciidoc)
-	sudo zypper install -y "${LTP_DEPS[@]}" "${DEPS[@]}"
+	local SUDO=
+	[[ $(id -u) -gt 0 ]] && SUDO=sudo
+
+	if which zypper; then
+		# https://github.com/linux-test-project/ltp/blob/master/ci/tumbleweed.sh
+		local TUMBLEWEED=(autoconf automake clang clang-tools findutils gcc gcc-32bit git gzip iproute2 make kernel-default-devel keyutils-devel lsb-release pkgconf-pkg-config linux-glibc-devel libacl-devel libacl-devel-32bit libaio-devel libaio-devel-32bit libcap-devel libcap-ng0-32bit libmnl-devel libmnl0-32bit libnuma-devel libnuma1-32bit libopenssl-3-devel libopenssl-3-devel-32bit libselinux-devel libselinux1-32bit libtirpc-devel libtirpc3-32bit)
+		local TUMBLEWEED+=(make Bear llvm bison flex virtme debootstrap dpkg asciidoc)
+		$SUDO zypper install -y "${TUMBLEWEED[@]}"
+	fi
+
+	if which apt; then
+		# https://github.com/linux-test-project/ltp/blob/master/ci/debian.sh
+		local DEBIAN=(autoconf automake build-essential debhelper devscripts clang gcc git iproute2 libc6-dev libtirpc-dev linux-libc-dev lsb-release pkg-config acl-dev libacl1-dev libaio-dev libcap-dev libkeyutils-dev libnuma-dev libmnl-dev libselinux1-dev libsepol-dev libssl-dev)
+		$SUDO apt install -y "${DEBIAN[@]}"
+	fi
 }
 
 configure() {
@@ -250,6 +263,7 @@ usage() {
 		echo "    -c		Clean all builds"
 		echo
 		echo "commands:"
+		echo "    prep"
 		echo "    configure"
 		echo "    build"
 		echo "    metadata"
