@@ -29,7 +29,7 @@ usage() {
 	echo
 	echo 'A stupid vng wrapper'
 	echo
-	echo '  -a		Target architecture (available: arm64, armhf, ppc64el, s390x, riscv64)'
+	echo '  -a		Target architecture (available: arm64, armhf, i386, ppc64el, s390x, riscv64)'
 	echo '  -r		Kernel directory to run (default: .)'
 	echo '  -R		Root filesystem path (default: $ROOTS/$ARCH/sid)'
 	echo '  -e		Command to execute within the virtualized environment'
