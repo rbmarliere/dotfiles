@@ -34,6 +34,7 @@ return {
 			{ "<Leader>gW", ":Gwrite!<CR>", desc = "Choose a version e.g. during conflict" },
 			{ "<Leader>ge", ":Gedit<CR>", desc = "Go to current version of object" },
 			{ "<Leader>gE", ":e %:h<CR>", desc = "Browse parent tree of object" }, -- http://vimcasts.org/episodes/fugitive-vim-browsing-the-git-object-database/
+			{ "<Leader>gr", ":G pull --rebase" },
 			{ "<Leader>gp", ":G pull origin " },
 			{ "<Leader>gP", ":G push " },
 			{ "<Leader>gsR", ":G set-pushRemote rbmarliere" },
