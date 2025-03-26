@@ -7,6 +7,7 @@ RUN=.
 ROOT=
 VNG=/usr/bin/vng
 EXEC=
+NETWORK=
 VERBOSE=
 EXTRA=
 CROSS_COMPILE_OPT=
@@ -33,6 +34,7 @@ usage() {
 	echo '  -r		Kernel directory to run (default: .)'
 	echo '  -R		Root filesystem path (default: $ROOTS/$ARCH/sid)'
 	echo '  -e		Command to execute within the virtualized environment'
+	echo '  -n		Enable networking'
 	echo '  -v		Increase verbosity'
 	echo '  -c		Clean kernel'
 	echo '  -b		Build kernel'
@@ -60,7 +62,7 @@ setcc() {
 	fi
 }
 
-while getopts "ha:r:R:e:vcb" OPT; do
+while getopts "ha:r:R:e:vcbn" OPT; do
 	case $OPT in
 	h)
 		usage
@@ -73,6 +75,7 @@ while getopts "ha:r:R:e:vcb" OPT; do
 	r) RUN="$OPTARG" ;;
 	R) ROOT="$OPTARG" ;;
 	e) EXEC=(--exec "$OPTARG") ;;
+	n) NETWORK=1 ;;
 	v) VERBOSE=1 ;;
 	c) CLEAN=1 ;;
 	b) BUILD=1 ;;
@@ -111,6 +114,10 @@ run_cmd=("${base_cmd[@]}")
 run_cmd+=("--run" "$RUN" "--root" "$ROOT" "$@")
 [[ -n ${EXTRA[*]} ]] && run_cmd+=("${EXTRA[@]}")
 [[ -n ${EXEC[*]} ]] && run_cmd+=("${EXEC[@]}")
+if [[ -n $NETWORK ]]; then
+	run_cmd+=(--network user)
+	sudo grep -q setnet "$ROOT/root/.bashrc.local" || echo "setnet" | sudo tee -a "$ROOT/root/.bashrc.local"
+fi
 
 if [[ -n $CLEAN ]]; then
 	pushd "$RUN"
