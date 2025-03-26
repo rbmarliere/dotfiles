@@ -134,7 +134,7 @@ build() {
 		configure "$KDIR"
 	fi
 
-	log_output "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" "${MAKE[@]}" "${TARGET[@]}"
+	log_output "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" "${MAKE[@]}" "${TARGET[@]}" || { cat error.log; return 1; }
 }
 
 metadata() {
