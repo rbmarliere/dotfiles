@@ -36,7 +36,7 @@ workspace 9 output $out3
 # 	xkb_options caps:shiftlock
 # }
 
-for_window [app_id=swaync] move to output $out2, border none, move position 0 ppt 0 ppt
+for_window [app_id=swaync] move to output $out3, border none, move position 0 ppt 0 ppt
 for_window [app_id="evolution-alarm-notify"] floating enable
 
 exec env TERM=$term /usr/bin/tmux new-session -d "~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh"
