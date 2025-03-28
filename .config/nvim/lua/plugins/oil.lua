@@ -38,7 +38,7 @@ return {
 		},
 	},
 	keys = {
-		{ "-", "<Cmd>Oil<CR>" },
+		{ "-", ":Oil<CR>" },
 	},
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function(_, opts)

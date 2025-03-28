@@ -3,6 +3,7 @@ return {
 	-- name = "git-worktree.nvim",
 	-- dir = "~/src/rbmarliere/git-worktree.nvim/main",
 	-- dev = true,
+	dependencies = { "nvim-lua/plenary.nvim" },
 	init = function()
 		vim.g.git_worktree = {
 			-- log_level = "DEBUG",

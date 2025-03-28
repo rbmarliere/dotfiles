@@ -74,7 +74,7 @@ return {
 					vim.keymap.set(
 						"n",
 						"<CR>",
-						"<Cmd>horizontal below Flogsplitcommit<CR>",
+						":horizontal below Flogsplitcommit<CR>",
 						{ noremap = true, silent = true }
 					)
 				end,

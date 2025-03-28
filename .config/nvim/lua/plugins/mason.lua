@@ -92,9 +92,9 @@ return {
 				})
 
 				-- https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero
-				vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>")
-				vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
-				vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>")
+				vim.keymap.set("n", "gl", ":lua vim.diagnostic.open_float()<cr>")
+				vim.keymap.set("n", "[d", ":lua vim.diagnostic.goto_prev()<cr>")
+				vim.keymap.set("n", "]d", ":lua vim.diagnostic.goto_next()<cr>")
 
 				vim.api.nvim_create_autocmd("LspAttach", {
 					callback = function(args)
