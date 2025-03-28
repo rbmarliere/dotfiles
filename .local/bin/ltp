@@ -209,7 +209,7 @@ run() {
 		shift
 	done
 
-	KDIR=${KDIR:-$LINUX/ltp}
+	KDIR=${KDIR:-$LINUX/ltp/$ARCH}
 	ROOT=${ROOT:-$ROOTS/$ARCH/sid}
 	TEST_FILE_PATH=$(realpath "$FILE")
 	TEST_FILE_NAME=$(basename "$TEST_FILE_PATH")
