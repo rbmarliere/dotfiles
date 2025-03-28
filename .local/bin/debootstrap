@@ -8,6 +8,7 @@ ARCH=$HOST
 DEBOOTSTRAP=/usr/sbin/debootstrap
 DPKG=/usr/bin/dpkg
 EXEC=
+DOTFILES=1
 
 usage() {
 	echo
@@ -17,6 +18,7 @@ usage() {
 	echo "  -r		target path to build the root filesystem"
 	echo "  -a		target architecture (default: $HOST)"
 	echo "  -e		extra command to run in the root"
+	echo "  -n		don't install dotfiles"
 	echo
 }
 
@@ -25,7 +27,7 @@ die() {
 	exit 1
 }
 
-while getopts "hr:a:e:" OPT; do
+while getopts "hr:a:e:n" OPT; do
 	case $OPT in
 	h)
 		usage
@@ -34,6 +36,7 @@ while getopts "hr:a:e:" OPT; do
 	r) ROOT="$OPTARG" ;;
 	a) ARCH="$OPTARG" ;;
 	e) EXEC="$OPTARG" ;;
+	n) DOTFILES=0 ;;
 	?)
 		usage
 		exit 1
@@ -52,10 +55,21 @@ else
 	sudo chroot "$ROOT" bash -c "/debootstrap/debootstrap --second-stage"
 fi
 
-DEPS=(git make stow build-essential flex bison pkg-config)
-# KSELFTESTS="build-essential flex bison libasound2-dev libcap-ng-dev libcap-dev libnuma-dev libmnl-dev pkg-config rsync libpopt-dev libssl-dev libelf-dev clang liburing-dev libfuse3-dev libfuse-dev"
+# base
+DEPS=(make build-essential flex bison pkg-config)
+# virtme-init
+DEPS+=(busybox kbd)
+# kselftests
+DEPS+=(build-essential flex bison libasound2-dev libcap-ng-dev libcap-dev libnuma-dev libmnl-dev pkg-config rsync libpopt-dev libssl-dev libelf-dev clang liburing-dev libfuse3-dev libfuse-dev)
+# dotfiles
+DEPS+=(git make stow)
+
 sudo chroot "$ROOT" bash -c "apt install -y ${DEPS[*]}"
-sudo chroot "$ROOT" bash -c "git clone https://github.com/rbmarliere/dotfiles ~/dotfiles && make -C ~/dotfiles"
+
+if [[ $DOTFILES -gt 0 ]]; then
+	sudo chroot "$ROOT" bash -c "git clone https://github.com/rbmarliere/dotfiles ~/dotfiles && make -C ~/dotfiles"
+fi
+
 if [[ -n ${EXEC[*]} ]]; then
 	sudo chroot "$ROOT" bash -ic "${EXEC[@]}"
 fi
