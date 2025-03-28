@@ -17,33 +17,33 @@ dbus-monitor \
 				pw-play /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
 				LAST_BEEP=$CURR
 			fi
-		elif echo "$line" | grep -q "member=AddNotification"; then
-			# Collect notification details
-			TITLE=""
-			BODY=""
+		# elif echo "$line" | grep -q "member=AddNotification"; then
+		# 	# Collect notification details
+		# 	TITLE=""
+		# 	BODY=""
 
-			while read -r subline; do
-				# Extract title
-				if echo "$subline" | grep -q 'string "title"'; then
-					read -r title_line
-					TITLE=$(echo "$title_line" | sed -n 's/.*variant.*string "\(.*\)"/\1/p')
-				fi
+		# 	while read -r subline; do
+		# 		# Extract title
+		# 		if echo "$subline" | grep -q 'string "title"'; then
+		# 			read -r title_line
+		# 			TITLE=$(echo "$title_line" | sed -n 's/.*variant.*string "\(.*\)"/\1/p')
+		# 		fi
 
-				# Extract body
-				if echo "$subline" | grep -q 'string "body"'; then
-					read -r body_line
-					BODY=$(echo "$body_line" | sed -n 's/.*variant.*string "\(.*\)"/\1/p')
-				fi
+		# 		# Extract body
+		# 		if echo "$subline" | grep -q 'string "body"'; then
+		# 			read -r body_line
+		# 			BODY=$(echo "$body_line" | sed -n 's/.*variant.*string "\(.*\)"/\1/p')
+		# 		fi
 
-				# End parsing when array closes
-				if echo "$subline" | grep -q '\]'; then
-					break
-				fi
-			done
+		# 		# End parsing when array closes
+		# 		if echo "$subline" | grep -q '\]'; then
+		# 			break
+		# 		fi
+		# 	done
 
-			# Send notification if title and body are set
-			if [[ -n "$TITLE" && -n "$BODY" ]]; then
-				notify-send "$TITLE" "$BODY"
-			fi
+		# 	# Send notification if title and body are set
+		# 	if [[ -n "$TITLE" && -n "$BODY" ]]; then
+		# 		notify-send "$TITLE" "$BODY"
+		# 	fi
 		fi
 	done
