@@ -10,8 +10,9 @@ download-timeout 10
 #show-read-feeds no
 text-width 80
 confirm-exit yes
-feed-sort-order title
-feed-sort-order unreadarticlecount-asc
+#feed-sort-order title
+#feed-sort-order firsttag
+#feed-sort-order unreadarticlecount-asc
 goto-next-feed no
 datetime-format "%d %b %y"
 
@@ -24,6 +25,10 @@ color listfocus_unread default green
 highlight article "^(Title):.*" blue default bold
 highlight article "^(Feed|Author|Date|Podcast Download URL):.*" blue default
 highlight article "^(Link):.*" yellow default bold
+
+# https://github.com/newsboat/newsboat/issues/412#issuecomment-683367675
+highlight feedlist "---.*---" black green bold
+highlight feedlist "^.*\\(0/0\\)" default default invis
 
 unbind-key g
 #unbind-key o
