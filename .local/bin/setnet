@@ -2,7 +2,7 @@
 
 [[ $(hostname) = "virtme-ng" ]] || exit 1
 
-echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 8.8.8.8" > /etc/resolv.conf || true  # fail gracefully because it might be RO fs
 ip link set eth0 up
 ip addr add 10.0.2.15/24 dev eth0  # QEMU's default user networking assigns this IP
 ip route add default via 10.0.2.2

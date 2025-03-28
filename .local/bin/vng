@@ -116,7 +116,8 @@ run_cmd+=("--run" "$RUN" "--root" "$ROOT" "$@")
 [[ -n ${EXEC[*]} ]] && run_cmd+=("${EXEC[@]}")
 if [[ -n $NETWORK ]]; then
 	run_cmd+=(--network user)
-	sudo grep -q setnet "$ROOT/root/.bashrc.local" || echo "setnet" | sudo tee -a "$ROOT/root/.bashrc.local"
+	echo "8.8.8.8" | sudo tee "$ROOT/etc/resolv.conf" >/dev/null
+	sudo grep -q setnet "$ROOT/root/.bashrc.local" || echo "setnet" | sudo tee -a "$ROOT/root/.bashrc.local" >/dev/null
 fi
 
 if [[ -n $CLEAN ]]; then
