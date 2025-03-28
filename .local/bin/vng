@@ -119,6 +119,9 @@ if [[ -n $NETWORK ]]; then
 	echo "8.8.8.8" | sudo tee "$ROOT/etc/resolv.conf" >/dev/null
 	sudo grep -q setnet "$ROOT/root/.bashrc.local" || echo "setnet" | sudo tee -a "$ROOT/root/.bashrc.local" >/dev/null
 fi
+if [[ $ARCH = "armhf" ]]; then
+	run_cmd+=(--qemu-opts="-dtb $RUN/arch/arm/boot/dts/arm/vexpress-v2p-ca15_a7.dtb")
+fi
 
 if [[ -n $CLEAN ]]; then
 	pushd "$RUN"
