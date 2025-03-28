@@ -75,7 +75,6 @@ fi
 
 if [[ -f /usr/share/doc/fzf/examples/key-bindings.bash ]]; then
 	# debian
-	source /usr/share/bash-completion/completions/fzf #1013356 ("fzf: Bash completions not active by default")
 	source /usr/share/doc/fzf/examples/key-bindings.bash
 fi
 if [[ -f /usr/share/bash-completion/completions/fzf-key-bindings ]]; then

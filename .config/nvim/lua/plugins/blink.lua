@@ -32,7 +32,7 @@ return {
 			},
 			menu = {
 				-- ExtraWhiteSpace is red in alabaster theme, disable it here
-				winhighlight = "Normal:BlinkCmpMenu,FloatBorder:BlinkCmpMenuBorder,CursorLine:BlinkCmpMenuSelection,Search:None,ExtraWhiteSpace:Normal",
+				winhighlight = "Normal:BlinkCmpMenu,FloatBorder:BlinkCmpMenuBorder,CursorLine:BlinkCmpMenuSelection,ExtraWhiteSpace:Normal",
 			},
 		},
 		sources = {
