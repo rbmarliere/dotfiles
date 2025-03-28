@@ -5,6 +5,7 @@ set -euo pipefail
 VERBOSE=0
 CLEAN=0
 ARCH=x86_64
+HOST=x86_64-pc-linux-gnu
 BEAR=()
 INTERCEPT_BUILD=()
 MAKE=(make "-j$(nproc)")
@@ -42,8 +43,10 @@ log_output() {
 _setcc() {
 	if [[ $ARCH = x86_64 || $ARCH = i386 ]]; then
 		CC="/usr/bin/gcc"
+		[[ $ARCH = i386 ]] && HOST=i386-pc-linux-gnu
 	else
 		CC="${ARCHMAP[$ARCH]}gcc"
+		HOST="$(basename "${CC%-gcc}")"
 	fi
 	export CC
 	GCC="14"
@@ -104,10 +107,14 @@ configure() {
 
 	_setcc
 
-	[[ $ARCH != x86_64 && $ARCH != i386 ]] && ARGV+=("--host=$(basename "${CC%-gcc}")")
+	[[ $ARCH != x86_64 ]] && ARGV+=("--host=$HOST)")
 	if [[ $ARCH = i386 ]]; then
+		set -x
+		# export PKG_CONFIG_SYSROOT_DIR="$ROOT"
+		# export PKG_CONFIG_LIBDIR=/usr/lib/pkgconfig
 		export CFLAGS="-m32"
 		export LDFLAGS="-m32"
+		set +x
 		# workaround for tumbleweed...
 		[[ ! -f /usr/lib/libtirpc.so ]] && sudo ln -s /usr/lib/libtirpc.so.3 /usr/lib/libtirpc.so
 		[[ ! -f /usr/lib/libmnl.so ]] && sudo ln -s /usr/lib/libmnl.so.0 /usr/lib/libmnl.so
@@ -128,7 +135,7 @@ build() {
 
 	_setcc
 
-	if [[ ! -f ./include/mk/config.mk ]] || ! grep -q "CC.*:= $CC" include/mk/config.mk; then
+	if [[ ! -f ./include/mk/config.mk ]] || ! grep -qe "^host := $HOST" include/mk/config.mk; then
 		echo 'configuring... (or re-configuring due to ARCH mismatch)'
 		log_output make clean
 		configure "$KDIR"
