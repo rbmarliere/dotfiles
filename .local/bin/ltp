@@ -5,20 +5,21 @@ set -euo pipefail
 VERBOSE=0
 CLEAN=0
 ARCH=x86_64
-HOST=x86_64-pc-linux-gnu
+HOST=
 BEAR=()
 INTERCEPT_BUILD=()
 MAKE=(make "-j$(nproc)")
 
 # openSUSE cross-compile settings to pass through
 # https://github.com/arighi/virtme-ng/blob/ee3f58a787dac6bca492c7c9e3ea235b508852e3/virtme_ng/run.py#L489
-declare -A ARCHMAP
-ARCHMAP["arm64"]="/usr/bin/aarch64-suse-linux-"
-ARCHMAP["armhf"]="/usr/bin/arm-suse-linux-gnueabi-"
-ARCHMAP["i386"]=
-ARCHMAP["ppc64el"]="/usr/bin/powerpc64le-suse-linux-"
-ARCHMAP["s390x"]="/usr/bin/s390x-suse-linux-"
-ARCHMAP["riscv64"]="/usr/bin/riscv64-suse-linux-"
+declare -A HOSTMAP
+HOSTMAP["arm64"]="aarch64-suse-linux"
+HOSTMAP["armhf"]="arm-suse-linux-gnueabi"
+HOSTMAP["i386"]="i386-suse-linux"
+HOSTMAP["ppc64el"]="powerpc64le-suse-linux"
+HOSTMAP["s390x"]="s390x-suse-linux"
+HOSTMAP["riscv64"]="riscv64-suse-linux"
+HOSTMAP["x86_64"]="x86_64-pc-linux-gnu"
 
 die() {
 	echo "ERROR: $1" >&2
@@ -49,27 +50,29 @@ log_output() {
 }
 
 _setcc() {
+	local GCC_VERSION="14"
+
+	HOST="${HOSTMAP[$ARCH]}"
 	if [[ $ARCH = x86_64 || $ARCH = i386 ]]; then
 		CC="/usr/bin/gcc"
-		[[ $ARCH = i386 ]] && HOST=i386-pc-linux-gnu
 	else
-		CC="${ARCHMAP[$ARCH]}gcc"
-		HOST="$(basename "${CC%-gcc}")"
+		CC="/usr/bin/$HOST-gcc"
 	fi
 	export CC
-	GCC="14"
-	if [[ $ARCH = i386 && ! -d /usr/lib64/gcc/x86_64-suse-linux/$GCC/32 ]]; then
-		sudo zypper install gcc$GCC-32bit || die "compiler $CC not found"
+
+	if [[ $ARCH = i386 && ! -d /usr/lib64/gcc/x86_64-suse-linux/$GCC_VERSION/32 ]]; then
+		sudo zypper install gcc$GCC_VERSION-32bit || die "compiler $CC not found"
 		return
 	fi
+
 	if [[ ! -f $CC ]]; then
 		declare -A PKGMAP
-		PKGMAP["arm64"]="cross-aarch64-gcc$GCC"
-		PKGMAP["armhf"]="cross-arm-gcc$GCC"
-		PKGMAP["ppc64el"]="cross-ppc64le-gcc$GCC"
-		PKGMAP["s390x"]="cross-s390x-gcc$GCC"
-		PKGMAP["riscv64"]="cross-riscv64-gcc$GCC"
-		PKGMAP["x86_64"]="gcc$GCC"
+		PKGMAP["arm64"]="cross-aarch64-gcc$GCC_VERSION"
+		PKGMAP["armhf"]="cross-arm-gcc$GCC_VERSION"
+		PKGMAP["ppc64el"]="cross-ppc64le-gcc$GCC_VERSION"
+		PKGMAP["s390x"]="cross-s390x-gcc$GCC_VERSION"
+		PKGMAP["riscv64"]="cross-riscv64-gcc$GCC_VERSION"
+		PKGMAP["x86_64"]="gcc$GCC_VERSION"
 		sudo zypper install "${PKGMAP[$ARCH]}" || die "compiler $CC not found"
 	fi
 }
@@ -117,19 +120,18 @@ prep() {
 configure() {
 	local KDIR=${1:?missing kernel directory}
 	local ARGV=(--with-linux-dir="$KDIR")
-	local CFLAGS=
-	local LDFLAGS=
 
 	_setcc
 
-	[[ $ARCH != x86_64 ]] && ARGV+=("--host=$HOST)")
+	if [[ $ARCH != x86_64 ]]; then
+		ARGV+=("--host=$HOST")
+		export PKG_CONFIG_SYSROOT_DIR="/usr/$HOST/sys-root"
+		export PKG_CONFIG_LIBDIR="/usr/$HOST/lib"
+	fi
+
 	if [[ $ARCH = i386 ]]; then
-		set -x
-		# export PKG_CONFIG_SYSROOT_DIR="$ROOT"
-		# export PKG_CONFIG_LIBDIR=/usr/lib/pkgconfig
 		export CFLAGS="-m32"
 		export LDFLAGS="-m32"
-		set +x
 		# workaround for tumbleweed...
 		[[ ! -f /usr/lib/libtirpc.so ]] && sudo ln -s /usr/lib/libtirpc.so.3 /usr/lib/libtirpc.so
 		[[ ! -f /usr/lib/libmnl.so ]] && sudo ln -s /usr/lib/libmnl.so.0 /usr/lib/libmnl.so
@@ -151,9 +153,10 @@ build() {
 	_setcc
 
 	if [[ ! -f ./include/mk/config.mk ]]; then
+		echo 'configuring...'
 		configure "$KDIR"
 	elif ! grep -qe "^host := $HOST" include/mk/config.mk; then
-		echo 'configuring... (or re-configuring due to ARCH mismatch)'
+		echo 're-configuring due to ARCH mismatch...'
 		_clean
 		configure "$KDIR"
 	fi
@@ -311,7 +314,7 @@ while getopts "vca:" OPT; do
 	c) CLEAN=1 ;;
 	a)
 		ARCH="$OPTARG"
-		[[ $ARCH != "$HOST" && -z ${ARCHMAP[$ARCH]+_} ]] && die "unsupported architecture"
+		[[ $ARCH != "$HOST" && -z ${HOSTMAP[$ARCH]+_} ]] && die "unsupported architecture"
 		;;
 	*)
 		usage
