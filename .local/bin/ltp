@@ -74,6 +74,16 @@ _setcc() {
 	fi
 }
 
+_clean() {
+	read -rp "Clean? [y|N] " ans
+	ans=${ans:-N}
+	if [[ $ans =~ ^[Yy]$ ]]; then
+		rm compile_commands.json 2>/dev/null || true
+		log_output make clean
+		log_output git clean -fdX
+	fi
+}
+
 _pre_flight() {
 	[[ $(git rev-parse --is-inside-work-tree) = "true" ]] || die "refusing to run outside a git worktree"
 	git remote -v | grep -q "linux-test-project/ltp" || die "refusing to run outside LTP repository"
@@ -82,10 +92,7 @@ _pre_flight() {
 	sudo chown "$(whoami)" -R .
 	git submodule update --init --recursive
 	if [[ $CLEAN -gt 0 ]]; then
-		rm compile_commands.json 2>/dev/null || true
-		log_output make clean
-		# TODO might not be enough e.g. from -a i386 to -a x86_64
-		# BUT git clean -fdx is dangerous...
+		_clean
 	fi
 }
 
@@ -143,9 +150,11 @@ build() {
 
 	_setcc
 
-	if [[ ! -f ./include/mk/config.mk ]] || ! grep -qe "^host := $HOST" include/mk/config.mk; then
+	if [[ ! -f ./include/mk/config.mk ]]; then
+		configure "$KDIR"
+	elif ! grep -qe "^host := $HOST" include/mk/config.mk; then
 		echo 'configuring... (or re-configuring due to ARCH mismatch)'
-		log_output make clean
+		_clean
 		configure "$KDIR"
 	fi
 
