@@ -147,11 +147,15 @@ echo "${run_cmd[@]}"
 OUTPUT=$(cat vng.log)
 if [[ $OUTPUT =~ "try --build to build the kernel" || $OUTPUT =~ "modules may not work" ]]; then
 	pushd "$RUN"
-	echo "${clean_cmd[@]}"
-	"${clean_cmd[@]}" >>vng.log 2>&1
-	echo "${base_cmd[@]}" --build "${CROSS_COMPILE_OPT[@]}"
-	"${base_cmd[@]}" --build "${CROSS_COMPILE_OPT[@]}" 2>>vng.log
-	popd
-	echo "${run_cmd[@]}"
-	"${run_cmd[@]}"
+	read -rp "Clean? [y|N] " ans
+	ans=${ans:-N}
+	if [[ $ans =~ ^[Yy]$ ]]; then
+		echo "${clean_cmd[@]}"
+		"${clean_cmd[@]}" >>vng.log 2>&1
+		echo "${base_cmd[@]}" --build "${CROSS_COMPILE_OPT[@]}"
+		"${base_cmd[@]}" --build "${CROSS_COMPILE_OPT[@]}" 2>>vng.log
+		popd
+		echo "${run_cmd[@]}"
+		"${run_cmd[@]}"
+	fi
 fi
