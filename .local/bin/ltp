@@ -34,9 +34,17 @@ log_output() {
 	} | tee -a build.log >error.log
 	if [[ $VERBOSE -gt 0 ]]; then
 		# keep output in the terminal
-		"$@" 2>&1 | tee -a build.log | tee >(tee -a error.log >&2)
+		"$@" 2>&1 | tee -a build.log | tee >(tee -a error.log >&2) || {
+			echo "cat error.log"
+			cat error.log
+			return 1
+		}
 	else
-		"$@" >>build.log 2> >(tee -a error.log >>build.log)
+		"$@" >>build.log 2> >(tee -a error.log >>build.log) || {
+			echo "cat error.log"
+			cat error.log
+			return 1
+		}
 	fi
 }
 
@@ -141,7 +149,7 @@ build() {
 		configure "$KDIR"
 	fi
 
-	log_output "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" "${MAKE[@]}" "${TARGET[@]}" || { cat error.log; return 1; }
+	log_output "${BEAR[@]}" "${INTERCEPT_BUILD[@]}" "${MAKE[@]}" "${TARGET[@]}"
 }
 
 metadata() {
