@@ -55,19 +55,19 @@ nnoremap <C-l> <C-w>l
 nnoremap <C-u> <C-u>zz
 nnoremap <C-w><C-t> :tabnew<CR>
 nnoremap <C-w>C :tabclose<CR>
-nnoremap <C-w>z <C-w><Bar><C-w>_
 nnoremap <C-w>h :vertical resize +10<CR>
 nnoremap <C-w>j :resize -10<CR>
 nnoremap <C-w>k :resize +10<CR>
 nnoremap <C-w>l :vertical resize -10<CR>
+nnoremap <C-w>z <C-w><Bar><C-w>_
 nnoremap <Leader><Space> :nohlsearch<CR>
 nnoremap <Leader>P O<Esc>pk<CR>
 nnoremap <Leader>S :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
-vnoremap <Leader>S y:%s/\zs<C-r>"\ze/<C-r>"/gI<Left><Left><Left>
 nnoremap <Leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap <Leader>X :!chmod +x %<CR>
 nnoremap <Leader>p :pu<CR>
 nnoremap <Leader>w :w<CR>
+nnoremap <Leader>y% :let @+ = expand('%')<CR>
 nnoremap <expr><silent> <Bar> v:count == 0 ? "<C-W>v<C-W><Right>" : ":<C-U>normal! 0".v:count."<Bar><CR>"
 nnoremap <expr><silent> _ v:count == 0 ? "<C-W>s<C-W><Down>"  : ":<C-U>normal! ".v:count."_<CR>"
 nnoremap <silent> <Leader>fws :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
@@ -78,6 +78,7 @@ nnoremap gp `[v`]
 nnoremap n nzzzv
 noremap <Leader><Leader>y "*y
 noremap <Leader>y "+y
+vnoremap <Leader>S y:%s/\zs<C-r>"\ze/<C-r>"/gI<Left><Left><Left>
 vnoremap <Leader>s :sort<CR>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
