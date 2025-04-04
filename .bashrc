@@ -19,6 +19,7 @@ export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="%F %T "
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+shopt -s direxpand
 shopt -s cmdhist
 shopt -s histappend
 
