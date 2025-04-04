@@ -194,7 +194,7 @@ qa-clone-job() {
 		CASEDIR="CASEDIR=$CASEDIR"
 	fi
 
-	_qa $SSH openqa-clone-job $HOST_OPT $SKIP_DEPS $SKIP_DOWNLOAD $WITHIN_INSTANCE $JOB $@ "${NS[@]}" $SKIP_UPDATES $CASEDIR
+	_qa $SSH openqa-clone-job $HOST_OPT $SKIP_DEPS $SKIP_DOWNLOAD $WITHIN_INSTANCE "$JOB" "$@" "${NS[@]}" $SKIP_UPDATES "$CASEDIR"
 }
 
 qa-clone-build() {
