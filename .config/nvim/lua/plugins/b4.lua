@@ -8,7 +8,11 @@ return {
 		-- log_level = "debug",
 	},
 	keys = {
-		{ "<Leader>bc", ":B4 prep --auto-to-cc<CR>:B4 trailers --update<CR>:B4 prep --check<CR>", desc = "b4 prep --auto-to-cc; b4 trailers --update; b4 prep --check", },
+		{
+			"<Leader>bc",
+			":B4 prep --auto-to-cc<CR>:B4 trailers --update<CR>:B4 prep --check<CR>:B4 prep --check-deps<CR>",
+			desc = "b4 prep --auto-to-cc; b4 trailers --update; b4 prep --check; b4 prep --check-deps",
+		},
 		{ "<Leader>bpc", ":B4 prep --edit-cover<CR>", desc = "b4 prep --edit-cover" },
 		{ "<Leader>bpd", ":B4 prep --edit-deps<CR>", desc = "b4 prep --edit-deps" },
 		{ "<Leader>bpe", ":B4 prep --enroll<CR>", desc = "b4 prep --enroll" },
