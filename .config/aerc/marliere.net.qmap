@@ -4,7 +4,7 @@
 archive = path:"marliere.net/all/**"
 drafts = tag:drafts
 important = tag:important and path:"marliere.net/all/**"
-inbox = tag:inbox and path:"marliere.net/all/**"
+inbox = tag:inbox and path:"marliere.net/all/**" and not (tag:inbox and (folder:gmail.com/mail or folder:suse.com/mail))
 sent = tag:sent and path:"marliere.net/all/**"
 spam = tag:spam and path:"marliere.net/all/**"
 trash = tag:trash and path:"marliere.net/all/**"

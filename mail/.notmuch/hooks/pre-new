@@ -135,7 +135,10 @@ maildir_mv() {
 		new_file="$id"
 	fi
 
-	mv "$src_path" ~/mail/"$dst_maildir/$subdir/$new_file"
+	dst_path="$HOME/mail/$dst_maildir/$subdir/$new_file"
+	if [ $(realpath $src_path) != $(realpath $dst_path) ]; then
+		mv "$src_path" "$HOME/mail/$dst_maildir/$subdir/$new_file"
+	fi
 }
 
 maildir_mvs() {
@@ -153,45 +156,47 @@ if [[ -d $DB/marliere.net ]] && type mbsync &>/dev/null; then
 	# inbox
 	notmuch search --output=files not tag:new \
 		and path:"marliere.net/all/**" \
-		and tag:inbox and not "folder:marliere.net/all/inbox" |
+		and tag:inbox and not folder:"marliere.net/all/INBOX" |
 		grep marliere.net |
-		maildir_mvs "marliere.net/all/inbox"
+		maildir_mvs "marliere.net/all/INBOX"
 	# important (only move if not in inbox)
 	notmuch search --output=files not tag:new \
 		and path:"marliere.net/all/**" \
-		and tag:important and not tag:inbox and not "folder:marliere.net/all/important" |
+		and tag:important and not tag:inbox and not folder:"marliere.net/all/Important" |
 		grep marliere.net |
-		maildir_mvs "marliere.net/all/important"
+		maildir_mvs "marliere.net/all/Important"
 	# spam
 	notmuch search --output=files not tag:new \
 		and path:"marliere.net/all/**" \
-		and tag:spam and not tag:inbox and not tag:trash and not tag:important and not folder:"marliere.net/all/spam" |
+		and tag:spam and not tag:inbox and not tag:trash and not tag:important and not folder:"marliere.net/all/Junk" |
 		grep marliere.net |
-		maildir_mvs "marliere.net/all/spam"
+		maildir_mvs "marliere.net/all/Junk"
 	# trash
 	notmuch search --output=files not tag:new \
 		and path:"marliere.net/all/**" \
-		and tag:trash and not tag:inbox and not folder:"marliere.net/all/trash" |
+		and tag:trash and not tag:inbox and not folder:"marliere.net/all/Trash" |
 		grep marliere.net |
-		maildir_mvs "marliere.net/all/trash"
+		maildir_mvs "marliere.net/all/Trash"
 	# if in inbox, important, spam, or trash but missing corresponding tag, move to archive
 	notmuch search --output=files not tag:new \
 		and path:"marliere.net/all/**" \
-		and "(folder:marliere.net/all/inbox and not tag:inbox)" \
-		or "(folder:marliere.net/all/important and not tag:important)" \
-		or "(folder:marliere.net/all/spam and not tag:spam)" \
-		or "(folder:marliere.net/all/trash and not tag:trash)" |
+		and "(folder:marliere.net/all/INBOX and not tag:inbox)" \
+		or "(folder:marliere.net/all/Important and not tag:important)" \
+		or "(folder:marliere.net/all/Junk and not tag:spam)" \
+		or "(folder:marliere.net/all/Trash and not tag:trash)" |
 		grep marliere.net |
 		grep -v archive |
-		maildir_mvs "marliere.net/all/archive"
+		maildir_mvs "marliere.net/all/Archive"
 
+	echo "-------------------------"
 	echo "SYNC $DB/marliere.net"
+	printf "\n(trash)\n"
 	mbsync -V trash
-	echo "-------------------------"
+	printf "\n(all)\n"
 	mbsync -V all
-	echo "-------------------------"
+	printf "\n(spam)\n"
 	mbsync -V spam
-	echo $DB/marliere.net/trash/**/{cur,new}/* | xargs rm -f
+	#echo $DB/marliere.net/trash/**/{cur,new}/* | xargs rm -f
 fi
 
 if [[ -f ~/src/extra/lieer/master/venv/bin/activate ]]; then

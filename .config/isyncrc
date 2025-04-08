@@ -4,7 +4,7 @@ Port 143
 User ricardo@marliere.net
 PassCmd "pass marliere.net"
 #Pass ""
-#SSLType STARTTLS
+SSLType STARTTLS
 
 IMAPStore remote
 Account marliere.net
@@ -12,14 +12,14 @@ Account marliere.net
 MaildirStore local
 SubFolders Verbatim
 # The trailing "/" is important
-Path ~/mail/marliere.net/all/
-Inbox ~/mail/marliere.net/all/inbox
+Path /mnt/md0/mail/marliere.net/all/
+Inbox /mnt/md0/mail/marliere.net/all/INBOX
 
 MaildirStore trash
 SubFolders Verbatim
 # The trailing "/" is important
-Path ~/mail/marliere.net/trash/
-Inbox ~/mail/marliere.net/trash/inbox
+Path /mnt/md0/mail/marliere.net/trash/
+Inbox /mnt/md0/mail/marliere.net/trash/INBOX
 
 # NOTE: when debugging, you might want to rm -rf ~/.local/state/isync/
 
@@ -27,17 +27,18 @@ Channel all
 Far :remote:
 Near :local:
 # archive  drafts  important  inbox  sent  spam  trash
-Patterns * !archive !important !spam
+# Archive Drafts Important INBOX Junk Sent Trash
+Patterns * !Archive !Important !Junk
 Create Both
 Remove Both
-#Sync Pull New ReNew Push Flags
-Sync Pull New Upgrade
+Sync Pull New ReNew Push Flags
+#Sync Pull New Upgrade
 Expunge None
 
 Channel spam
 Far :remote:
 Near :local:
-Patterns spam
+Patterns Junk
 Create Both
 Remove Both
 Sync All
@@ -46,7 +47,7 @@ Expunge Both
 Channel trash
 Far :remote:
 Near :trash:
-Patterns * !spam
+Patterns * !Junk
 Create Both
 Remove Both
 Expunge Both
