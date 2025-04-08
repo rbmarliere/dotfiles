@@ -25,6 +25,7 @@ local my_theme = {
 	TelescopeResultsNormal = { bg = colors.white },
 	TelescopeResultsBorder = { fg = colors.green, bg = colors.white },
 	TelescopePromptCounter = { fg = colors.green },
+	Todo = { fg = colors.lighterwhite, bg = colors.purple, bold = true },
 }
 
 local create_groups = function()
@@ -37,16 +38,6 @@ local create_groups = function()
 			vim.api.nvim_set_option_value("winhighlight", hl, { win = win })
 		end
 	end
-
-	-- TODO highlight
-	vim.api.nvim_set_hl(0, "TodoHighlight", { bg = colors.purple, fg = colors.lightwhite, bold = true })
-	vim.api.nvim_create_augroup("TodoHighlighting", { clear = true })
-	vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile", "TextChanged", "InsertLeave" }, {
-		group = "TodoHighlighting",
-		callback = function()
-			vim.cmd([[syntax match TodoHighlight /\vTODO|\vNOTE/]])
-		end,
-	})
 
 	-- highlight groups used to set active window bg opaque and keep others transparent
 	vim.api.nvim_set_hl(0, "Transparent", {
@@ -112,6 +103,11 @@ return {
 			for group, settings in pairs(my_theme) do
 				vim.api.nvim_set_hl(0, group, settings)
 			end
+			vim.api.nvim_set_hl(0, "@comment.error", { link = "Todo" })
+			vim.api.nvim_set_hl(0, "@comment.note", { link = "Todo" })
+			vim.api.nvim_set_hl(0, "@comment.todo", { link = "Todo" })
+			vim.api.nvim_set_hl(0, "@comment.warning", { link = "Todo" })
+			vim.api.nvim_set_hl(0, "@text.note", { link = "Todo" })
 			create_groups()
 		end
 	end,

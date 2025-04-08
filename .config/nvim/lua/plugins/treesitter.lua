@@ -7,7 +7,7 @@ return {
 		end,
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "markdown", "markdown_inline", "gotmpl" },
+				ensure_installed = { "comment", "markdown", "markdown_inline", "gotmpl" },
 				highlight = {
 					enable = true,
 				},
