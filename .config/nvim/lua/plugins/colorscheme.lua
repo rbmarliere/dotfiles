@@ -103,11 +103,11 @@ return {
 	-- lazy = false,
 	priority = 1000,
 	config = function()
-		if os.getenv("TERM") == "linux" then
+		vim.opt.termguicolors = true
+		if os.getenv("TERM") == "linux" or os.getenv("TMUX_OUTER_TERM") == "linux" then
 			vim.opt.background = "dark"
 		else
 			vim.opt.background = "light"
-			vim.opt.termguicolors = true
 			vim.cmd.colorscheme("alabaster")
 			for group, settings in pairs(my_theme) do
 				vim.api.nvim_set_hl(0, group, settings)
