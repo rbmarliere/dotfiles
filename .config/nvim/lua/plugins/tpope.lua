@@ -7,7 +7,7 @@ return {
 	{ "tpope/vim-repeat" },
 	{
 		"tpope/vim-fugitive",
-		lazy = false,
+		cmd = { "G", "Git" },
 		dependencies = {
 			"tpope/vim-rhubarb",
 			{

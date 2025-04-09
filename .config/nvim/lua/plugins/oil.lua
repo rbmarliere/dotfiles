@@ -1,6 +1,6 @@
 return {
 	"stevearc/oil.nvim",
-	lazy = false,
+	cmd = { "Oil" },
 	opts = {
 		default_file_explorer = true,
 		-- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
