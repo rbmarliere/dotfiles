@@ -26,4 +26,5 @@ if [[ -d $HOME/notes ]]; then
 	root_runner "git -C $HOME/notes push || git -C $HOME/notes pull --rebase && git -C $HOME/notes push" || exit 1
 fi
 
+root_runner "sudo pkill -x vi" # force sessions update
 root_runner "sudo shutdown -h --no-wall now"

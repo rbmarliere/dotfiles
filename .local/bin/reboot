@@ -30,4 +30,5 @@ if [[ -n $1 ]]; then
 	root_runner "sudo grub-reboot $1 || sudo grub2-reboot $1"
 fi
 
+root_runner "sudo pkill -x vi" # force sessions update
 root_runner "sudo shutdown -r --no-wall now"
