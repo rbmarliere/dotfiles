@@ -1,6 +1,5 @@
 #notify-always yes
 #notify-program /usr/bin/notify-send
-browser "firefox -P reading %u"
 auto-reload yes
 suppress-first-reload yes
 reload-time 10
@@ -16,7 +15,11 @@ confirm-exit yes
 goto-next-feed no
 datetime-format "%d %b %y"
 
-external-url-viewer "urlscan"
+unbind-key o
+unbind-key O
+#browser "osc52-cp %u"
+
+external-url-viewer "urlscan --run 'osc52-cp {}' --single"
 
 color info default green
 color listnormal_unread yellow default
@@ -31,7 +34,6 @@ highlight feedlist "---.*---" black green bold
 highlight feedlist "^.*\\(0/0\\)" default default invis
 
 unbind-key g
-#unbind-key o
 
 bind-key j down
 bind-key k up
