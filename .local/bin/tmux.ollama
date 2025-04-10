@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -euo pipefail
+
+NAME="ollama"
+TMUX="tmux"
+WD="$HOME/src/extra/open-webui/main"
+echo -ne "\033]0;$NAME\007"
+sleep 1
+
+if ! $TMUX has-session -t $NAME 2>/dev/null; then
+	$TMUX new-session -c "$WD" -d -s $NAME "source venv/bin/activate && open-webui serve"
+	$TMUX split-window -t "$NAME:0" "ollama serve"
+fi
+
+$TMUX attach -t $NAME
