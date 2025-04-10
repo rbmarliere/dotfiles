@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# This will walk through existing sessions and delete those that
+# don't have a nvim process attached to. So we purge unused sessions
+# in the current boot before calling $HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh
+# so the list does not grow too much
+
+tmux list-sessions -F '#S' | while read -r session; do
+	if ! tmux list-panes -t "$session" -F '#{pane_pid}' |
+		xargs -n1 pstree -p 2>/dev/null | grep -Eq '\b(vi|vim|nvim)\b'; then
+		tmux kill-session -t "$session"
+	fi
+done

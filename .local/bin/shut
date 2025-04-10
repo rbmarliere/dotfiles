@@ -18,6 +18,7 @@ fi
 
 if tmux ls &>/dev/null && [[ -f "$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh" ]]; then
 	# if tmux is running in the default socket, save it
+	root_runner "tmux_prune"
 	root_runner "$HOME/.config/tmux/plugins/tmux-resurrect/scripts/save.sh"
 fi
 
